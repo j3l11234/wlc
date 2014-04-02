@@ -95,6 +95,7 @@
 			</div>
 		</div>
 		
+		<button type="button" id='sample-btn' class="btn btn-xs" style="display: none;">00:00:00</button>
 		<div style="white-space: nowrap; overflow-x: scroll;">
 			<table class="table table-hover table-condensed">
 				<thead>
@@ -104,6 +105,7 @@
 						<th>日期</th>
 						<th>上班签到</th>
 						<th>下班签退</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody> 		
@@ -115,21 +117,26 @@
 							<td>
 								<switch name="record['clockin_status']">
 									<case value="0">
-										<button type="button" class="btn-clock btn btn-xs btn-success" disabled="disabled">{$record['clockin']}</button>
+										<button type="button" class="btn-clocktime btn btn-xs btn-success">{$record['clockin']}</button>
 									</case>
 									<default />
-									<button type="button" class="btn-clock btn btn-xs btn-danger" disabled="disabled">{$record['clockin']}</button>
+										<button type="button" class="btn-clocktime btn btn-xs btn-danger">{$record['clockin']}</button>
 								</switch>
 
 							</td>
 							<td>
 								<switch name="record['clockout_status']">
 									<case value="0">
-										<button type="button" class="btn-clock btn btn-xs btn-success" disabled="disabled">{$record['clockout']}</button>
+										<button type="button" class="btn-clocktime btn btn-xs btn-success">{$record['clockout']}</button>
 									</case>
 									<default />
-									<button type="button" class="btn-clock btn btn-xs btn-danger" disabled="disabled">{$record['clockout']}</button>
+										<button type="button" class="btn-clocktime btn btn-xs btn-danger">{$record['clockout']}</button>
 								</switch>
+							</td>
+							<td style="text-align: right;">
+							<if condition="$isPersonnel">
+								<button type="button" class="btn btn-xs btn-warning btn-clock" disabled="disabled">修改</button>
+							</if>
 							</td>	
 						</tr>
 					</foreach>
@@ -146,9 +153,6 @@
 
 	</div>
 </div>
-
-
-
 
 
 <script type="text/javascript">
@@ -222,7 +226,8 @@
 		$('#query-condition-collapse').on('shown.bs.collapse', function(){
 			setCookie('collapse',0);
 		});
-		
+
+		$(".btn-clocktime").width($("#sample-btn").width());
 	});
 
 	function get_department_user(){

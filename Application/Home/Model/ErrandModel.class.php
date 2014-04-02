@@ -48,6 +48,16 @@ class ErrandModel extends Model {
 		else
 			$list = $this->select();
 
+		//判断是否可以总结
+		$now = time();
+		foreach ($list as $key => $record){
+			if($now >= strtotime($record['end_date'].' 00:00:00'))
+				$list[$key]['can_sum'] = true;	
+			else
+				$list[$key]['can_sum'] = false;	
+		}
+
+
 		$return = array('count' => $count, 'list' => $list);
 		return $return;
 	}
@@ -175,6 +185,10 @@ class ErrandModel extends Model {
 		if($data['check_status'] != 2 && $data['check_status'] != 4)
 			return null;
 
+		//在结束之间之后才能审批记录
+		if(time() < strtotime($data['end_date'].' 00:00:00'))
+			return null;
+
 		$data['object']			=	$object;
 		$data['cost']			=	$cost;
 		$data['summary']		=	$summary;
@@ -292,10 +306,7 @@ class ErrandModel extends Model {
 				return null;
 			$data['checker2_id'] = $checker_id;
 			$data['check2_datetime'] = date('Y-m-d H:i:s',$check_datetime);
-			$data['check2_comment'] = $check_comment;
-
-			
-
+			$data['check2_comment'] = $check_comment;		
 		}elseif($is_agree == 7 || $is_agree == 8){ //金额审批
 			if($data['check_status'] != 5 && $data['check_status'] != 7 && $data['check_status'] != 8)
 				return null;
@@ -318,6 +329,26 @@ class ErrandModel extends Model {
 	 * @return 待审批数量
 	 */
 	public function getPendingNum(){
-		return $this->where(array('check_status' => 1))->count();
+		return $this->where(array('check_status' => array('in','1,4')))->count();
+	}
+
+	/**
+	 * 获取金额待审批数量
+	 * @return 待审批数量
+	 */
+	public function getPendingCostNum(){
+		return $this->where(array('check_status' => 5))->count();
+	}
+
+	/**
+	 * 获取待总结数量
+	 * @return 待待总结数量
+	 */
+	public function getPendingSumNum($user_id){
+		return $this->where(array(
+			'user_id' 		=>	$user_id,
+			'check_status'	=>	2,
+			'end_date'		=>	array('elt',date('Y-m-d')),
+			))->count();
 	}
 }

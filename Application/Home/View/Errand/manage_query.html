@@ -133,35 +133,35 @@
 							<td>
 								<switch name="record['check_status']">
 									<case value="1">
-										<button type="button" class="btn btn-xs btn-info" disabled="disabled">申请等待审批</button>
+										<button type="button" class="btn btn-xs btn-info">申请等待审批</button>
 									</case>
 									<case value="2">
-										<button type="button" class="btn btn-xs btn-success" disabled="disabled">申请审批通过</button>
+										<button type="button" class="btn btn-xs btn-success">申请审批通过</button>
 									</case>
 									<case value="3">
-										<button type="button" class="btn btn-xs btn-danger" disabled="disabled">申请审批驳回</button>
+										<button type="button" class="btn btn-xs btn-danger">申请审批驳回</button>
 									</case>
 									<case value="4">
-										<button type="button" class="btn btn-xs btn-info" disabled="disabled">总结等待审批</button>
+										<button type="button" class="btn btn-xs btn-info">总结等待审批</button>
 									</case>
 									<case value="5">
-										<button type="button" class="btn btn-xs btn-success" disabled="disabled">总结审批通过</button>
+										<button type="button" class="btn btn-xs btn-success">总结审批通过</button>
 									</case>
 									<case value="6">
-										<button type="button" class="btn btn-xs btn-danger" disabled="disabled">总结审批驳回</button>
+										<button type="button" class="btn btn-xs btn-danger">总结审批驳回</button>
 									</case>
 									<case value="7">
-										<button type="button" class="btn btn-xs btn-success" disabled="disabled">金额审批通过</button>
+										<button type="button" class="btn btn-xs btn-success">金额审批通过</button>
 									</case>
 									<case value="8">
-										<button type="button" class="btn btn-xs btn-danger" disabled="disabled">金额审批驳回</button>
+										<button type="button" class="btn btn-xs btn-danger">金额审批驳回</button>
 									</case>
 									<default />
 										<button type="button" class="btn btn-xs " style="visibility:hidden;">未知状态</button>
 								</switch>
 							</td>
 							<td style="text-align: right;">
-								<button type="button" class="btn btn-xs btn-primary btn-view" onclick="onViewClick(this)">查看</button>
+								<button type="button" class="btn btn-xs btn-primary" onclick="onViewClick(this)">查看</button>
 								<if condition="$isBoss">
 									<if condition="($record['check_status'] eq 1) OR ($record['check_status'] eq 4)">
 										<button type="button" class="btn btn-xs btn-info" onclick="onApprobateClick(this)">审批</button>

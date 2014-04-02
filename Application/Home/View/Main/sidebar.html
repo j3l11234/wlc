@@ -8,8 +8,9 @@
 
       <a href="{:U('Main/workplan')}" class="list-group-item {:getIsActive('sidebar-workplan',$sidebar_item)}">工作计划</a>
 
-      <a href="{:U('Main/errand')}" class="list-group-item {:getIsActive('sidebar-errand',$sidebar_item)}">出差列表</a>
-
+      <a href="{:U('Main/errand')}" class="list-group-item {:getIsActive('sidebar-errand',$sidebar_item)}">出差列表
+      <span class="badge">{:getPendingNum('errand',1)}</span>
+      </a>
       <a href="{:U('Main/leave')}" class="list-group-item {:getIsActive('sidebar-leave',$sidebar_item)}">请假申请
       </a>
       <a href="{:U('Main/order')}" class="list-group-item {:getIsActive('sidebar-order',$sidebar_item)}">订餐申请

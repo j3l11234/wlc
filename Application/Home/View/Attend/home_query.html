@@ -65,6 +65,7 @@
 			</form>	
 		</div>
 
+		<button type="button" id='sample-btn' class="btn btn-xs" style="display: none;">00:00:00</button>
 		<div class="table-responsive">
 			<table class="table table-condensed table-hover">
 				<thead>
@@ -81,19 +82,19 @@
 							<td>
 								<switch name="record['clockin_status']">
 									<case value="0">
-										<button type="button" class="btn-clock btn btn-xs btn-success" disabled="disabled">{$record['clockin']}</button>
+										<button type="button" class="btn-clocktime btn btn-xs btn-success">{$record['clockin']}</button>
 									</case>
 									<default />
-										<button type="button" class="btn-clock btn btn-xs btn-danger" disabled="disabled">{$record['clockin']}</button>
+										<button type="button" class="btn-clocktime btn btn-xs btn-danger">{$record['clockin']}</button>
 								</switch>
 							</td>
 							<td>
 								<switch name="record['clockout_status']">
 									<case value="0">
-										<button type="button" class="btn-clock btn btn-xs btn-success" disabled="disabled">{$record['clockout']}</button>
+										<button type="button" class="btn-clocktime btn btn-xs btn-success">{$record['clockout']}</button>
 									</case>
 									<default />
-										<button type="button" class="btn-clock btn btn-xs btn-danger" disabled="disabled">{$record['clockout']}</button>
+										<button type="button" class="btn-clocktime btn btn-xs btn-danger">{$record['clockout']}</button>
 								</switch>
 							</td>	
 						</tr>
@@ -150,6 +151,8 @@
 		$('#query-condition-collapse').on('shown.bs.collapse', function(){
 			setCookie('collapse',0);
 		});
+
+		$(".btn-clocktime").width($("#sample-btn").width());		
 	});
 
 	function onSearch(){

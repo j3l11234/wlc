@@ -64,12 +64,18 @@ function getPendingNum($item,$home = 0){
 		case 'borrow':
 			if($home == 1)
 				$pendingNum = D('Borrow')->getPendingReturntNum($_SESSION['user']['user_id']);
-			else if (get_privilege() == PRIRILEGE_PERSONNEL) //查询待审批借用申请的数量-人事负责人用
-				$pendingNum = D('Borrow')->getPendingNum();
+			else 
+				if (get_privilege() == PRIRILEGE_PERSONNEL) //查询待审批借用申请的数量-人事负责人用
+					$pendingNum = D('Borrow')->getPendingNum();
 			break;
 		case 'errand': 
-			if (get_privilege() == PRIRILEGE_BOSS) //查询待审批出差申请的数量-处长用
-				$pendingNum = D('Errand')->getPendingNum();
+				if($home == 1)
+					$pendingNum = D('Errand')->getPendingSumNum($_SESSION['user']['user_id']);
+			else 
+				if (get_privilege() == PRIRILEGE_BOSS) //查询待审批 出差申请/总结 的数量-处长用
+					$pendingNum = D('Errand')->getPendingNum();
+				elseif(get_privilege() == PRIRILEGE_PERSONNEL) //查询待审批 金额 的数量 - 人事用
+					$pendingNum = D('Errand')->getPendingCostNum();
 			break;
 
 	}
