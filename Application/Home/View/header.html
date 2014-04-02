@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+
+    <title>外联处管理系统</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="__PUBLIC__/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <!-- Bootstrap theme -->
+    <link href="__PUBLIC__/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+     <!-- sticky-footer -->
+    <link href="__PUBLIC__/css/sticky-footer.css" rel="stylesheet">
+    <!-- 附属插件 -->
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/datetimepicker/bootstrap-datetimepicker.min.css"  media="screen">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/bootstrap/css/bootstrap-switch.min.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/bootstrap/css/bootstrap-select.min.css">
+  
+
+    <style type="text/css">
+      .input-group-btn:last-child > .btn{
+          border-bottom-left-radius: 4px;
+          border-top-left-radius: 4px;
+      }
+      .form-div {
+        margin-bottom: 10px;
+      }
+
+      .form-label{
+        padding-top:5px;
+        padding-right:5px;
+        float:left;
+      }
+</style>
+    <script src="__PUBLIC__/bootstrap/js/jquery.min.js"></script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="__PUBLIC__/bootstrap/js/html5shiv.min.js"></script>
+        <script src="__PUBLIC__/bootstrap/js/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+
+<div class="navbar  navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" >外联处</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="{:getIsActive('navbar-main',$navbar_item)}"><a href="{:U('Main/index')}">个人中心</a></li>
+            <li class="{:getIsActive('navbar-manage',$navbar_item)}"><a href="{:U('Manage/index')}">审批管理</a></li>
+            <li id="navbar-stat"><a href="{:U('Stat/home')}">数据统计</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">消息 <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li class="dropdown-header">Nav header</li>
+                <li><a href="#">Separated link</a></li>
+                <li><a href="#">One more separated link</a></li>
+              </ul>
+            </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+	          <a href="#" class="dropdown-toggle" data-toggle="dropdown">{:get_username()} <b class="caret"></b></a>
+	          <ul class="dropdown-menu">
+	            <li><a href="#">编辑个人资料</a></li>
+	            <li><a href="#">修改密码</a></li>
+	            <li><a href="#">[预留]</a></li>
+	            <li class="divider"></li>
+	            <li><a href="{:U('User/logout')}">注销</a></li>
+	          </ul>
+	        </li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+    
+        <!-- Wrap all page content here -->
+    <div id="wrap">
+    <div class="container">
+  

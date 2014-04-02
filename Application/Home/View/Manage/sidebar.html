@@ -1,0 +1,25 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">常用功能</h3>
+  </div>
+  <div class="panel-body">
+    <div class="list-group">
+      <a href="{:U('Manage/attend')}" class="list-group-item {:getIsActive('sidebar-attend',$sidebar_item)}">签到记录</a>
+
+      <a href="{:U('Manage/workplan')}" class="list-group-item {:getIsActive('sidebar-workplan',$sidebar_item)}">工作计划</a>
+
+      <a href="{:U('Manage/errand')}" class="list-group-item {:getIsActive('sidebar-errand',$sidebar_item)}">出差列表
+      <span class="badge">{:getPendingNum('errand')}</span>
+      </a>
+      <a href="{:U('Manage/leave')}" class="list-group-item {:getIsActive('sidebar-leave',$sidebar_item)}">请假审批
+        <span class="badge">{:getPendingNum('leave')}</span>
+      </a>
+      <a href="{:U('Manage/order')}" class="list-group-item {:getIsActive('sidebar-order',$sidebar_item)}">订餐审批
+        <span class="badge">{:getPendingNum('order')}</span>
+      </a> 
+      <a href="{:U('Manage/borrow')}" class="list-group-item {:getIsActive('sidebar-borrow',$sidebar_item)}">借用审批
+         <span class="badge">{:getPendingNum('borrow')}</span>
+      </a>
+    </div>         
+  </div>
+</div> 

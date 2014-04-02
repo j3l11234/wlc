@@ -1,0 +1,136 @@
+<?php if (!defined('THINK_PATH')) exit();?> 
+
+
+<div class="modal fade"  id="attend-modal">
+	<div class="modal-dialog" style="margin: 10px auto;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title"></h4>
+			</div>
+			<div class="modal-body">
+				<form id="modal-form">
+					<input type="hidden" id="modal-attend-id" name="attend_id">
+					<div class="row">
+						<div class="col-sm-6 form-div">
+							<div class="form-label">人员姓名</div>
+							<div class="input-group">
+								<input type="input" id="modal-user" class="form-control" readonly="">
+								<span class="input-group-addon"></span>
+							</div>
+						</div>
+						<div class="col-sm-6 form-div">
+							<div class="form-label">所属部门</div>
+							<div class="input-group">
+								<input type="input" id="modal-department" class="form-control" readonly="">
+								<span class="input-group-addon"></span>
+							</div>
+						</div>
+						<div class="col-sm-6 form-div">
+							<div class="form-label">签到日期</div>
+							<div class="input-group">
+								<input type="input" id="modal-date" class="form-control" readonly="">
+								<span class="input-group-addon"></span>
+							</div>
+						</div>
+						<div class="col-sm-6 hidden-xs form-div" style="visibility:hidden;">
+							<div class="form-label">预留空间</div>
+							<div class="input-group">
+								<input type="input" class="form-control" readonly="">
+								<span class="input-group-addon"></span>
+							</div>
+						</div>
+						<div class="col-sm-6 form-div">
+							<div class="form-label">签到时间</div>
+							<div class="input-group">
+								<input type="input" id="modal-clockin" name="clockin" class="form-control" placeholder='如"08:10:00"，或留空'>	
+								<span class="input-group-addon"></span>
+							</div>
+						</div>
+						<div class="col-sm-6 form-div">
+							<div class="form-label">签退时间</div>
+							<div class="input-group">
+								<input type="input" id="modal-clockout" name="clockout" class="form-control" placeholder='如"17:30:00"，或留空'>	
+								<span class="input-group-addon"></span>
+							</div>
+						</div>				
+					</div>
+				</form>
+				<div class="alert alert-danger" style="margin-bottom: 0px;"></div>
+			</div>
+			<div class="modal-footer" style="margin-top: auto; white-space: nowrap;">
+				<button type="button" class="btn btn-default btn-edit" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-primary btn-edit" onclick="onEditSubmit()">确认修改</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	function reset(data){
+		$("#attend-modal .modal-footer").children().hide();
+		$("#attend-modal .alert").hide();
+
+		$("#modal-attend-id").val(data.attend_id);
+		$("#modal-user").val(data.alias);
+		$("#modal-department").val(data.department_name);
+		$("#modal-date").val(data.date);
+		$("#modal-clockin").val(data.clockin!="未签到"?data.clockin:"");
+		$("#modal-clockout").val(data.clockout!="未签退"?data.clockout:"");
+
+		$("#attend-modal .alert").removeClass("alert-success").addClass("alert-danger");
+	}
+
+	
+
+	function editAttend(data){
+		reset(data);
+		$("#attend-modal .modal-title").text("修改签到记录");
+		$("#attend-modal .alert").text("签到时间影响月末统计，请谨慎修改！").show();
+		$(".btn-edit").show();
+
+		
+		$('#attend-modal').modal({backdrop:"static"});	
+	}
+	
+	function onEditSubmit(){
+		var reg_hhmmss=/^(0\d{1}|1\d{1}|2[0-3]):[0-5]\d{1}:([0-5]\d{1})$/;
+		if(!reg_hhmmss.test($("#modal-clockin").val()) && $("#modal-clockin").val() != ''){
+			displayResult(false,"签到时间格式不正确");
+			return;
+		}
+		if(!reg_hhmmss.test($("#modal-clockout").val()) && $("#modal-clockout").val() != ''){
+			displayResult(false,"签退时间格式不正确");
+			return;
+		}
+
+		$.post('<?php echo U('Attend/editAttend');?>', $("#modal-form").serialize(),
+			function(data,status){
+				if(typeof(data) == "string"){
+					displayResult(false,"失败："+data);
+				}else{
+					displayResult(true,"修改成功！");
+				}
+			});
+	}
+	
+	function displayResult(success,text){
+		$("#attend-modal .alert").text(text);
+		if(success)
+			$("#attend-modal .alert").removeClass("alert-danger").addClass("alert-success");
+		else
+			$("#attend-modal .alert").removeClass("alert-success").addClass("alert-danger");
+
+		$("#attend-modal .alert").show();
+		$("#attend-modal .alert")
+			.animate({textIndent:10}, 100)
+			.animate({textIndent:0}, 100)
+			.animate({textIndent:10}, 100)
+			.animate({textIndent:0}, 100,function(){
+				if(success)
+					location.reload();
+			});
+	}
+	
+</script>
