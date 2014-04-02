@@ -140,10 +140,8 @@
 	var objectList;
 
 	$(function(){
-		//初始化日期选择插件
-		
-		
 	});
+	
 	function setApplyFormEnable(enable){
 		if(enable){
 			$('#append-form .form_date').datetimepicker({  
@@ -223,11 +221,11 @@
 	
 		switch(mode){
 			case "add":
-			  postSubmit("<?php echo U('Errand/addErrand');?>",$("#append-form").serialize(),"提交成功",$('#append-submit'),null,"提交结果");
-			  break;
+				postSubmit("<?php echo U('Errand/addErrand');?>",$("#append-form").serialize(),"提交成功",$('#append-submit'),null,"提交结果");
+				break;
 			case "edit":
-			  postSubmit("<?php echo U('Errand/editErrand');?>",$("#append-form").serialize(),"修改成功",$('#append-submit'),null,"修改结果");
-			  break;
+				postSubmit("<?php echo U('Errand/editErrand');?>",$("#append-form").serialize(),"修改成功",$('#append-submit'),null,"修改结果");
+				break;
 		}
 	
 	}

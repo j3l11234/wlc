@@ -33,7 +33,6 @@
 								</select>
 							</div>
 						</div>
-
 						<div class="col-sm-6 form-div">
 							<div class="form-label">所属部门</div>
 							<div class="input-group">
@@ -155,17 +154,7 @@
 
 		function onApprobateSubmit(isAgree){	
 			$('#modal-is-agree').val(isAgree?"true":"false");
-			$.post("<?php echo U('Leave/approbate');?>", $("#modal-form").serialize(),
-				function(data,status){
-					if(typeof(data) == "string"){
-						displayResult(false,"失败： "+data);
-					}else{
-						displayResult(true,"审批成功");
-					}
-				}).error(
-					function() {
-						displayResult(false,"失败： 超时");
-					});
+			postSubmit("<?php echo U('Leave/approbateLeave');?>",$("#modal-form").serialize(),"审批成功",null,$("#errand-modal"),"");
 		}<?php endif; ?>
 
 	
@@ -177,34 +166,6 @@
 		}
 
 		function onReportSubmit(){
-			$.post("<?php echo U('Leave/report');?>", $("#modal-form").serialize(),
-				function(data,status){
-					if(typeof(data) == "string"){
-						displayResult(false,"失败： "+data);
-					}else{
-						displayResult(true,"销假成功");
-					}
-				}).error(
-					function() {
-						displayResult(false,"失败： 超时");
-					});
+			postSubmit("<?php echo U('Leave/reportLeave');?>",$("#modal-form").serialize(),"销假成功",null,$("#errand-modal"),"");
 		}<?php endif; ?>	
-
-	function displayResult(success,text){
-		$("#leave-modal .alert").text(text);
-		if(success)
-			$("#leave-modal .alert").removeClass("alert-danger").addClass("alert-success");
-		else
-			$("#leave-modal .alert").removeClass("alert-success").addClass("alert-danger");
-
-		$("#leave-modal .alert").show();
-		$("#leave-modal .alert")
-			.animate({textIndent:10}, 100)
-			.animate({textIndent:0}, 100)
-			.animate({textIndent:10}, 100)
-			.animate({textIndent:0}, 100,function(){
-				if(success)
-					location.reload();
-			});
-		}
 </script>

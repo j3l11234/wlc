@@ -159,34 +159,6 @@
 
 		function onApprobateSubmit(isAgree){	
 			$('#modal-is-agree').val(isAgree?"true":"false");
-			$.post("<?php echo U('Borrow/approbateBorrow');?>", $("#modal-form").serialize(),
-				function(data,status){
-					if(typeof(data) == "string"){
-						displayResult(false,"失败： "+data);
-					}else{
-						displayResult(true,"审批成功");
-					}
-				}).error(
-					function() {
-						displayResult(false,"失败： 超时");
-					});
+			postSubmit("<?php echo U('Borrow/approbateBorrow');?>",$("#modal-form").serialize(),"审批成功",null,$("#borrow-modal"),"");
 		}<?php endif; ?>
-
-	function displayResult(success,text){
-		$("#borrow-modal .alert").text(text);
-		if(success)
-			$("#borrow-modal .alert").removeClass("alert-danger").addClass("alert-success");
-		else
-			$("#borrow-modal .alert").removeClass("alert-success").addClass("alert-danger");
-
-		$("#borrow-modal .alert").show();
-		$("#borrow-modal .alert")
-			.animate({textIndent:10}, 100)
-			.animate({textIndent:0}, 100)
-			.animate({textIndent:10}, 100)
-			.animate({textIndent:0}, 100,function(){
-				if(success)
-					location.reload();
-			});
-		}
 </script>

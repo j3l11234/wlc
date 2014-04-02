@@ -281,22 +281,4 @@
 			$('#modal-is-agree').val(check_status_base + (isAgree? 1 : 2));
 			postSubmit("<?php echo U('Errand/approbateErrand');?>",$("#modal-form").serialize(),"审批成功",null,$("#errand-modal"),"");
 		}<?php endif; ?>
-
-	function displayResult(success,text){
-		$("#errand-modal .alert").text(text);
-		if(success)
-			$("#errand-modal .alert").removeClass("alert-danger").addClass("alert-success");
-		else
-			$("#errand-modal .alert").removeClass("alert-success").addClass("alert-danger");
-
-		$("#errand-modal .alert").show();
-		$("#errand-modal .alert")
-			.animate({textIndent:10}, 100)
-			.animate({textIndent:0}, 100)
-			.animate({textIndent:10}, 100)
-			.animate({textIndent:0}, 100,function(){
-				if(success)
-					location.reload();
-			});
-		}
 </script>

@@ -55,11 +55,10 @@
 						</div>
 					</div>
 					<div class="col-lg-4 col-sm-6 form-div">
-						<div class="form-label" style="visibility:hidden;">确认按钮</div>
 						<div style="input-group; text-align: center;">
-							<button style="width:70%" type="button" id="btn-search" onclick="onSearch()" data-loading-text="查找中。。。" class="btn btn-primary">
-							查找
-							</button>
+							<button style="width:45%" type="button" onclick="addOrder()" class="btn btn-success">新申请</button>
+							&nbsp;
+							<button style="width:45%" type="button" id="btn-search" onclick="onSearch()" data-loading-text="查找中。。。" class="btn btn-primary">查找</button>
 						</div>
 					</div>	
 				</div>
@@ -186,17 +185,17 @@
 
 		$(".btn-edit").click(function(e){
 			var index = $(e.target).parent().parent().index();
-			editLeave(orderList[index]);
+			editOrder(orderList[index]);
 		});
 
 		$(".btn-delete").click(function(e){
 			var index = $(e.target).parent().parent().index();
-			deleteLeave(orderList[index]);
+			deleteOrder(orderList[index]);
 		});
 
 		$(".btn-view").click(function(e){
 			var index = $(e.target).parent().parent().index();
-			viewLeave(orderList[index]);
+			viewOrder(orderList[index]);
 		});
 	});
 

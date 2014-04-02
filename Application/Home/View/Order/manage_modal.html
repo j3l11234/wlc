@@ -150,35 +150,7 @@
 
 		function onApprobateSubmit(isAgree){	
 			$('#modal-is-agree').val(isAgree?"true":"false");
-			$.post("{:U('Order/approbateOrder')}", $("#modal-form").serialize(),
-				function(data,status){
-					if(typeof(data) == "string"){
-						displayResult(false,"失败： "+data);
-					}else{
-						displayResult(true,"审批成功");
-					}
-				}).error(
-					function() {
-						displayResult(false,"失败： 超时");
-					});
+			postSubmit("{:U('Order/approbateOrder')}",$("#modal-form").serialize(),"审批成功",null,$("#order-modal"),"");
 		}
 	</if>
-
-	function displayResult(success,text){
-		$("#order-modal .alert").text(text);
-		if(success)
-			$("#order-modal .alert").removeClass("alert-danger").addClass("alert-success");
-		else
-			$("#order-modal .alert").removeClass("alert-success").addClass("alert-danger");
-
-		$("#order-modal .alert").show();
-		$("#order-modal .alert")
-			.animate({textIndent:10}, 100)
-			.animate({textIndent:0}, 100)
-			.animate({textIndent:10}, 100)
-			.animate({textIndent:0}, 100,function(){
-				if(success)
-					location.reload();
-			});
-		}
 </script>

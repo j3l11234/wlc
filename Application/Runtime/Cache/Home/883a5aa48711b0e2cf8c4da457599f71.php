@@ -20,131 +20,139 @@
 </div>
 
  
-<div class="panel panel-success">
+<div class="panel panel-success" id="append-panel" style="display:none;">
 	<div class="panel-heading">
-		<h3 class="panel-title">
-			<a data-toggle="collapse" data-toggle="collapse" data-parent="#accordion" href="#collapse-add">提交新申请</a>
-		</h3>
+		<h3 class="panel-title"></h3>
 	</div>
-	<div id="collapse-add" class="panel-collapse collapse">
-		<div class="panel-body">
-			<form id="add-form">
-				<div class="row">	
-					<div class="col-lg-4 col-sm-6 form-div">
-						<div class="form-label">人员姓名</div>
-						<div class="input-group">
-							<input type="input"  class="form-control" readonly="" value="<?php echo get_username();?>">
-							<span class="input-group-addon"></span>
-						</div>
-					</div>
-					<div class="col-lg-4 col-sm-6 form-div">
-						<div class="form-label">所属部门</div>
-						<div class="input-group">
-							<input type="input"  class="form-control" readonly="" value="<?php echo get_department_name();?>">
-							<span class="input-group-addon"></span>
-						</div>
-					</div>
-					<div class="col-lg-4 col-sm-6 form-div">
-						<div class="form-label">申请日期</div>
-						<div class="input-group">
-							<input type="input"  class="form-control" readonly=""  value="<?php echo date('Y-m-d');?>">
-							<span class="input-group-addon"></span>
-						</div>
-					</div>
-					<div class="col-sm-12 form-div">
-						<div class="form-label">订餐地点</div>
-						<div class="input-group">
-							<input class="form-control" size="16" type="text" name="place">
-							<span class="input-group-addon"></span>
-						</div>
-					</div>
-					<div class="col-sm-12 form-div">
-						<div class="form-label">加班原因</div>
-						<div class="input-group">
-							<input class="form-control" size="16" type="text" name="reason">
-							<span class="input-group-addon"></span>
-						</div>
-					</div>
-					<div class="col-sm-6 form-div">
-						<div class="form-label">加班人数</div>
-						<div class="input-group">
-							<input class="form-control" size="16" type="text" name="number">
-							<span class="input-group-addon"></span>
-						</div>
-					</div>
-					<div class="col-sm-6 form-div">
-						<div class="form-label">每人餐标</div>
-						<div class="input-group">
-							<input class="form-control" size="16" type="text" name="standard">
-							<span class="input-group-addon"></span>
-						</div>
+	<div class="panel-body">
+		<form id="append-form">
+			<input type="hidden" id="append-order-id" name="order_id">
+			<div class="row">	
+				<div class="col-lg-4 col-sm-6 form-div">
+					<div class="form-label">人员姓名</div>
+					<div class="input-group">
+						<input type="input"  class="form-control" readonly="" value="<?php echo get_username();?>">
+						<span class="input-group-addon"></span>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-sm-12 form-div" style="text-align: center;">
-						<br>
-						<button style="min-width:150px;width:30%;" type="button" id="submit" onclick="onAddSubmit()" data-loading-text="提交中。。" class="btn btn-success">提交</button>
-					</div>	
+				<div class="col-lg-4 col-sm-6 form-div">
+					<div class="form-label">所属部门</div>
+					<div class="input-group">
+						<input type="input"  class="form-control" readonly="" value="<?php echo get_department_name();?>">
+						<span class="input-group-addon"></span>
+					</div>
 				</div>
-			</form>
-		</div>
+				<div class="col-lg-4 col-sm-6 form-div">
+					<div class="form-label">申请日期</div>
+					<div class="input-group">
+						<input type="input"  class="form-control" id="append-datetime" readonly="">
+						<span class="input-group-addon"></span>
+					</div>
+				</div>
+				<div class="col-sm-12 form-div">
+					<div class="form-label">订餐地点</div>
+					<div class="input-group">
+						<input class="form-control" id="append-place" name="place">
+						<span class="input-group-addon"></span>
+					</div>
+				</div>
+				<div class="col-sm-12 form-div">
+					<div class="form-label">加班原因</div>
+					<div class="input-group">
+						<input class="form-control" id="append-reason" name="reason">
+						<span class="input-group-addon"></span>
+					</div>
+				</div>
+				<div class="col-sm-6 form-div">
+					<div class="form-label">加班人数</div>
+					<div class="input-group">
+						<input class="form-control" id="append-number" name="number">
+						<span class="input-group-addon"></span>
+					</div>
+				</div>
+				<div class="col-sm-6 form-div">
+					<div class="form-label">每人餐标</div>
+					<div class="input-group">
+						<input class="form-control" id="append-standard" name="standard">
+						<span class="input-group-addon"></span>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12 form-div" style="text-align: center;">
+					<br>
+						<button style="min-width:150px;width:30%;" type="button" id="append-submit" data-loading-text="提交中。。" class="btn btn-success">
+							提交
+						</button>
+				</div>	
+			</div>
+		</form>
 	</div>
 </div>
 
 
 
 <script type="text/javascript">
-	//提交表单
-	function onAddSubmit(){
-		if($("#add-form input[name='place']").val() == ""){
+function addOrder(){	
+		$("#append-submit").unbind();
+		$("#append-submit").click(function(){onAdd_EditSubmit('add');});
+
+		$("#append-panel .panel-title").text("提交申请");
+		$("#append-order-id").val("");
+		$("#append-datetime").val(new Date().format("yyyy-MM-dd"));
+		$("#append-place").val("");
+		$("#append-reason").val("");
+		$("#append-number").val("");
+		$("#append-standard").val("");
+
+		$("#append-panel").show();
+		window.scrollTo(0,$("#append-panel").offset().top);
+	}
+
+	//编辑签到申请
+	function editOrder(data){
+		$("#append-submit").unbind();
+		$("#append-submit").click(function(){onAdd_EditSubmit('edit');});
+
+		$("#append-panel .panel-title").text("修改申请");
+		$("#append-order-id").val(data.order_id);
+		$("#append-datetime").val(data.datetime);
+		$("#append-place").val(data.place);
+		$("#append-reason").val(data.reason);
+		$("#append-number").val(data.number);
+		$("#append-standard").val(data.standard);
+
+		$("#append-panel").show();
+		window.scrollTo(0,$("#append-panel").offset().top);
+	}
+
+	function onAdd_EditSubmit(mode){
+		if($("#append-place").val() == ""){
 			displayAddReslt(false,"请输入订餐地点");
 			return;
 		}
-		if($("#add-form input[name='reason']").val() == ""){
+		if($("#append-reason").val() == ""){
 			displayAddReslt(false,"请输入加班原因");
 			return;
 		}
-		var number = $("#add-form input[name='number']").val();
+		var number = $("#append-number").val();
 		if(parseInt(number) != number){
 			displayAddReslt(false,"请输入订餐人数");
 			return;
 		}
-		var standard = $("#add-form input[name='standard']").val();
+		var standard = $("#append-standard").val();
 		if(parseInt(standard) != standard){
 			displayAddReslt(false,"请输入每人标准");
 			return;
-		}
-		
-		$('#add-form #submit').button('loading');
-		
-
-		$.post('<?php echo U('Order/addOrder');?>', $("#add-form").serialize(),
-		function(data,status){
-			if(typeof(data) == "string"){
-				displayAddReslt(false,"失败： "+data);
-			}else{
-				displayAddReslt(true,"提交成功");
-			}
-		}).error(
-			function() {
-				displayAddReslt(false,"");
-			});
-	}
+		} 		
 	
-	//显示服务器返回结果
-	function displayAddReslt(success,text){
-		$("#modal-add-result .alert").text(text);
-		if(success)
-			$("#modal-add-result .alert").removeClass("alert-danger").addClass("alert-success");
-		else
-			$("#modal-add-result .alert").removeClass("alert-success").addClass("alert-danger");
-		
-		$("#modal-add-result").modal('show');
-			$("#modal-add-result").on("hidden.bs.modal", function (e) {
-			if(success)
-				location.reload();
-			else
-				$('#add-form #submit').button('reset');
-		});
+		switch(mode){
+			case "add":
+				postSubmit("<?php echo U('Order/addOrder');?>",$("#append-form").serialize(),"提交成功",$('#append-submit'),null,"提交结果");
+				break;
+			case "edit":
+				postSubmit("<?php echo U('Order/editOrder');?>",$("#append-form").serialize(),"提交成功",$('#append-submit'),null,"提交结果");
+				break;
+		}
 	}		
 </script>

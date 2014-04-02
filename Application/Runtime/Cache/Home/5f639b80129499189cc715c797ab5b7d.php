@@ -36,28 +36,28 @@
 						<div class="col-sm-12 form-div">
 							<div class="form-label">订餐地点</div>
 							<div class="input-group">
-								<input class="form-control" id="modal-place" type="text" name="place">
+								<input class="form-control" id="modal-place" type="text" name="place" readonly>
 								<span class="input-group-addon"></span>
 							</div>
 						</div>
 						<div class="col-sm-12 form-div">
 							<div class="form-label">加班原因</div>
 							<div class="input-group">
-								<input class="form-control" id="modal-reason" type="text" name="reason">
+								<input class="form-control" id="modal-reason" type="text" name="reason" readonly>
 								<span class="input-group-addon"></span>
 							</div>
 						</div>
 						<div class="col-sm-6 form-div">
 							<div class="form-label">加班人数</div>
 							<div class="input-group">
-								<input class="form-control" id="modal-number" type="text" name="number">
+								<input class="form-control" id="modal-number" type="text" name="number" readonly>
 								<span class="input-group-addon"></span>
 							</div>
 						</div>
 						<div class="col-sm-6 form-div">
 							<div class="form-label">每人餐标</div>
 							<div class="input-group">
-								<input class="form-control" id="modal-standard" type="text" name="standard">
+								<input class="form-control" id="modal-standard" type="text" name="standard" readonly>
 								<span class="input-group-addon"></span>
 							</div>
 						</div>
@@ -111,11 +111,6 @@
 		$("#order-modal .alert").hide();
 		$("#order-modal .alert").removeClass("alert-success").addClass("alert-danger");
 
-		$("#modal-place").attr("readonly","");
-		$("#modal-reason").attr("readonly","");
-		$("#modal-number").attr("readonly","");
-		$("#modal-standard").attr("readonly","");
-
 		$("#modal-order-id").val(data.order_id);
 		$("#modal-datetime").val(data.datetime);
 		$("#modal-place").val(data.place);
@@ -127,23 +122,8 @@
 		$("#modal-check-comment").val(data.check_comment);		
 	}
 
-	//编辑订餐申请
-	function editLeave(data){
-		reset(data);
-
-		$("#modal-place").removeAttr("readonly");
-		$("#modal-reason").removeAttr("readonly");
-		$("#modal-number").removeAttr("readonly");
-		$("#modal-standard").removeAttr("readonly");
-
-		$("#order-modal .modal-title").text("编辑订餐申请");
-		$(".btn-modal-edit").show();
-		$("#order-modal .alert").text("请谨慎修改！").show();
-		$('#order-modal').modal({backdrop:"static"});
-	}
-
 	//查看订餐申请
-	function viewLeave(data){
+	function viewOrder(data){
 		reset(data);
 
 		$("#order-modal .modal-title").text("查看订餐申请");
@@ -152,7 +132,7 @@
 	}
 
 	//删除订餐申请
-	function deleteLeave(data){
+	function deleteOrder(data){
 		reset(data);
 
 		$("#order-modal .modal-title").text("编辑订餐申请");
@@ -161,68 +141,7 @@
 		$('#order-modal').modal({backdrop:"static"});
 	}
 
-	function onEditSubmit(){
-		if($("#modal-place").val() == ""){
-			displayReslt(false,"请输入订餐地点");
-			return;
-		}
-		if($("#modal-reason").val() == ""){
-			displayReslt(false,"请输入加班原因");
-			return;
-		}
-		var number = $("#modal-number").val();
-		if(parseInt(number) != number){
-			displayReslt(false,"请输入订餐人数");
-			return;
-		}
-		var standard = $("#modal-standard").val();
-		if(parseInt(standard) != standard){
-			displayReslt(false,"请输入每人标准");
-			return;
-		}
-
-		$.post("<?php echo U('Order/editOrder');?>", $("#modal-form").serialize(),
-		function(data,status){
-			if(typeof(data) == "string"){
-				displayResult(false,"失败： "+data);
-			}else{
-				displayResult(true,"提交成功");
-			}
-		}).error(
-			function() {
-				displayResult(false,"失败： 超时");
-			});
-
-	}
-
 	function onDeleteSubmit(){
-		$.post("<?php echo U('Order/deleteOrder');?>", $("#modal-form").serialize(),
-		function(data,status){
-			if(typeof(data) == "string"){
-				displayResult(false,"失败： "+data);
-			}else{
-				displayResult(true,"删除成功");
-			}
-		}).error(
-			function() {
-				displayResult(false,"失败： 超时");
-			});
+		postSubmit("<?php echo U('Order/deleteOrder');?>",$("#modal-form").serialize(),"删除成功",null,$("#order-modal"),"");	
 	}
-		
-	function displayResult(success,text){
-		$("#order-modal .alert").text(text);
-		if(success)
-			$("#order-modal .alert").removeClass("alert-danger").addClass("alert-success");
-		else
-			$("#order-modal .alert").removeClass("alert-success").addClass("alert-danger");
-
-		$("#order-modal .alert")
-			.animate({textIndent:10}, 100)
-			.animate({textIndent:0}, 100)
-			.animate({textIndent:10}, 100)
-			.animate({textIndent:0}, 100,function(){
-				if(success)
-					location.reload();
-			});
-		}
 </script>
