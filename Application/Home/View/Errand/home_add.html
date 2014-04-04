@@ -179,7 +179,7 @@
 		$("#append-reason").val("");
 
 		$("#append-panel").show();
-		window.scrollTo(0,$("#append-panel").offset().top);
+		$.scrollTo($("#append-panel").offset().top-60,300);
 	}
 
 	//编辑申请
@@ -198,7 +198,7 @@
 		$("#append-reason").val(data.reason);
 
 		$("#append-panel").show();
-		window.scrollTo(0,$("#append-panel").offset().top);
+		$.scrollTo($("#append-panel").offset().top-60,300);
 	}
 
 	function onAdd_EditSubmit(mode){
@@ -266,7 +266,7 @@
 		catch(err){}
 
 		$("#append-panel").show();
-		window.scrollTo(0,$("#append-panel").offset().top);
+		$.scrollTo($("#append-panel").offset().top-60,300);
 	}
 
 	function onSummarizeSubmit(){
@@ -317,7 +317,10 @@
 		object_tr.append("<td>" + $("#table-contact-input").val() + "</td>");
 		object_tr.append("<td>" + $("#table-alumni-input").val() + "</td>");
 		object_tr.append('<td><button type="button" class="btn btn-xs btn-danger" onclick="delObjFromTable(this)">删除</button></td>');
+		object_tr.hide();
 		$(button).parent().parent().last().before(object_tr);
+		object_tr.fadeIn("fast");
+
 
 		$("#table-name-input").val("");
 		$("#table-sex-input").val("");
@@ -328,6 +331,7 @@
 	}
 
 	function delObjFromTable(button){
-		$(button).parent().parent().remove();
+		var object = $(button).parent().parent();
+		object.fadeOut("fast",function(){object.remove();});
 	}
 </script>

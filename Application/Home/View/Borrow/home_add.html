@@ -133,7 +133,7 @@
 		$("#append-reason").val("");
 
 		$("#append-panel").show();
-		window.scrollTo(0,$("#append-panel").offset().top);
+		$.scrollTo($("#append-panel").offset().top-60,300);
 	}
 
 	//编辑签到申请
@@ -152,7 +152,7 @@
 		$("#append-reason").val(data.reason);
 
 		$("#append-panel").show();
-		window.scrollTo(0,$("#append-panel").offset().top);
+		$.scrollTo($("#append-panel").offset().top-60,300);
 	}
 
 	function onAdd_EditSubmit(mode){
