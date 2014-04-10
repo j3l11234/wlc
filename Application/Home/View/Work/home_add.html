@@ -2,7 +2,7 @@
 
 
 {//个人中心-工作计划-提交表单} 
-<div class="panel panel-success" id="append-panel" style="display:none;">
+<div class="panel panel-success" id="append-panel" style="display:none; margin-bottom: 100px;">
 	<div class="panel-heading">
 		<h3 class="panel-title" id="append-panel-title"></h3>
 	</div>
@@ -25,7 +25,7 @@
 					</div>
 				</div>
 				<div class="col-lg-4 col-sm-6 form-div">
-					<div class="form-label">周次日期</div>
+					<div class="form-label">日期</div>
 					<div class="input-group">
 						<input type="input"  class="form-control" id="append-date" readonly="">
 						<span class="input-group-addon"></span>
@@ -35,20 +35,27 @@
 					<hr style="margin: 5px auto;">
 				</div>
 				<div class="col-sm-12">
-					<div style="text-align: center;">工作计划</div>
-					<div class="panel-group" id="workplan-list">
+					<div class="table-responsive">
+						<input type="hidden" id="append-workplan" name="workplan">
+						<table class="table table-condensed">
+							<thead>
+								<tr>
+									<th width="50%">工作计划</th>
+									<th width="50%">工作完成情况</th>
+								</tr>
+							</thead>
+							<tbody id="workplan-list">
+							</tbody>
+						</table>
 					</div>
-					<br>
-					<button type="button" class="btn btn-success center-block" onclick="addWorkplan(null)">添加新工作</button>
+					<button type="button" class="btn btn-success center-block" onclick="addWorkplan(null)">添加工作计划</button>
 				</div>
-
 				<div class="col-sm-12 form-div">
 					<div class="form-label">总结</div>
 					<div class="textarea">
 					<textarea type="" class="form-control" id="append-summary" name="summary" style="min-height:100px;"> </textarea>
 					</div>
-				</div>
-				
+				</div>	
 			</div>
 			<div class="row">
 				<div class="col-sm-12 form-div" style="text-align: center;">
@@ -62,58 +69,22 @@
 	</div>
 </div>
 
-<div class="panel panel-success" id="new-workplan" style="display: none;">
-	<div class="panel-heading" style="padding: 5px 15px;">
-		<div class="panel-title">
-			工作
+<table style="display: none;">
+	<tr id="new-workplan" style="display: none;">
+		<td>
+			<textarea type="" class="form-control workplan-detail" style="min-height:80px;white-space:normal;">____年__月__日，在____（工作地点），和________（同事、领导、接待对象等），________（工作内容）。</textarea>
+		</td>
+		<td>
+			<div style="margin-bottom: 10px;">
+				<input type="checkbox" class="workplan-finish" data-on="success" data-on-label="已完成" data-off="danger" data-off-label="未完成" />
+			</div>					
+			<input type="input"  class="form-control workplan-reason" placeholder="未完成原因">
+		</td>
+		<td>
 			<button type="button" class="btn btn-xs btn-danger" onclick="deleteWorkPlan(this)" style="float:right;">删除</button>
-			<div style="clear: both;"></div>
-		</div>
-	</div>
-	<div class="panel-body">
-		<div class="row">
-			<div class="col-lg-4 col-sm-6 form-div">
-				<div class="form-label">日期</div>
-				<div class="input-group date form_date"  data-date-format="yyyy-mm-dd">	
-					<input class="form-control append-date" type="text" readonly>
-					<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-				</div>
-			</div>
-			<div class="col-lg-4 col-sm-6 form-div">
-				<div class="form-label">地点</div>
-				<div class="input-group">
-					<input type="input"  class="form-control append-place">
-					<span class="input-group-addon"></span>
-				</div>
-			</div>
-			<div class="col-lg-4 col-sm-6 form-div">
-				<div class="form-label">人物</div>
-				<div class="input-group">
-					<input type="input"  class="form-control append-person">
-					<span class="input-group-addon"></span>
-				</div>
-			</div>
-			<div class="col-sm-12 form-div">
-				<div class="form-label">工作内容</div>
-				<div class="textarea">
-				<textarea type="" class="form-control append-details" style="min-height:50px;"> </textarea>
-				</div>
-			</div>
-			<div class="col-sm-2 form-div">
-				<input type="checkbox" class="append-finish" data-on="success" data-on-label="已完成" data-off="danger" data-off-label="未完成" />
-			</div>
-			<div class="col-sm-10 form-div">
-				<div class="form-label">未完成原因</div>
-				<div class="input-group">
-					<input type="input"  class="form-control append-reason">
-					<span class="input-group-addon"></span>
-				</div>
-			</div>
-		</div>
-		<div class="alert alert-danger" style="margin-bottom: 0px; padding: 10px 15px; display: none;"></div>
-	</div>
-</div>
-
+		</td>
+	</tr>
+</table>
 
 <script type="text/javascript">
 	var workplanList;
@@ -122,40 +93,25 @@
 		
 	});
 	
-	function setApplyFormEnable(enable){
-		if(enable){
-			$('#append-form .form_date').datetimepicker({  
-				language:"zh-CN",
-				weekStart: 1,
-				todayBtn:  1,
-				autoclose: 1,
-				todayHighlight: 1,
-				startView: 2,
-				minView:2,
-				forceParse: 0
-	    	});
-			$("#append-place").removeAttr("readonly");
-			$("#append-reason").removeAttr("readonly");
-		}else{
-			$('#append-form .form_date').datetimepicker('remove');
-			$("#append-place").attr("readonly","");
-			$("#append-reason").attr("readonly","");
-		}
-
-	}
-
 	//填写工作计划
 	function editWork(data){
 		$("#append-submit").unbind();
 		$("#append-submit").click(function(){onEditSubmit('edit');});
 
 		//setApplyFormEnable(true);
-		$("#append-panel-title").text("修改申请");
+		$("#append-panel-title").text("填写工作计划");
 		$("#append-work-id").val(data.work_id);
 		$("#append-date").val(data.date);
+		$("#append-summary").val(data.summary);
 
-		$("#append-summary").parent().parent().hide();
-
+		$("#workplan-list").children().remove();
+		try{
+			var workplanList = JSON.parse(data.workplan);
+			for (var i = 0; i < workplanList.length; i++){
+				addWorkplan(workplanList[i]);
+			}
+		}
+		catch(err){}
 
 		$("#append-panel").show();
 		$.scrollTo($("#append-panel").offset().top-60,300);
@@ -163,56 +119,23 @@
 
 
 
-	function onEditSubmit(mode){
+	function onEditSubmit(){
 
-		var workplan_panelList = $("#workplan-list").children();
-		workplan_panelList.find(".alert").hide();
+		var workplan_trlList = $("#workplan-list").children();
 		var workplanList = new Array();
-		for (var i = 0; i < workplan_panelList.length; i++){
-			var workplan_panel = $(workplan_panelList[i]);
-			if(workplan_panel.find(".append-date").val() == ""){
-				showAlert(workplan_panel,"请选择时间");
-				return;
-			}
-			if(workplan_panel.find(".append-place").val() == ""){
-				showAlert(workplan_panel,"请填写地点");
-				return;
-			}
-			if(workplan_panel.find(".append-person").val() == ""){
-				workplan_panel.find(".append-person").val("无");
-			}	
-			if(workplan_panel.find(".append-details").val() == ""){
-				showAlert(workplan_panel,"请填写工作内容");
-				return;
-			}	
+		for (var i = 0; i < workplan_trlList.length; i++){
+			var workplan_tr = $(workplan_trlList[i]);
 
 			var workplan = new Object();
-			workplan.date = workplan_panel.find(".append-date").val();
-			workplan.place = workplan_panel.find(".append-place").val();
-			workplan.person = workplan_panel.find(".append-person").val();
-			workplan.details = workplan_panel.find(".append-details").val();
-			workplan.finish = workplan_panel.find(".append-finish")[0].checked;
-			workplan.reason = workplan_panel.find(".append-reason").val();
+			workplan.detail = workplan_tr.find(".workplan-detail").val();
+			workplan.finish = workplan_tr.find(".workplan-finish").is(':checked');
+			workplan.reason = workplan_tr.find(".workplan-reason").val();
 			workplanList.push(workplan);
 		}
 
-		alert(JSON.stringify(workplanList));
-		return;
-	
-		switch(mode){
-			case "add":
-				postSubmit("{:U('Work/addWork')}",$("#append-form").serialize(),"提交成功",$('#append-submit'),null,"提交结果");
-				break;
-			case "edit":
-				postSubmit("{:U('Work/editWork')}",$("#append-form").serialize(),"修改成功",$('#append-submit'),null,"修改结果");
-				break;
-		}
+		$("#append-workplan").val(JSON.stringify(workplanList));
 
-		function showAlert(panel,text){
-			panel.find(".alert").text(text).show();
-			$.scrollTo(panel.offset().top-60,300);
-		}
-	
+		postSubmit("{:U('Work/editWork')}",$("#append-form").serialize(),"填写成功",$('#append-submit'),null,"提交结果");
 	}
 
 	function summarizeWork(data){
@@ -233,24 +156,7 @@
 		$("#append-summary").val(data.summary);
 
 
-		$("#table-workplan-input").siblings().remove();
-		try{
-			var workplanList = JSON.parse(data.workplan);
-			var workplan_trList = new Array();
-			for (var i = 0; i < workplanList.length; i++){
-				var workplan_tr = $(document.createElement("tr"));
-				workplan_tr.append("<td>" + workplanList[i].name + "</td>");
-				workplan_tr.append("<td>" + workplanList[i].sex + "</td>");
-				workplan_tr.append("<td>" + workplanList[i].department + "</td>");
-				workplan_tr.append("<td>" + workplanList[i].position + "</td>");
-				workplan_tr.append("<td>" + workplanList[i].contact + "</td>");
-				workplan_tr.append("<td>" + workplanList[i].alumni + "</td>");
-				workplan_tr.append('<td><button type="button" class="btn btn-xs btn-danger" onclick="delObjFromTable(this)">删除</button></td>');
-				workplan_trList.push(workplan_tr);
-			}
-			$('#append-workplan-tbody').children().last().before(workplan_trList);
-		}
-		catch(err){}
+	
 
 		$("#append-panel").show();
 		$.scrollTo($("#append-panel").offset().top-60,300);
@@ -285,35 +191,33 @@
 
 	function addWorkplan(data){
 		var new_workplan = $("#new-workplan").clone(true);
-			new_workplan.removeAttr("id");
-			new_workplan.addClass("workplan");
+		new_workplan.removeAttr("id");
+		new_workplan.addClass("workplan");
 
-			new_workplan.find(".append-finish").bootstrapSwitch();
-			new_workplan.find(".append-finish").on('switch-change', function (e, data){
-				if(data.value){
-					$(e.target).parents(".workplan").find(".append-reason").attr('disabled','disabled');
-				}
-				else{
-					$(e.target).parents(".workplan").find(".append-reason").removeAttr('disabled');
-				}		
-			});
-			new_workplan.find(".form_date").datetimepicker({  
-				language:"zh-CN",
-				weekStart: 1,
-				todayBtn:  1,
-				autoclose: 1,
-				todayHighlight: 1,
-				startView: 2,
-				minView:2,
-				forceParse: 0
-    		});	
-			$("#workplan-list").append(new_workplan);
-			new_workplan.fadeIn("fast");
+		new_workplan.find(".workplan-finish").bootstrapSwitch();
+		new_workplan.find(".workplan-finish").on('switch-change', function (e, data){
+			if(data.value){
+				$(e.target).parents(".workplan").find(".workplan-reason").fadeOut("fast");
+			}
+			else{
+				$(e.target).parents(".workplan").find(".workplan-reason").fadeIn("fast");
+			}		
+		});
+
+		$("#workplan-list").append(new_workplan);
+		new_workplan.fadeIn("fast");
+
+		if(data != null){
+			new_workplan.find(".workplan-detail").val(data.detail);
+			new_workplan.find(".workplan-reason").val(data.reason);
+			new_workplan.find(".workplan-finish").bootstrapSwitch('setState', data.finish);
+		}else{		
 			$.scrollTo(new_workplan.offset().top-60,300);
+		}
 	}
 
 	function deleteWorkPlan(button){
-		var workplan = $(button).parent().parent().parent();
+		var workplan = $(button).parent().parent();
 		workplan.fadeOut("fast",function(){workplan.remove();});
 		
 	}

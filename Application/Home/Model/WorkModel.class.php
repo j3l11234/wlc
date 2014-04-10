@@ -71,7 +71,7 @@ class WorkModel extends Model {
 			$end_date = '9999-12-31';
 		
 		$where = array(
-			'user_id'	=>	$user_id,
+			'wlc_work.user_id'	=>	$user_id,
 			'date'		=>	array('between',array($start_date,$end_date)),
 		);
 		
@@ -81,7 +81,9 @@ class WorkModel extends Model {
 		$count = $this->where($where)->count();
 
 		$this->where($where)->order('date desc')
-		->field('work_id,date,workplan,summary,status,check_datetime,check_comment,check2_datetime,check2_comment');
+		->join('LEFT JOIN wlc_user AS checker ON checker.user_id = wlc_work.checker_id')
+		->field('work_id,date,workplan,summary,status,
+			checker.alias AS checker,check_datetime,check_comment');
 
 		if($per_page != 0)
 			$list = $this->page($page.','.$per_page)->select();
@@ -102,6 +104,42 @@ class WorkModel extends Model {
 	}
 
 
+
+	/**
+	 * 填写工作计划
+	 * 
+	 * @param int $user_id			用户id
+	 * @param int $work_id			工作计划条目id
+	 * @param string $workplan		工作计划
+	 * @param string $summary		总结
+	 * @return 修改失败null 否则返回数据条目
+	 */
+	public function editWork($user_id,$work_id,$workplan,$summary){
+		//获取记录
+		$data = $this->where(array('work_id' => $work_id))->select()[0];
+		
+		if(!$data)
+			return null;
+		//检查记录所有者
+		if($data['user_id'] != $user_id)
+			return null;
+
+
+		//只能编辑未审批的记录
+		if(!($data['status'] == 2 || $data['status'] == 3 || $data['status'] == 4))
+			return null;
+
+		$data['workplan']		=	$workplan;
+		$data['summary']		=	$summary;
+		$data['status']	= 3;
+
+		$this->save($data);
+
+		$result = $this->where(array('work_id' => $work_id))->select()[0];
+		return $result;
+	}
+
+
 	/**
 	 * 检查是否存在工作计划
 	 * @param int $user_id	用户id
@@ -112,11 +150,11 @@ class WorkModel extends Model {
 		$records = $this->where(array(
 			'user_id'	=>	$user_id,
 			'date'		=>	$date,
-		))->select();
+		))->select()[0];
 		if(!isset($records))
 			return null;
 		else
-			return ($records[0]);
+			return ($records);
 	}
 
 
@@ -140,7 +178,13 @@ class WorkModel extends Model {
 			
 			for ($tTimestamp = $recentWorkTimestamp; 
 				 $tTimestamp <= $timestamp; $tTimestamp += 7*86400){
-				$this->addWork($user['user_id'], date('Y-m-d',$tTimestamp),1);
+				$status = 1; //是否允许填写
+				//判断上周是否已经填写
+				$lastRecord = $this->isExistWork($user_id, date('Y-m-d',$tTimestamp - 7*86400));
+				if($lastRecord != null)
+					if($lastRecord['status'] >= 2)
+						$status = 2;
+				$this->addWork($user['user_id'], date('Y-m-d',$tTimestamp),$status);
 			}
 		}		
 	}
@@ -151,11 +195,6 @@ class WorkModel extends Model {
 	//===============================================================================================	
 	//===============================================================================================	
 	//===============================================================================================	
-
-
-
-
-
 
 
 	/**

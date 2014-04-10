@@ -72,6 +72,27 @@ class WorkController extends Controller {
 		return $this->fetch('Work/home_query');
 	}
 
+	/**
+	 * 个人中心——填写总结
+	 * AXAJ
+	 */
+	public function editWork(){
+		check_login('die');
+
+		//print_r($_REQUEST);
+		//die();
+
+		$result = D('Work')->editWork(
+			$_SESSION['user']['user_id'],
+			$_REQUEST['work_id'],
+			$_REQUEST['workplan'],
+			$_REQUEST['summary']);
+
+
+		if(!$result)
+			die('修改失败');
+		$this->ajaxReturn($result);
+	}
 
 	/**
 	 * 审批管理——工作计划主页面

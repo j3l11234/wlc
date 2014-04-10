@@ -33,10 +33,10 @@
 						<div class="input-group">
 							<select name="check_status" class="selectpicker">
 								<option value="0">全部</option>
-								<option value="1">未审批</option>
-								<option value="2">已审批</option>
-								<option value="3">需要填写</option>
-								<option value="4">不可填写</option>
+								<option value="1">不能填写</option>
+								<option value="2">允许填写</option>
+								<option value="3">已经填写</option>
+								<option value="4">已经审阅</option>
 							</select>
 						</div>
 					</div>
@@ -91,7 +91,10 @@
 									<button type="button" class="btn btn-xs btn-info">已经填写</button>
 								</case>
 								<case value="4">
-									<button type="button" class="btn btn-xs btn-success">已经总结</button>
+									<button type="button" class="btn btn-xs btn-success">已经审阅</button>
+								</case>
+								<case value="5">
+									<button type="button" class="btn btn-xs btn-success">已经存档</button>
 								</case>
 							</switch>
 						</td>
@@ -99,19 +102,10 @@
 							<button type="button" class="btn btn-xs btn-primary" onclick="onViewClick(this)">查看</button>
 							<if condition="$record['status'] eq 1"> {//不可填写}
 								<button type="button" class="btn btn-xs" style="visibility:hidden;">填写</button>
-								<button type="button" class="btn btn-xs" style="visibility:hidden;">总结</button>
-							<elseif condition="$record['status'] eq 2"/> {//等待填写-不可总结}
+							<elseif condition="$record['status'] eq 2"/>
 								<button type="button" class="btn btn-xs btn-info" onclick="onEditClick(this)">填写</button>
-								<button type="button" class="btn btn-xs" style="visibility:hidden;">总结</button>
-							<elseif condition="$record['status'] eq 3"/> {//已经填写-可填写-可总结}	
+							<elseif condition="($record['status'] eq 3) OR ($record['status'] eq 4)"/>
 								<button type="button" class="btn btn-xs btn-warning btn-edit" onclick="onEditClick(this)" disabled="disabled">修改</button>
-								<button type="button" class="btn btn-xs btn-info" onclick="onSummarizeClick(this)">总结</button>
-							<elseif condition="$record['status'] eq 4"/> {//已经总结-可总结}	
-								<button type="button" class="btn btn-xs" style="visibility:hidden;">修改</button>
-								<button type="button" class="btn btn-xs btn-warning btn-edit" onclick="onSummarizeClick(this)" disabled="disabled">总结</button>
-							<else />
-								<button type="button" class="btn btn-xs" style="visibility:hidden;">修改</button>
-								<button type="button" class="btn btn-xs" style="visibility:hidden;">删除</button>
 							</if>
 						</td>	
 					</tr>
