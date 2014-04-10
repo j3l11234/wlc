@@ -163,7 +163,7 @@ class OrderController extends Controller {
 
 		$this->assign('departmentList',$departmentList);
 		$this->assign('userList',$userList);
-		$this->assign('isPersonnel',$privilege == PRIRILEGE_PERSONNEL);
+		$this->assign('isBoss',$privilege == PRIRILEGE_BOSS);
 
 		if(!isset($_REQUEST['department']))
 			$_REQUEST['department'] = 0;
@@ -216,10 +216,11 @@ class OrderController extends Controller {
 	 */
 	public function approbateOrder(){
 		check_login('die');
-		if(get_privilege() != PRIRILEGE_PERSONNEL)
+		if(get_privilege() != PRIRILEGE_BOSS)
 			die('权限错误');
 
 		$result = D('Order')->approbateOrder(
+			$_SESSION['user']['user_id'],
 			$_REQUEST['order_id'],
 			$_REQUEST['is_agree'],
 			time(),

@@ -128,21 +128,21 @@ function addOrder(){
 
 	function onAdd_EditSubmit(mode){
 		if($("#append-place").val() == ""){
-			displayAddReslt(false,"请输入订餐地点");
+			showModalResult(false,"输入错误","请输入订餐地点",false);
 			return;
 		}
 		if($("#append-reason").val() == ""){
-			displayAddReslt(false,"请输入加班原因");
+			showModalResult(false,"输入错误","请输入订餐地点",false);
 			return;
 		}
 		var number = $("#append-number").val();
 		if(parseInt(number) != number){
-			displayAddReslt(false,"请输入订餐人数");
+			showModalResult(false,"输入错误","请输入订餐地点",false);
 			return;
 		}
 		var standard = $("#append-standard").val();
 		if(parseInt(standard) != standard){
-			displayAddReslt(false,"请输入每人标准");
+			showModalResult(false,"输入错误","请输入每人标准",false);
 			return;
 		} 		
 	

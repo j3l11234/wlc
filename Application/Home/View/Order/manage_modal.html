@@ -77,11 +77,11 @@
 							<div class="form-label">
 							审批状态
 							</div>
-							<div class="" id="modal-check-status">
+							<div id="modal-check-status">
 								<button type="button" id="modal-check-status1" class="btn btn-sm btn-info">等待审批</button>
 								<button type="button" id="modal-check-status2" class="btn btn-sm btn-success">审批通过</button>
 								<button type="button" id="modal-check-status3" class="btn btn-sm btn-danger">审批驳回</button>
-								<span class="" id="modal-checker"></span>
+								<span id="modal-checker"></span>
 							</div>
 						</div>
 						<div class="col-sm-12 form-div">
@@ -127,6 +127,7 @@
 		$("#modal-check-datetime").val(data.check_datetime);
 		$("#modal-check-status"+data.check_status).show();
 		$("#modal-check-comment").val(data.check_comment);
+		$("#modal-checker").text(data.check_status != 1 && data.checker!=null ?"by "+data.checker:"").show();
 	}
 
 	function viewOrder(data){
@@ -138,7 +139,7 @@
 	}
 
 	{//处长级别才能审批}
-	<if condition="$isPersonnel">
+	<if condition="$isBoss">
 		function approbateOrder(data){
 			reset(data);
 			$("#order-modal .modal-title").text("审批订餐申请");

@@ -73,11 +73,11 @@
 						</div>
 						<div class="col-sm-6 form-div">
 							<div class="form-label">审批状态</div>
-							<div class="" id="modal-check-status">
-								<button type="button" id="modal-check-status1" class="btn btn-sm btn-info">等待审批<tton>
-								<button type="button" id="modal-check-status2" class="btn btn-sm btn-success">审批通过<tton>
-								<button type="button" id="modal-check-status3" class="btn btn-sm btn-danger">审批驳回<tton>
-								<span class="" id="modal-checker"></span>
+							<div id="modal-check-status">
+								<button type="button" id="modal-check-status1" class="btn btn-sm btn-info">等待审批</button>
+								<button type="button" id="modal-check-status2" class="btn btn-sm btn-success">审批通过</button>
+								<button type="button" id="modal-check-status3" class="btn btn-sm btn-danger">审批驳回</button>
+								<span id="modal-checker"></span>
 							</div>
 						</div>
 						<div class="col-sm-12 form-div">
@@ -119,7 +119,8 @@
 		$("#modal-standard").val(data.standard);
 		$("#modal-check-datetime").val(data.check_datetime);
 		$("#modal-check-status"+data.check_status).show();
-		$("#modal-check-comment").val(data.check_comment);		
+		$("#modal-check-comment").val(data.check_comment);
+		$("#modal-checker").text(data.check_status != 1 && data.checker!=null ?"by "+data.checker:"").show();	
 	}
 
 	//查看订餐申请

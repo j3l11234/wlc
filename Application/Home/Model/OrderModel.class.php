@@ -23,7 +23,10 @@ class OrderModel extends Model {
 			'reason'	=>	$reason,
 			'number'	=>	$number,
 			'standard'	=>	$standard,
+			'checker_id' => D('User')->getChecker($user_id),
 		);
+
+
 		//print_r($data);
 		if(!$this->add($data))
 			return null;
@@ -50,8 +53,8 @@ class OrderModel extends Model {
 			$end_date = '9999-12-31';
 		
 		$where = array(
-			'user_id'	=>	$user_id,
-			'datetime'		=>	array('between',array($start_date, $end_date)),
+			'wlc_order.user_id'	=>	$user_id,
+			'datetime'			=>	array('between',array($start_date, $end_date)),
 		);
 		
 		if($check_status >= 1 && $check_status <= 3)
@@ -60,7 +63,9 @@ class OrderModel extends Model {
 		//var_dump(expression)
 		$count = $this->where($where)->count();
 		$this->where($where)->order('datetime desc')
-		->field('order_id,datetime,place,reason,number,standard,check_status,check_datetime,check_comment,check_comment');
+		->join('LEFT JOIN wlc_user AS checker ON checker.user_id = wlc_order.checker_id')
+		->field('order_id,datetime,place,reason,number,standard,
+			check_status,checker.alias AS checker,check_datetime,check_comment');
 
 		if($per_page != 0)
 			$list = $this->page($page.','.$per_page)->select();
@@ -199,9 +204,12 @@ class OrderModel extends Model {
 		$count = $this->where($where)->count(); 
 		//var_dump($where);
 		$this->join('RIGHT JOIN wlc_user ON wlc_user.user_id = wlc_order.user_id')
-		->join('LEFT JOIN wlc_department ON wlc_department.department_id = wlc_user.department_id');
-		$this->field('order_id,datetime,place,reason,number,standard,check_status,check_datetime,check_comment,alias,department_name')
+		->join('LEFT JOIN wlc_department ON wlc_department.department_id = wlc_user.department_id')
+		->join('LEFT JOIN wlc_user AS checker ON checker.user_id = wlc_order.checker_id');
+		$this->field('order_id,wlc_user.alias,department_name,datetime,place,reason,number,standard,
+			check_status,checker.alias AS checker,check_datetime,check_comment')
 		->where($where)->order($order);
+
 		//var_dump($count);
 		if($per_page != 0)
 			$list = $this->page($page.','.$per_page)->select();
@@ -228,16 +236,18 @@ class OrderModel extends Model {
 	 * @param string $check_comment		请假原因
 	 * @return 审批失败null 否则返回数据条目
 	 */
-	public function approbateOrder($order_id,$is_agree,$check_datetime,$check_comment){
+	public function approbateOrder($checker_id,$order_id,$is_agree,$check_datetime,$check_comment){
 		//获取记录
 		$data = $this->where(array('order_id' => $order_id))->select()[0];
 		
 		if(!$data)
 			return null;
 
+		$data['checker_id']		=	$checker_id;
 		$data['check_status'] 	= 	$is_agree=='true' ? 2 : 3;
 		$data['check_datetime']	=	date('Y-m-d H:i:s',$check_datetime);
 		$data['check_comment']	=	$check_comment;
+
 
 		$this->save($data);
 
@@ -249,7 +259,10 @@ class OrderModel extends Model {
 	 * 获取待审批数量
 	 * @return 待审批数量
 	 */
-	public function getPendingNum(){
-		return $this->where(array('check_status' => 1))->count();
+	public function getPendingNum($user_id){
+		return $this->where(array(
+			'check_status' => 1,
+			'checker_id' => $user_id,
+			))->count();
 	}
 }

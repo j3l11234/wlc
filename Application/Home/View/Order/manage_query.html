@@ -58,7 +58,7 @@
 							</select>
 						</div>
 					</div>
-					<if condition="$isPersonnel">
+					<if condition="$isBoss">
 						<div class="col-lg-4 col-sm-6 form-div">
 							<div class="form-label">修改审批</div>
 							<div class="input-group">									
@@ -139,7 +139,7 @@
 							</td>
 							<td style="text-align: right;">
 								<button type="button" class="btn btn-xs btn-primary btn-view">查看</button>
-								<if condition="$isPersonnel">
+								<if condition="$isBoss">
 									<switch name="record['check_status']">
 										<case value="1">
 											<button type="button" class="btn btn-xs btn-info btn-approbate">审批</button>
@@ -238,7 +238,7 @@
 		});
 
 		{//人事负责人才能审批}
-		<if condition="$isPersonnel">
+		<if condition="$isBoss">
 			$(".btn-approbate").click(function(e){
 				var index = $(e.target).parent().parent().index();
 				approbateOrder(orderList[index]);

@@ -58,8 +58,8 @@ function getPendingNum($item,$home = 0){
 				$pendingNum = D('Leave')->getPendingReportNum();
 			break;
 		case 'order': 
-			if (get_privilege() == PRIRILEGE_PERSONNEL) //查询待审批订餐申请的数量-人事负责人用
-				$pendingNum = D('Order')->getPendingNum();
+			if (get_privilege() == PRIRILEGE_BOSS) //查询待审批订餐申请的数量-人事负责人用
+				$pendingNum = D('Order')->getPendingNum($_SESSION['user']['user_id']);
 			break;
 		case 'borrow':
 			if($home == 1)
@@ -69,11 +69,8 @@ function getPendingNum($item,$home = 0){
 					$pendingNum = D('Borrow')->getPendingNum();
 			break;
 		case 'errand': 
-				if($home == 1)
-					$pendingNum = D('Errand')->getPendingSumNum($_SESSION['user']['user_id']);
-			else 
-				if (get_privilege() == PRIRILEGE_BOSS) //查询待审批
-					$pendingNum = D('Errand')->getPendingNum($_SESSION['user']['user_id']);
+			if (get_privilege() == PRIRILEGE_BOSS) //查询待审批
+				$pendingNum = D('Errand')->getPendingNum($_SESSION['user']['user_id']);
 			break;
 
 	}
