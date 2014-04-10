@@ -72,10 +72,8 @@ function getPendingNum($item,$home = 0){
 				if($home == 1)
 					$pendingNum = D('Errand')->getPendingSumNum($_SESSION['user']['user_id']);
 			else 
-				if (get_privilege() == PRIRILEGE_BOSS) //查询待审批 出差申请/总结 的数量-处长用
-					$pendingNum = D('Errand')->getPendingNum();
-				elseif(get_privilege() == PRIRILEGE_PERSONNEL) //查询待审批 金额 的数量 - 人事用
-					$pendingNum = D('Errand')->getPendingCostNum();
+				if (get_privilege() == PRIRILEGE_BOSS) //查询待审批
+					$pendingNum = D('Errand')->getPendingNum($_SESSION['user']['user_id']);
 			break;
 
 	}

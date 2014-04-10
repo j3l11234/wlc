@@ -30,33 +30,20 @@ class ErrandModel extends Model {
 			'end_date'				=>	array('elt',$end_date),
 		);
 		
-		if($check_status >= 1 && $check_status <= 8)
+		if($check_status >= 1 && $check_status <= 3)
 			$where['check_status'] = $check_status;
 
 		$count = $this->where($where)->count();
 
 		$this->where($where)->order('date desc')
 		->join('LEFT JOIN wlc_user AS checker ON checker.user_id = wlc_errand.checker_id')
-		->join('LEFT JOIN wlc_user AS checker2 ON checker2.user_id = wlc_errand.checker2_id')
-		->field('errand_id,date,start_date,end_date,place,reason,object,cost,summary,check_status,
-			checker.alias AS checker,check_datetime,check_comment,
-			checker2.alias AS checker2,check2_datetime,check2_comment,
-			check3_datetime,check3_comment');
+		->field('errand_id,date,start_date,end_date,place,reason,object,cost,cost_sum,summary,check_status,
+			checker.alias AS checker,check_datetime,check_comment');
 
 		if($perPage != 0)
 			$list = $this->page($page.','.$perPage)->select();
 		else
 			$list = $this->select();
-
-		//判断是否可以总结
-		$now = time();
-		foreach ($list as $key => $record){
-			if($now >= strtotime($record['end_date'].' 00:00:00'))
-				$list[$key]['can_sum'] = true;	
-			else
-				$list[$key]['can_sum'] = false;	
-		}
-
 
 		$return = array('count' => $count, 'list' => $list);
 		return $return;
@@ -72,20 +59,30 @@ class ErrandModel extends Model {
 	 * @param string $end_date		结束时间
 	 * @param string $reason		出差事由
 	 * @param string $place			出差地点
+	 * @param string $object		出访目标
+	 * @param string $cost			报销金额细节
+	 * @param int $cost_sum			报销金额
+	 * @param string $summary		出差总结
 	 * @return 新增失败则返回null 否则返回数据条目
 	 */
-	public function addErrand($user_id, $date, $start_date, $end_date, $place, $reason){
+	public function addErrand($user_id,$date,$start_date,$end_date,$place,$reason,$object,$cost,$cost_sum,$summary){
 		
 		$data = array(
 			'user_id'		=>	$user_id,
 			'type'			=>	$type,
 			'date'			=>	$date,
-			'start_date'	=>	$start_date,
-			'end_date'		=>	$end_date,
-			'reason'		=>	$reason,
-			'place'			=>	$place,
-		);
-		
+		);	
+		$data['start_date']		=	$start_date;
+		$data['end_date']		=	$end_date;
+		$data['place']			=	$place;
+		$data['reason']			=	$reason;
+		$data['object']			=	$object;
+		$data['cost']			=	$cost;
+		$data['cost_sum']		=	$cost_sum;
+		$data['summary']		=	$summary;
+		$data['check_status']	=	1;
+		$data['checker_id']		=	D('User')->getChecker($user_id);
+
 		if(!$this->add($data))
 			return null;
 		else
@@ -102,9 +99,13 @@ class ErrandModel extends Model {
 	 * @param string $end_date		结束时间
 	 * @param string $reason		出差事由
 	 * @param string $place			出差地点
+	 * @param string $object		出访目标
+	 * @param string $cost			报销金额细节
+	 * @param int $cost_sum			报销金额
+	 * @param string $summary		出差总结
 	 * @return 修改失败null 否则返回数据条目
 	 */
-	public function editErrand($user_id, $errand_id, $start_date, $end_date, $place, $reason){
+	public function editErrand($user_id,$errand_id,$start_date,$end_date,$place,$reason,$object,$cost,$cost_sum,$summary){
 		//获取记录
 		$data = $this->where(array('errand_id' => $errand_id))->select()[0];
 		
@@ -123,6 +124,10 @@ class ErrandModel extends Model {
 		$data['end_date']	=	$end_date;
 		$data['place']		=	$place;
 		$data['reason']		=	$reason;
+		$data['object']		=	$object;
+		$data['cost']		=	$cost;
+		$data['cost_sum']	=	$cost_sum;
+		$data['summary']	=	$summary;
 		
 		$this->save($data);
 
@@ -161,48 +166,7 @@ class ErrandModel extends Model {
 
 
 	/**
-	 * 总结出差
-	 * 
-	 * @param int $user_id			用户id
-	 * @param int $errand_id		申请条目id
-	 * @param string $object		出访目标
-	 * @param int $cost				报销金额
-	 * @param string $summary		出差总结
-	 * @return 修改失败null 否则返回数据条目
-	 */
-	public function summarizeErrand($user_id, $errand_id, $object, $cost, $summary){
-		//获取记录
-		$data = $this->where(array('errand_id' => $errand_id))->select()[0];
-		
-		if(!$data)
-			return null;
-		
-		//检查记录所有者
-		if($data['user_id'] != $user_id)
-			return null;
-
-		//只能总结申请通过的记录
-		if($data['check_status'] != 2 && $data['check_status'] != 4)
-			return null;
-
-		//在结束之间之后才能审批记录
-		if(time() < strtotime($data['end_date'].' 00:00:00'))
-			return null;
-
-		$data['object']			=	$object;
-		$data['cost']			=	$cost;
-		$data['summary']		=	$summary;
-		$data['check_status']	=	4;
-
-		$this->save($data);
-
-		$result = $this->where(array('errand_id' => $errand_id))->select()[0];
-		return $result;
-	}
-
-
-	/**
-	 * 查询用户的请假申请--管理员用
+	 * 查询用户的出差申请--管理员用
 	 * 
 	 * @param int $department_id	部门id
 	 * @param int $userId			用户id
@@ -231,7 +195,7 @@ class ErrandModel extends Model {
 		if($user_id != 0)
 			$where['wlc_errand.user_id'] = $user_id;
 		
-		if($check_status >= 1 && $check_status <= 8)
+		if($check_status >= 1 && $check_status <= 3)
 			$where['check_status'] = $check_status;
 
 
@@ -259,13 +223,12 @@ class ErrandModel extends Model {
 		//var_dump($where);
 		$this->join('RIGHT JOIN wlc_user ON wlc_user.user_id = wlc_errand.user_id')
 		->join('LEFT JOIN wlc_department ON wlc_department.department_id = wlc_user.department_id')
-		->join('LEFT JOIN wlc_user AS checker ON checker.user_id = wlc_errand.checker_id')
-		->join('LEFT JOIN wlc_user AS checker2 ON checker2.user_id = wlc_errand.checker_id');
-		$this->field('errand_id,department_name,wlc_user.alias,date,start_date,end_date,place,reason,object,cost,summary,check_status,
-			checker.alias AS checker,check_datetime,check_comment,
-			checker2.alias AS checker2,check2_datetime,check2_comment,
-			check3_datetime,check3_comment')
+		->join('LEFT JOIN wlc_user AS checker ON checker.user_id = wlc_errand.checker_id');
+		$this->field('errand_id,department_name,wlc_user.alias,date,start_date,end_date,place,reason,object,cost,cost_sum,summary,check_status,
+			checker.alias AS checker,check_datetime,check_comment')
 		->where($where)->order($order);
+
+
 		//var_dump($count);
 		if($perPage != 0)
 			$list = $this->page($page.','.$perPage)->select();
@@ -294,28 +257,10 @@ class ErrandModel extends Model {
 		if(!$data)
 			return null;
 
-		if($is_agree == 2 || $is_agree == 3 ){  //申请审批
-			if($data['check_status'] != 1 && $data['check_status'] != 2 && $data['check_status'] != 3)
-				return null;
-			$data['checker_id'] = $checker_id;
-			$data['check_datetime']	= date('Y-m-d H:i:s',$check_datetime);
-			$data['check_comment'] = $check_comment;
-
-		}elseif($is_agree == 5 || $is_agree == 6){  //申请总结
-			if($data['check_status'] != 4 && $data['check_status'] != 5 && $data['check_status'] != 6)
-				return null;
-			$data['checker2_id'] = $checker_id;
-			$data['check2_datetime'] = date('Y-m-d H:i:s',$check_datetime);
-			$data['check2_comment'] = $check_comment;		
-		}elseif($is_agree == 7 || $is_agree == 8){ //金额审批
-			if($data['check_status'] != 5 && $data['check_status'] != 7 && $data['check_status'] != 8)
-				return null;
-			$data['check3_datetime'] = date('Y-m-d H:i:s',$check_datetime);
-			$data['check3_comment'] = $check_comment;
-		}else
-			return null;
-		
-		$data['check_status'] = $is_agree;
+		$data['check_status']	=	$is_agree=='true' ? 2 : 3;
+		$data['checker_id']		=	$checker_id;
+		$data['check_datetime']	=	date('Y-m-d H:i:s',$check_datetime);
+		$data['check_comment']	=	$check_comment;
 
 		$this->save($data);
 
@@ -328,27 +273,10 @@ class ErrandModel extends Model {
 	 * 获取待审批数量
 	 * @return 待审批数量
 	 */
-	public function getPendingNum(){
-		return $this->where(array('check_status' => array('in','1,4')))->count();
-	}
-
-	/**
-	 * 获取金额待审批数量
-	 * @return 待审批数量
-	 */
-	public function getPendingCostNum(){
-		return $this->where(array('check_status' => 5))->count();
-	}
-
-	/**
-	 * 获取待总结数量
-	 * @return 待待总结数量
-	 */
-	public function getPendingSumNum($user_id){
+	public function getPendingNum($user_id){
 		return $this->where(array(
-			'user_id' 		=>	$user_id,
-			'check_status'	=>	2,
-			'end_date'		=>	array('elt',date('Y-m-d')),
+			'check_status' => 1,
+			'checker_id' => $user_id,
 			))->count();
 	}
 }

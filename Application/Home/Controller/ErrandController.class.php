@@ -95,7 +95,11 @@ class ErrandController extends Controller {
 			$_REQUEST['start_date'],
 			$_REQUEST['end_date'],
 			$_REQUEST['place'],
-			$_REQUEST['reason']);
+			$_REQUEST['reason'],
+			$_REQUEST['object'],
+			$_REQUEST['cost'],
+			$_REQUEST['cost_sum'],
+			$_REQUEST['summary']);
 
 		if($result == null)
 			die('失败');
@@ -109,6 +113,9 @@ class ErrandController extends Controller {
 	 */
 	public function editErrand(){
 		check_login('die');
+
+		//print_r($_REQUEST);
+		//die();
 
 		//检查时间格式
 		if(date('Y-m-d',strtotime($_REQUEST['start_date']. ' 00:00:00')) != $_REQUEST['start_date'])
@@ -124,7 +131,11 @@ class ErrandController extends Controller {
 			$_REQUEST['start_date'],
 			$_REQUEST['end_date'],
 			$_REQUEST['place'],
-			$_REQUEST['reason']);
+			$_REQUEST['reason'],
+			$_REQUEST['object'],
+			$_REQUEST['cost'],
+			$_REQUEST['cost_sum'],
+			$_REQUEST['summary']);
 
 
 		if(!$result)
@@ -144,27 +155,6 @@ class ErrandController extends Controller {
 			die('删除失败');
 		$this->ajaxReturn(array());
 	}
-
-
-	/**
-	 * 个人中心——修改申请
-	 * AXAJ
-	 */
-	public function summarizeErrand(){
-		check_login('die');
-
-		$result = D('Errand')->summarizeErrand(
-			$_SESSION['user']['user_id'],
-			$_REQUEST['errand_id'],
-			$_REQUEST['object'],
-			$_REQUEST['cost'],
-			$_REQUEST['summary']);
-
-		if(!$result)
-			die('提交失败');
-		$this->ajaxReturn($result);
-	}
-
 
 
 	/**
@@ -211,7 +201,6 @@ class ErrandController extends Controller {
 		$this->assign('userList',$userList);
 
 		$this->assign('isBoss',$privilege == PRIRILEGE_BOSS);
-		$this->assign('isPersonnel',$privilege == PRIRILEGE_PERSONNEL);
 
 		if(!isset($_REQUEST['department']))
 			$_REQUEST['department'] = 0;
@@ -246,8 +235,7 @@ class ErrandController extends Controller {
 		$errandList = $result['list'];
 		
 		$page  = new \Think\Page($count,$_REQUEST['per_page'] );
-		$pageHtml = $page->show();
-		
+		$pageHtml = $page->show();	
 		
 		$this->assign('pageHtml',$pageHtml);
 		$this->assign('errandList',$errandList);
@@ -262,29 +250,15 @@ class ErrandController extends Controller {
 	public function approbateErrand(){
 		check_login('die');
 
-		$check_comment;
-		if($_REQUEST['is_agree'] == 2 || $_REQUEST['is_agree'] == 3 ){  //申请审批
-			if(get_privilege() != PRIRILEGE_BOSS)
-				die('权限错误');
-			$check_comment = $_REQUEST['check_comment'];
-		}elseif($_REQUEST['is_agree'] == 5 || $_REQUEST['is_agree'] == 6){  //申请总结
-			if(get_privilege() != PRIRILEGE_BOSS)
-				die('权限错误');
-			$check_comment = $_REQUEST['check2_comment'];
-		}elseif($_REQUEST['is_agree'] == 7 || $_REQUEST['is_agree'] == 8){ //金额审批
-			if(get_privilege() != PRIRILEGE_PERSONNEL)
-				die('权限错误');
-			$check_comment = $_REQUEST['check3_comment'];
-		}else
-			die('错误');
-
+		if(get_privilege() != PRIRILEGE_BOSS)
+			die('权限错误');
 
 		$result = D('Errand')->approbateErrand(
 			$_SESSION['user']['user_id'],
 			$_REQUEST['errand_id'],
 			$_REQUEST['is_agree'],
 			time(),
-			$check_comment);
+			$_REQUEST['check_comment']);
 
 		if(!$result)
 			die('审批失败');

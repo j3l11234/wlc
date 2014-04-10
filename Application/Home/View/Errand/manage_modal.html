@@ -65,7 +65,61 @@
 						<div class="col-sm-12 form-div">
 							<hr style="margin: auto;">
 						</div>
-						<div class="col-sm-12" style="text-align: center;">出差申请审批情况</div>
+						<div class="col-sm-12">
+							<div style="text-align: center;">出差/走访/办公对象联系方式</div>
+							<div class="table-responsive">
+								<table class="table table-condensed">
+									<thead>
+										<tr>
+											<th>姓名</th>
+											<th>性别</th>
+											<th>单位</th>
+											<th>职务</th>
+											<th>联系方式</th>							
+											<th>校友</th>
+										</tr>
+									</thead>
+									<tbody id="modal-object-tbody">
+									</tbody>
+								</table>
+							</div>
+						</div>		
+						<div class="col-sm-12 form-div">
+							<div class="form-label">总结</div>
+							<div class="textarea">
+							<textarea type="" class="form-control" id="modal-summary" name="summary" style="min-height:40px;" readonly=""> </textarea>
+							</div>
+						</div>
+						<div class="col-sm-12 form-div">
+							<hr style="margin: auto;">
+						</div>
+						<div class="col-sm-12 form-div">
+							<div style="text-align: center;">报销金额</div>
+							<div class="table-responsive">
+								<table class="table table-condensed">
+									<thead>
+										<tr>
+											<th>类型</th>
+											<th>详情</th>
+											<th>金额</th>
+										</tr>
+									</thead>
+									<tbody id="modal-cost-tbody">
+										<tr>
+											<td>
+											</td>
+											<td>
+												<strong>金额总计</strong>	
+											</td>
+											<td>
+												<span id="modal-cost_sum" style="text-align: right;" ></span>									
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="col-sm-12" style="text-align: center;">审批情况</div>
 						<div class="col-sm-6 form-div">
 							<div class="form-label">审批时间</div>
 							<div class="input-group">
@@ -77,7 +131,7 @@
 							<div class="form-label">审批状态</div>
 							<div class="div-check-status">
 								<button type="button" class="btn btn-sm btn-info btn-check-status1">等待审批</button>
-								<button type="button" class="btn btn-sm btn-success btn-check-status2 btn-check-status4 btn-check-status5 btn-check-status6 btn-check-status7 btn-check-status8">申请通过</button>
+								<button type="button" class="btn btn-sm btn-success btn-check-status2">申请通过</button>
 								<button type="button" class="btn btn-sm btn-danger btn-check-status3">申请驳回</button>
 								<span class="" id="modal-checker"></span>
 							</div>
@@ -85,96 +139,10 @@
 						<div class="col-sm-12 form-div">
 							<div class="form-label">审批批注</div>	
 							<div class="input-group">
-								<input type="input" id="modal-check-comment" name="check_comment" class="form-control" readonly="">
+								<input type="input" id="modal-check-comment" class="form-control" readonly="">
 								<span class="input-group-addon"></span>
 							</div>			
 						</div>
-						<div id="modal-summary-div">
-							<div class="col-sm-12 form-div">
-								<hr style="margin: 5px auto;">
-							</div>
-							<div class="col-sm-12">
-								<div style="text-align: center;">出差/走访/办公对象联系方式</div>
-								<div class="table-responsive">
-									<table class="table table-condensed">
-										<thead>
-											<tr>
-												<th>姓名</th>
-												<th>性别</th>
-												<th>单位</th>
-												<th>职务</th>
-												<th>联系方式</th>							
-												<th>校友</th>
-											</tr>
-										</thead>
-										<tbody id="modal-object-tbody">
-										</tbody>
-									</table>
-								</div>
-							</div>
-							<div class="col-sm-12 form-div">
-								<div class="form-label">报销金额</div>
-								<div class="input-group">
-									<input type="input"  class="form-control" id="modal-cost" name="cost" readonly="">
-									<span class="input-group-addon">￥</span>
-								</div>
-							</div>
-							<div class="col-sm-12 form-div">
-								<div class="form-label">总结</div>
-								<div class="textarea">
-								<textarea type="" class="form-control" id="modal-summary" name="summary" style="min-height:40px;" readonly=""> </textarea>
-								</div>
-							</div>
-							<div class="col-sm-12" style="text-align: center;">出差总结审批情况</div>
-							<div class="col-sm-6 form-div">
-								<div class="form-label">审批时间</div>
-								<div class="input-group">
-									<input type="input"  id='modal-check2-datetime' class="form-control" readonly="">
-									<span class="input-group-addon"></span>
-								</div>
-							</div>
-							<div class="col-sm-6 form-div">
-								<div class="form-label">审批状态</div>
-								<div class="div-check-status">
-									<button type="button" class="btn btn-sm btn-info btn-check-status4">等待审批</button>
-									<button type="button" class="btn btn-sm btn-success btn-check-status5 btn-check-status7 btn-check-status8">审批通过</button>
-									<button type="button" class="btn btn-sm btn-danger btn-check-status6">审批驳回</button>
-									<span class="" id="modal-checker"></span>
-								</div>
-							</div>
-							<div class="col-sm-12 form-div">
-								<div class="form-label">审批批注</div>	
-								<div class="input-group">
-									<input type="input" id="modal-check2-comment" name="check2_comment" class="form-control" readonly="">
-									<span class="input-group-addon"></span>
-								</div>			
-							</div>
-							<div class="col-sm-12" style="text-align: center;">报销金额审批情况</div>
-							<div class="col-sm-6 form-div">
-								<div class="form-label">审批时间</div>
-								<div class="input-group">
-									<input type="input"  id='modal-check3-datetime' class="form-control" readonly="">
-									<span class="input-group-addon"></span>
-								</div>
-							</div>
-							<div class="col-sm-6 form-div">
-								<div class="form-label">审批状态</div>
-								<div class="div-check-status">
-									<button type="button" class="btn btn-sm btn-info btn-check-status5">等待审批</button>
-									<button type="button" class="btn btn-sm btn-success btn-check-status7">审批通过</button>
-									<button type="button" class="btn btn-sm btn-danger btn-check-status8">审批驳回</button>
-									<span class="" id="modal-checker"></span>
-								</div>
-							</div>
-							<div class="col-sm-12 form-div">
-								<div class="form-label">审批批注</div>	
-								<div class="input-group">
-									<input type="input" id="modal-check3-comment" name="check3_comment" class="form-control" readonly="">
-									<span class="input-group-addon"></span>
-								</div>			
-							</div>
-						</div>
-
 					</div>
 				</form>
 				<div class="alert alert-danger" style="margin-bottom: 0px;"></div>
@@ -203,85 +171,76 @@
 		$("#modal-date").val(data.date);
 		$("#modal-start-date").val(data.start_date);
 		$("#modal-end-date").val(data.end_date);
-		$("#modal-place").val(data.place);	
+		$("#modal-place").val(data.place);
 		$("#modal-reason").val(data.reason);
 
 		$(".btn-check-status"+data.check_status).show();
 		$("#modal-check-datetime").val(data.check_datetime);
 		$("#modal-check-comment").val(data.check_comment);
 		$("#modal-checker").text(data.checker!=null ? "by "+data.checker : "").show();
-		if(data.check_status >= 4){
-			$("#modal-summary-div").show();
 
-			$("#modal-cost").val(data.cost);
-			$("#modal-summary").val(data.summary);
-			$("#modal-check2-datetime").val(data.check2_datetime);
-			$("#modal-check2-comment").val(data.check2_comment);
-			$("#modal-checker2").text(data.checker2!=null ? "by "+data.checker2 : "").show();
-			$("#modal-check3-datetime").val(data.check3_datetime);
-			$("#modal-check3-comment").val(data.check3_comment);
+		$("#modal-cost_sum").text(data.cost_sum);
+		$("#modal-summary").val(data.summary);
 
-			$("#modal-object-tbody").children().remove();
-			try{
-				objectList = JSON.parse(data.object);
-				object_trList = new Array();
-				for (var i = 0; i < objectList.length; i++){
-					var object_tr = $(document.createElement("tr"));
-					object_tr.append("<td>" + objectList [i].name + "</td>");
-					object_tr.append("<td>" + objectList [i].sex + "</td>");
-					object_tr.append("<td>" + objectList [i].department + "</td>");
-					object_tr.append("<td>" + objectList [i].position + "</td>");
-					object_tr.append("<td>" + objectList [i].contact + "</td>");
-					object_tr.append("<td>" + objectList [i].alumni + "</td>");
-					object_trList.push(object_tr);
-				}
-				$("#modal-object-tbody").append(object_trList);
-			}catch(err){}
-		}else
-			$("#modal-summary-div").hide();		
+		//显示出差对象
+		$("#modal-object-tbody").children().remove();
+		try{
+			objectList = JSON.parse(data.object);
+			object_trList = new Array();
+			for (var i = 0; i < objectList.length; i++){
+				var object_tr = $(document.createElement("tr"));
+				object_tr.append("<td>" + objectList [i].name + "</td>");
+				object_tr.append("<td>" + objectList [i].sex + "</td>");
+				object_tr.append("<td>" + objectList [i].department + "</td>");
+				object_tr.append("<td>" + objectList [i].position + "</td>");
+				object_tr.append("<td>" + objectList [i].contact + "</td>");
+				object_tr.append("<td>" + objectList [i].alumni + "</td>");
+				object_trList.push(object_tr);
+			}
+			$("#modal-object-tbody").append(object_trList);
+		}catch(err){}
+
+		//显示报销金额
+		$("#modal-cost-tbody").children().slice(0,-1).remove();
+		try{
+			var costList = JSON.parse(data.cost);
+			var cost_trList = new Array();
+			for (var i = 0; i < costList.length; i++){
+				var cost_tr = $(document.createElement("tr"));
+				cost_tr.append("<td>" + costList[i].type + "</td>");
+				cost_tr.append("<td>" + costList[i].detail + "</td>");
+				cost_tr.append("<td>" + costList[i].cost + "</td>");
+				cost_trList.push(cost_tr);
+			}
+			$("#modal-cost-tbody").prepend(cost_trList);
+		}
+		catch(err){}
 	}
 
 	function viewErrand(data){
 		reset(data);
 		$("#errand-modal .modal-title").text("查看申请");
 		$("#modal-check-comment").attr("readonly","");
-		$("#modal-check2-comment").attr("readonly","");
-		$("#modal-check3-comment").attr("readonly","");
 		$(".btn-modal-view").show();
 
 		$('#errand-modal').modal({backdrop:"static"});
 	}
 
-	{//处长才能审批}
-	<if condition="$isBoss OR $isPersonnel">
+	<if condition="$isBoss">
 		function approbateErrand(data){
 			reset(data);
 			$("#errand-modal .alert").hide();
 
-			<if condition="$isBoss">
-				if(data.check_status < 4){
-					$("#errand-modal .modal-title").text("申请审批");
-					$("#modal-check-comment").removeAttr("readonly");
-					check_status_base = 1;
-				}else if(data.check_status >= 4 || data.check_status <= 6){
-					check_status_base = 4;
-					$("#errand-modal .modal-title").text("总结审批");
-					$("#modal-check2-comment").removeAttr("readonly");
-				}
-			<elseif condition="$isPersonnel"/>
-				if(data.check_status == 5 || data.check_status == 7 || data.check_status == 8){
-					check_status_base = 6;
-					$("#errand-modal .modal-title").text("金额审批");
-					$("#modal-check3-comment").removeAttr("readonly");
-				}
-			</if>
-			
+			$("#errand-modal .modal-title").text("申请审批");
+			$("#modal-check-comment").removeAttr("readonly");
+			check_status_base = 1;
+		
 			$(".btn-modal-approbate").show();
 			$('#errand-modal').modal({backdrop:"static"});
 		}
 
 		function onApprobateSubmit(isAgree){	
-			$('#modal-is-agree').val(check_status_base + (isAgree? 1 : 2));
+			$('#modal-is-agree').val(isAgree?"true":"false");
 			postSubmit("{:U('Errand/approbateErrand')}",$("#modal-form").serialize(),"审批成功",null,$("#errand-modal"),"");
 		}
 	</if>
