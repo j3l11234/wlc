@@ -55,7 +55,7 @@ class BorrowModel extends Model {
 			$end_date = '9999-12-31';
 		
 		$where = array(
-			'wlc_borrow.user_id'		=>	$user_id,
+			'user_id'		=>	$user_id,
 			'start_date'	=>	array('egt',$start_date),
 			'end_date'		=>	array('elt',$end_date),
 		);

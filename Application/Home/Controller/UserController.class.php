@@ -20,7 +20,7 @@ class UserController extends Controller {
     
     public function logout(){
     	session(null);
-    	$this->success('注销成功', 'User/login');
+    	$this->success('注销成功', U('User/login'));
     }
 
 }

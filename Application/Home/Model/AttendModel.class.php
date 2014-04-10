@@ -15,9 +15,9 @@ class AttendModel extends Model {
 	*/
 	function __construct(){
 		parent::__construct();
-		if(F('recent_date') != date('Y-m-d',time())){
+		if(F('recent_date') != date('Y-m-d')){
 			$this->tidyAttend();
-			F('recent_date',date('Y-m-d',time()));
+			F('recent_date',date('Y-m-d'));
 		}
 	}
 	
@@ -243,7 +243,7 @@ class AttendModel extends Model {
 	 *
 	 */
 	private function tidyAttend(){	
-		$todayTimestamp = strtotime(date('Y-m-d').' 12:00:00');
+		$todayTimestamp = time();
 		
 		$User = D('User');
 		//获取未签到用户
@@ -253,7 +253,9 @@ class AttendModel extends Model {
 		foreach ($unclockUser as $user){
 			//日期循环
 			//var_dump($user);
-			for ($timestamp = max(strtotime($user['recent_date'].' 12:00:00'),strtotime('2014-01-01 12:00:00')); 
+			if($user['recent_date'] == null)
+				$user['recent_date'] = '2014-01-01';
+			for ($timestamp = strtotime($user['recent_date'].' 00:00:00');
 				 $timestamp <= $todayTimestamp; $timestamp += 86400){			
 				$day = date('Y-m-d',$timestamp);
 				//var_dump($UnclockUser);
