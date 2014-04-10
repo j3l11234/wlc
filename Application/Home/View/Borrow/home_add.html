@@ -157,19 +157,19 @@
 
 	function onAdd_EditSubmit(mode){
 		if($("#append-start-date").val() == ""){
-			displayReslt(false,"请选择借出时间");
+			showModalResult(false,"提示","请选择借出时间",false);
 			return;
 		}
 		if($("#append-end-date").val() == ""){
-			displayReslt(false,"请选择归还时间");
+			showModalResult(false,"提示","请选择归还时间",false);
 			return;
 		}	
 		if($("#append-goods-name").val() == ""){
-			displayReslt(false,"请填写物品名称");
+			showModalResult(false,"提示","请填写物品名称",false);
 			return;
 		}	
 		if($("#append-reason").val().length < 3){
-			displayReslt(false,"请认真填写借用原因");
+			showModalResult(false,"提示","请请认真填写借用原因",false);
 			return;
 		}	 		
 	

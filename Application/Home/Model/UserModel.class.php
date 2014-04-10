@@ -93,17 +93,19 @@ class UserModel extends Model {
 	 * @return 没用户则返回null 否则返回用户id
 	 */
 	public function getChecker($user_id){
+		//得到员工自身
 		$user = $this->field('user_id,privilege,superior')->where(array('user_id' =>$user_id))->select()[0];		
-		if(!$user)
+		if(!isset($user))
 			return null;
-		
-		if($user['privilege'] == PRIRILEGE_BOSS){
+		//得到员工上级
+		$user = $this->field('user_id,superior')->where(array('user_id' =>$user['superior']))->select()[0];
+		if(!isset($user))
+			return null;
+		//是处长直接返回
+		if($user['privilege'] == PRIRILEGE_BOSS)
 			return $user['user_id'];
-		}else{
-			$user = $this->field('user_id')->where(array('user_id' =>$user['superior']))->select()[0];
-			if(!$user)
-				return null;
-			return $user['user_id'];
-		}		
+		else
+			return $user['superior'];
+				
 	}
 }

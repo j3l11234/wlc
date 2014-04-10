@@ -155,7 +155,7 @@
 
 		function onApprobateSubmit(isAgree){	
 			$('#modal-is-agree').val(isAgree?"true":"false");
-			postSubmit("{:U('Leave/approbateLeave')}",$("#modal-form").serialize(),"审批成功",null,$("#errand-modal"),"");
+			postSubmit("{:U('Leave/approbateLeave')}",$("#modal-form").serialize(),"审批成功",null,$("#leave-modal"),"");
 		}
 	</if>
 
@@ -169,7 +169,7 @@
 		}
 
 		function onReportSubmit(){
-			postSubmit("{:U('Leave/reportLeave')}",$("#modal-form").serialize(),"销假成功",null,$("#errand-modal"),"");
+			postSubmit("{:U('Leave/reportLeave')}",$("#modal-form").serialize(),"销假成功",null,$("#leave-modal"),"");
 		}
 		
 	</if>	

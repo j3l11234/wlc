@@ -8,7 +8,7 @@ class LeaveModel extends Model {
 	/**
 	 * 查询用户的请假申请
 	 * 
-	 * @param int $userId			用户id
+	 * @param int $user_id			用户id
 	 * @param string $startDate		开始时间
 	 * @param string $endDate		结束时间
 	 * @param int $checkStatus		审批状态
@@ -16,14 +16,14 @@ class LeaveModel extends Model {
 	 * @param int $perPage			每页显示的数量
 	 * @return 没用户则返回null 否则返回用户id
 	 */
-	public function userQuery($userId, $startDate='', $endDate='', $checkStatus = 4, $page = 1,$perPage = 0){
+	public function userQuery($user_id, $startDate='', $endDate='', $checkStatus = 4, $page = 1,$perPage = 0){
 		if(empty($startDate))
 			$startDate = '0000-00-00';
 		if(empty($endDate))
 			$endDate = '9999-12-31';
 		
 		$where = array(
-			'wlc_leave.user_id'		=>	$userId,
+			'wlc_leave.user_id'		=>	$user_id,
 			'start_date'	=>	array('egt',$startDate),
 			'end_date'		=>	array('elt',$endDate),
 		);
@@ -54,7 +54,7 @@ class LeaveModel extends Model {
 	/**
 	 * 新增请假申请
 	 * 
-	 * @param int $userId		用户id
+	 * @param int $user_id		用户id
 	 * @param int $type			请假类型
 	 * @param timestamp $date	提交日期
 	 * @param timestamp $start	开始时间
@@ -62,10 +62,10 @@ class LeaveModel extends Model {
 	 * @param string $reason	请假原因
 	 * @return 新增失败则返回null 否则返回数据条目
 	 */
-	public function submitLeave($userId,$date,$type,$start,$end,$reason){
+	public function submitLeave($user_id,$date,$type,$start,$end,$reason){
 		
 		$data = array(
-			'user_id'		=>	$userId,
+			'user_id'		=>	$user_id,
 			'type'	=>	$type,
 			'date'	=>	date('Y-m-d',$date),
 			'start_date'	=>	date('Y-m-d',$start),
@@ -86,7 +86,7 @@ class LeaveModel extends Model {
 	/**
 	 * 修改请假申请
 	 * 
-	 * @param int $userId		用户id
+	 * @param int $user_id		用户id
 	 * @param int $leaveId		请假申请条目id
 	 * @param int $type			请假类型
 	 * @param timestamp $start	开始时间
@@ -94,14 +94,14 @@ class LeaveModel extends Model {
 	 * @param string $reason	请假原因
 	 * @return 修改失败null 否则返回数据条目
 	 */
-	public function editLeave($userId,$leaveId,$type,$start,$end,$reason){
+	public function editLeave($user_id,$leaveId,$type,$start,$end,$reason){
 		//获取记录
 		$data = $this->where(array('leave_id' => $leaveId))->select()[0];
 		
 		if(!$data)
 			return null;
 		//检查记录所有者
-		if($data['user_id'] != $userId)
+		if($data['user_id'] != $user_id)
 			return null;
 
 		//只能编辑未审批的记录
@@ -155,7 +155,7 @@ class LeaveModel extends Model {
 	 * 查询用户的请假申请--管理员用
 	 * 
 	 * @param int $department_id	部门id
-	 * @param int $userId			用户id
+	 * @param int $user_id			用户id
 	 * @param string $start_date	开始时间
 	 * @param string $end_date		结束时间
 	 * @param int $checkStatus		审批状态

@@ -16,7 +16,7 @@ class LeaveController extends Controller {
 	 */
 	public function home($call = null){
 		check_invoke($call);
-		
+
 		//装载查询页面
 		$queryHtml = $this->homeQuery();
 		$this->assign('queryHtml' ,$queryHtml);

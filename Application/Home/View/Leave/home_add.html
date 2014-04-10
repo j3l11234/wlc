@@ -150,16 +150,16 @@
 	}
 
 	function onAdd_EditSubmit(mode){
-		if($("#append-start-date").val() == ""){	
-			displayReslt(false,"请选择开始时间");
+		if($("#append-start-date").val() == ""){
+			showModalResult(false,"提示","请选择开始时间",false);
 			return;
 		}
 		if($("#append-end-date").val() == ""){
-			displayReslt(false,"请选择结束时间");
+			showModalResult(false,"提示","请选择结束时间",false);
 			return;
 		}	
 		if($("#append-reason").val().length < 5){
-			displayReslt(false,"请认真填写请假原因");
+			showModalResult(false,"提示","请认真填写请假原因",false);
 			return;
 		}	 
 		 		
