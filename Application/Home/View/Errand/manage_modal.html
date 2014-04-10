@@ -177,7 +177,7 @@
 		$(".btn-check-status"+data.check_status).show();
 		$("#modal-check-datetime").val(data.check_datetime);
 		$("#modal-check-comment").val(data.check_comment);
-		$("#modal-checker").text(data.checker!=null ? "by "+data.checker : "").show();
+		$("#modal-checker").text(data.check_status != 1 && data.checker!=null ?"by "+data.checker:"").show();
 
 		$("#modal-cost_sum").text(data.cost_sum);
 		$("#modal-summary").val(data.summary);
