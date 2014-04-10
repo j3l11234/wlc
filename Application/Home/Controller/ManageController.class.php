@@ -59,15 +59,15 @@ class ManageController extends Controller {
 	/**
 	 * 审批管理——工作计划
 	 */
-	public function workplan(){
+	public function work(){
 		check_privilege();
 		
-		$Workplan = new WorkplanController();
-		$htmlContent = $Workplan->manage(C('AUTH_PARA'));
+		$Work = new WorkController();
+		$htmlContent = $Work->manage(C('AUTH_PARA'));
 		$this->assign('htmlContent',$htmlContent);
 		
 		$this->assign('navbar_item','navbar-manage');
-		$this->assign('sidebar_item','sidebar-workplan');
+		$this->assign('sidebar_item','sidebar-work');
 		$this->display('template');
 	}
 

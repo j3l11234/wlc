@@ -31,7 +31,7 @@ class UserModel extends Model {
 	public function getUnclockUser($date){
 		return $this->where(array(
 			'need_clock' => 1,
-			'recent_date' =>array('lt',$date),
+			'recent_date' =>array(array('lt',$date), array('exp','is NULL'), 'or'),
 		))->field("user_id,recent_date")->select();
 	}
 	
@@ -40,12 +40,36 @@ class UserModel extends Model {
 	 * 
 	 * @param string $date 日期
 	 */
-	public function setRecentClockDate($userId,$date){
-		$data['user_id'] = $userId;
+	public function setRecentClockDate($user_id,$date){
+		$data['user_id'] = $user_id;
 		$data['recent_date'] = $date;
 		$this->save($data);
 	}
 	
+	/**
+	 * 得到未总结工作计划的用户以及时间
+	 * 
+	 * @param string $date 日期
+	 */
+	public function getUnworkUser($date){
+		return $this->where(array(
+			'need_clock' => 1,
+			'recent_work' =>array(array('lt',$date), array('exp','is NULL'), 'or'),
+		))->field("user_id,recent_work")->select();
+	}
+	
+	/**
+	 * 设置该用户的最近生成工作计划日期
+	 * 
+	 * @param string $date 日期
+	 */
+	public function setRecentWorkDate($user_id,$date){
+		$data['user_id'] = $user_id;
+		$data['recent_work'] = $date;
+		$this->save($data);
+	}
+	
+
 	/**
 	 * 根据部门获取部门下所有用户 0则为全部用户
 	 * 
@@ -63,17 +87,17 @@ class UserModel extends Model {
 	}
 	
 	/**
-	 * 获取某用户下的请假审批上级
+	 * 获取某用户的(处长级)审批上级
 	 * 
-	 * @param string $userId 用户id
+	 * @param string $user_id 用户id
 	 * @return 没用户则返回null 否则返回用户id
 	 */
-	public function getLeaveChecker($userId){
-		$user = $this->field('user_id,privilege,superior')->where(array('user_id' =>$userId))->select()[0];		
+	public function getChecker($user_id){
+		$user = $this->field('user_id,privilege,superior')->where(array('user_id' =>$user_id))->select()[0];		
 		if(!$user)
 			return null;
 		
-		if($user['privilege'] == PRIRILEGE_BOSS || $user['privilege'] == PRIRILEGE_ADMIN){
+		if($user['privilege'] == PRIRILEGE_BOSS){
 			return $user['user_id'];
 		}else{
 			$user = $this->field('user_id')->where(array('user_id' =>$user['superior']))->select()[0];
@@ -82,6 +106,4 @@ class UserModel extends Model {
 			return $user['user_id'];
 		}		
 	}
-	
-	
 }

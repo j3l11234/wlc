@@ -56,14 +56,14 @@ class MainController extends Controller {
 	/**
 	 * 个人中心——工作计划
 	 */
-	public function workplan(){
+	public function work(){
 		check_login();
-		$Workplan = new WorkplanController();
-		$htmlContent = $Workplan->home(C('AUTH_PARA'));
+		$Work = new WorkController();
+		$htmlContent = $Work->home(C('AUTH_PARA'));
 		$this->assign('htmlContent',$htmlContent);
 		
 		$this->assign('navbar_item','navbar-main');
-		$this->assign('sidebar_item','sidebar-workplan');
+		$this->assign('sidebar_item','sidebar-work');
 		$this->display('template');
 	}
 
