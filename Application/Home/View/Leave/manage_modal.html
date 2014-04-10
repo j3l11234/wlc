@@ -125,7 +125,7 @@
 		$("#modal-start-date").val(data.start_date+" "+data.start_time.substr(0,2));
 		$("#modal-end-date").val(data.end_date+" "+data.end_time.substr(0,2));
 		$("#modal-reason").val(data.reason);
-		$("#modal-checker").text(data.checker!=null?"by "+data.checker:"").show();
+		$("#modal-checker").text(data.check_status != 1 && data.checker!=null?"by "+data.checker:"").show();
 		$("#modal-check-datetime").val(data.check_datetime);
 		$("#modal-check-status"+data.check_status).show();
 		$("#modal-check-comment").val(data.check_comment);

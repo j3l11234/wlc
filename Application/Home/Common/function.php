@@ -53,7 +53,7 @@ function getPendingNum($item,$home = 0){
 	switch ($item) {
 		case 'leave': 
 			if (get_privilege() == PRIRILEGE_BOSS) //查询待审批请假的数量-处长用
-				$pendingNum = D('Leave')->getPendingNum();
+				$pendingNum = D('Leave')->getPendingNum($_SESSION['user']['user_id']);
 			elseif (get_privilege() == PRIRILEGE_PERSONNEL) //查询待销假请假的数量-人事负责人用
 				$pendingNum = D('Leave')->getPendingReportNum();
 			break;

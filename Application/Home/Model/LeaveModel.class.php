@@ -73,6 +73,7 @@ class LeaveModel extends Model {
 			'end_date'		=>	date('Y-m-d',$end),
 			'end_time'		=>	date('H:i:s',$end),
 			'reason'		=>	$reason,
+			'checker_id'	=>	D('User')->getChecker($user_id),
 		);
 		
 		if(!$this->add($data))
@@ -285,8 +286,11 @@ class LeaveModel extends Model {
 	 * 获取待审批数量
 	 * @return 待审批数量
 	 */
-	public function getPendingNum(){
-		return $this->where(array('check_status' => 1))->count();
+	public function getPendingNum($user_id){
+		return $this->where(array(
+			'check_status' => 1,
+			'checker_id' => $user_id,
+			))->count();
 	}
 
 	/**
