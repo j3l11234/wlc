@@ -1,0 +1,102 @@
+{//个人中心-模态框 } 
+{//个人中心-签到记录-备注}
+
+<div class="modal fade"  id="attend-modal">
+	<div class="modal-dialog" style="margin: 10px auto;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title"></h4>
+			</div>
+			<div class="modal-body">
+				<form id="modal-form">
+					<input type="hidden" id="modal-attend-id" name="attend_id">
+					<div class="row">
+						<div class="col-sm-6 form-div">
+							<div class="form-label">人员姓名</div>
+							<div class="input-group">
+								<input type="input" id="modal-user" class="form-control" readonly="" value="{:get_username()}">
+								<span class="input-group-addon"></span>
+							</div>
+						</div>
+						<div class="col-sm-6 form-div">
+							<div class="form-label">所属部门</div>
+							<div class="input-group">
+								<input type="input" id="modal-department" class="form-control" readonly="" value="{:get_department_name()}">
+								<span class="input-group-addon"></span>
+							</div>
+						</div>
+						<div class="col-sm-6 form-div">
+							<div class="form-label">签到日期</div>
+							<div class="input-group">
+								<input type="input" id="modal-date" class="form-control" readonly="">
+								<span class="input-group-addon"></span>
+							</div>
+						</div>						
+						<div class="clearfix visible-lg visible-md visible-sm"></div>
+						<div class="col-sm-6 form-div">
+							<div class="form-label">签到时间</div>
+							<div class="input-group">
+								<input type="input" id="modal-clockin" class="form-control" readonly="">	
+								<span class="input-group-addon"></span>
+							</div>
+						</div>
+						<div class="col-sm-6 form-div">
+							<div class="form-label">签退时间</div>
+							<div class="input-group">
+								<input type="input" id="modal-clockout" class="form-control" readonly="">	
+								<span class="input-group-addon"></span>
+							</div>
+						</div>
+						<div class="col-sm-12 form-div">
+							<div class="form-label">备注说明</div>
+							<div class="input-group">
+								<input type="input" id="modal-comment" name="comment" class="form-control">	
+								<span class="input-group-addon"></span>
+							</div>
+						</div>				
+					</div>
+				</form>
+				<div class="alert alert-danger" style="margin-bottom: 0px;"></div>
+			</div>
+			<div class="modal-footer" style="margin-top: auto; white-space: nowrap;">
+				<button type="button" class="btn btn-default btn-edit" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-primary btn-edit" onclick="onCommentSubmit()">提交</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	function reset(data){
+		$("#attend-modal .modal-footer").children().hide();
+		$("#attend-modal .alert").hide();
+
+		$("#modal-attend-id").val(data.attend_id);
+		$("#modal-date").val(data.date);
+		$("#modal-clockin").val(data.clockin!="未签到"?data.clockin:"");
+		$("#modal-clockout").val(data.clockout!="未签退"?data.clockout:"");
+		$("#modal-comment").val(data.comment);
+
+
+
+		$("#attend-modal .alert").removeClass("alert-success").addClass("alert-danger");
+	}
+
+	
+
+	function commentAttend(data){
+		reset(data);
+		$("#attend-modal .modal-title").text("备注签到记录");
+		$(".btn-edit").show();
+
+		
+		$('#attend-modal').modal({backdrop:"static"});	
+	}
+	
+	function onCommentSubmit(){
+		postSubmit("{:U('Attend/commentAttend')}",$("#modal-form").serialize(),"提交成功",null,$("#attend-modal"),"");
+	}
+	
+</script>

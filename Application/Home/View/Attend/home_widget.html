@@ -2,82 +2,82 @@
 
 <div class="panel panel-warning">
   <div class="panel-heading">
-    <h4 class="panel-title">
-      <a data-toggle="collapse" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-        签到
-      </a>
-    </h4>
+	<h4 class="panel-title">
+	  <a data-toggle="collapse" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+		签到
+	  </a>
+	</h4>
   </div>
   <div id="collapseOne" class="panel-collapse collapse in">
-    <div class="panel-body">
-      <div class="row">
-        <div class="col-sm-6">
-        <h1>上班签到 <small id="clockin-status">未签到</small></h1>
-        <button type="button" class="btn btn-danger btn-lg" id="clockin-button" onclick="attend(0)">点我签到</button>
-        </div>
-        <div class="col-sm-6">
-          <h1>下班签退 <small id="clockout-status">未签退</small></h1>
-          <button type="button" class="btn btn-danger btn-lg" id="clockout-button" onclick="attend(1)">点我签退</button>
-        </div>
-      </div>
-    </div>
+	<div class="panel-body">
+	  <div class="row">
+		<div class="col-sm-6">
+			<if condition="!$needClock">
+				<h1>上班签到<small>无需签到</small></h1>
+				<button type="button" class="btn btn-success btn-lg">您无需签到</button>
+			<else />
+				<if condition="$attendRecord['clockin'] eq null">
+					<h1>上班签到<small>未签到</small></h1>
+					<button type="button" class="btn btn-danger btn-lg" onclick="attend(0)">点我签到</button>
+				<else />
+					<h1>上班签到<small>已签到</small></h1>
+					<?php if($attendRecord['clockin_status']): ?>
+						<button type="button" class="btn btn-success btn-lg">{$attendRecord['clockin']}</button>
+					<?php else: ?>
+						<button type="button" class="btn btn-danger btn-lg">{$attendRecord['clockin']}</button>
+					<?php endif; ?>  
+				</if>
+			</if>
+		</div>
+		<div class="col-sm-6">
+			<if condition="!$needClock">
+				<h1>上班签到<small>无需签退</small></h1>
+				<button type="button" class="btn btn-success btn-lg">您无需签退</button>
+			<else />
+				<if condition="$attendRecord['clockout'] eq null">
+					<h1>下班签退<small>未签退</small></h1>
+					<button type="button" class="btn btn-danger btn-lg" id="clockin-button" onclick="attend(1)">点我签退</button>
+				<else />
+					<h1>下班签退<small>已签退</small></h1>
+					<?php if($attendRecord['clockout_status']): ?>
+						<button type="button" class="btn btn-success btn-lg" id="clockin-button" onclick="attend(1)">{$attendRecord['clockout']}</button>
+					<?php else: ?>
+						<button type="button" class="btn btn-danger btn-lg" id="clockin-button" onclick="attend(1)">{$attendRecord['clockout']}</button>
+					<?php endif; ?>
+				</if>
+			</if>
+		</div>
+	  </div>
+	</div>
   </div>
 </div>
 
 <script type="text/javascript">
-    $(document).ready(function(){
-        var needClock = {$needClock};
-        var canClockOut = {$canClockOut};
-                         
-        if(canClockOut == false){
-            $("#clockout-button")
-            .attr("disabled","disabled")
-            .text("未到下班时间");  
-        }
-                         
-        //分析签到状态                 
-        date = {$attendStatus};
-        attended(date,0);
-        attended(date,1);
-        
-        //分析是否签到
-        if(needClock == 0){
-            $("#clockin-status").text("无需");
-            $("#clockin-button").removeClass("btn-danger")
-            .addClass("btn-success")
-            .attr("disabled","disabled")
-            .text('您无需签到'); 
-            $("#clockout-status").text("无需");
-            $("#clockout-button").removeClass("btn-danger")
-            .addClass("btn-success")
-            .attr("disabled","disabled")
-            .text('您无需签到'); 
-        }
-    });
    
-    function attend(clockType){
-        $.post('{:U('Attend/attend')}', {clockType:clockType},
-            function(data,status){
-                if(typeof(data) == "string")
-                    alert("失败");
-                else
-                    attended(data,clockType);
-            });
-    }
-    
-    function attended(data,clockType){
-        if(clockType == 0 && data.clockin != null){
-            $("#clockin-status").text("已签到");
-            $("#clockin-button").removeClass("btn-danger")
-            .addClass("btn-success")
-            .attr("disabled","disabled")
-            .text(data.clockin);      
-        }else if(clockType == 1 && data.clockout != null){
-            $("#clockout-status").text("已签退");
-            $("#clockout-button").removeClass("btn-danger")
-            .addClass("btn-success")
-            .attr("disabled","disabled")
-            .text(data.clockout);   
-        }
-    }
+	function attend(clockType){
+		switch(clockType){
+			case 0:
+				postSubmit("{:U('Attend/attend')}",{clockType:clockType},"签到成功",null,null,"签到结果");
+				break;
+			case 1:
+				postSubmit("{:U('Attend/attend')}",{clockType:clockType},"签退成功",null,null,"签退结果");
+				break;
+		}	
+	}
+	
+	function attended(data,clockType){
+		if(clockType == 0 && data.clockin != null){
+			$("#clockin-status").text("已签到");
+			$("#clockin-button").removeClass("btn-danger")
+			.addClass("btn-success")
+			.attr("disabled","disabled")
+			.text(data.clockin);      
+		}else if(clockType == 1 && data.clockout != null){
+			$("#clockout-status").text("已签退");
+			$("#clockout-button").removeClass("btn-danger")
+			.addClass("btn-success")
+			.attr("disabled","disabled")
+			.text(data.clockout);   
+		}
+	}
 </script>

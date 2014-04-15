@@ -24,74 +24,90 @@ class AttendModel extends Model {
 	
 	/**
 	 * 签到
-	 * @param int $userId			用户id
+	 * @param int $user_id			用户id
 	 * @param int $clockType		签到类型 0为上班签到 1为下班签到 
-	 * @param timestamp $timestamp 签到时间戳
+	 * @param string $date			签到时间戳
+	 * @param string $time			签到时间戳
 	 * @return null 签到失败 attend对象签到成功 
 	 */
-	public function attend($userId,$clockType,$timestamp){
+	public function attend($user_id, $clockType, $date, $time){
 		//检查签到情况
-		$date = date('Y-m-d',$timestamp);
-		$time = date('H:i:s',$timestamp);
-		$record = $this->isAttended($userId,$date);
+
+		$data = $this->isAttended($user_id,$date);
 		
-		if($record == null){	//不存在记录
-			if($clockType == 1)
+		if($data == null)
+			return null;
+
+		switch ($clockType){
+			case 0:
+				$data['clockin'] = $time;
+				break;
+			case 1:
+				$data['clockout'] = $time;
+				break;
+			default:
 				return null;
-		}else{
-			
-			if($record['clockin'] == null){ //存在记录但上班未签到
-				if($clockType == 1)
-					return $record;
-			}else{
-				if($record['clockout'] != null) //存在记录且上下班签到
-					return $record;
-			}
 		}
-		
-		if($record == null){ //无记录
-			if($clockType == 0){
-				$record = array(
-					'user_id'	=>	$userId,
-					'date'		=>	$date,
-					'clockin'	=>	$time,
-				);
-				if(!$this->add($record))
-					return null;
-				}
-		}else{ //有记录
-			if($clockType == 0)
-				$record['clockin'] = $time;
-			else
-				$record['clockout'] = $time;
-			if(!$this->save($record))
-				return null; 
-		}
-		D('User')->setRecentClockDate($userId,$date);
-		return $record;
+
+		if(!$this->save($data))
+			return null; 
+
+		D('User')->setRecentClockDate($user_id,$date);
+		return $data;
 	}
 	
-	
+
+	 /**
+	 * 提交签到备注
+	 *
+	 * @param int $attend_id		签到记录ID
+	 * @param int $user_id			用户id
+	 * @param string $comment		签退时间
+	 * @retuen 成功则返回新纪录 失败则返回0
+	 */
+	public function commentAttend($attend_id, $user_id, $comment){
+		//获取该条签到记录
+		$data = $this->where(array('attend_id' => $attend_id,))->select()[0];
+
+		if(!$data)
+			return null;
+
+		//检查记录所有者
+		if($data['user_id'] != $user_id)
+			return null;
+
+		$data['comment'] =	$comment;
+
+		//写入数据
+		$this->save($data);
+		//查询新数据
+		$result = $this->where(array('attend_id' => $attend_id,))->select()[0];
+		if(!$result)
+			return null; 
+		return $result;
+	}
+
+
 	/**
 	 * 检查是否已经签到
-	 * @param int $userId	用户id
+	 * @param int $user_id	用户id
 	 * @param date $date	日期
 	 * @return 返回对应的记录 null则无对应签到 
 	 */
-	public function isAttended($userId, $date = null){
+	public function isAttended($user_id, $date = null){
 		if ($date == null)
 			$date = date('Y-m-d');
 			
 		$records = $this->where(array(
 			'date'=>$date,
-			'user_id'=>$userId
-		))->select();
+			'user_id'=>$user_id
+		))->select()[0];
 		//var_dump($recordNum);
 		//array('like',date('Y-m-d',$timestamp).'%')
 		if(!isset($records))
 			return null;
 		else
-			return ($records[0]);
+			return ($records);
 	}
 	
 	
@@ -106,11 +122,12 @@ class AttendModel extends Model {
 		if($time == null or $time == '')
 			return 1;
 		
+		$date = date('Y-m-d');
 		if($type == 0){ //上班时间 
-			if(strtotime(date('Y-m-d').' '.$time) <= strtotime(date('Y-m-d').' 08:10:00'))
+			if(strtotime($date.' '.$time) <= strtotime($date.' 08:10:00'))
 				return 0;
 		}else{ //下班时间
-			if(strtotime(date('Y-m-d').' '.$time) >= strtotime(date('Y-m-d').' 17:30:00'))
+			if(strtotime($date.' '.$time) >= strtotime($date.' 17:30:00'))
 				return 0;
 		}
 		return 1;
@@ -127,7 +144,7 @@ class AttendModel extends Model {
 	 * @param $page			第几页
 	 * @param $perPage		每页显示的数量
 	 */
-	public function userSearch($userId, $startDate='', $endDate='', $status = 0, $order='',$page = 1,$perPage = 0){
+	public function userSearch($user_id, $startDate='', $endDate='', $status = 0, $order='',$page = 1,$perPage = 0){
 		if($startDate == '')
 			$startDate = '0000-00-00';
 		if($endDate == '')
@@ -135,7 +152,7 @@ class AttendModel extends Model {
 		if($order == '')
 			$order = 'date desc';
 		$where = array(
-			'user_id'	=>	$userId,
+			'user_id'	=>	$user_id,
 			'date'		=>	array('between',array($startDate,$endDate)),
 		);
 		if($status == 1)
@@ -144,12 +161,13 @@ class AttendModel extends Model {
 			$where['clockout'] = array(array('lt','08:10:00'), array('exp','is NULL'),'or');	
 			
 		$count = $this->where($where)->count();
-		$this->where($where)->order($order);
+		$this->where($where)->order($order)
+		->field('attend_id,date,clockin,clockout,comment');
 		if($perPage != 0)
 			$list = $this->page($page.','.$perPage)->select();
 		else
-			$list = $this->select();
-		
+			$list = $this->select();	
+
 		$list = $this->getStatus($list);
 		$return = array('count' => $count, 'list' => $list);
 		return $return;
@@ -162,7 +180,7 @@ class AttendModel extends Model {
 	 * @param 
 	 *
 	 */
-	public function adminQuery($departmentId = 0, $userId = 0, $startDate='', $endDate='', $status = 0, $order='', $page = 1, $perPage = 0){
+	public function adminQuery($departmentId = 0, $user_id = 0, $startDate='', $endDate='', $status = 0, $order='', $page = 1, $perPage = 0){
 		if($startDate == '')
 			$startDate = '0000-00-00';
 		if($endDate == '')
@@ -178,8 +196,8 @@ class AttendModel extends Model {
 		if($departmentId != 0)
 			$where['wlc_user.department_id'] = $departmentId;
 		
-		if($userId != 0)
-			$where['wlc_attend.user_id'] = $userId;
+		if($user_id != 0)
+			$where['wlc_attend.user_id'] = $user_id;
 		
 		if($status == 1)
 			$where['clockin'] = array(array('gt','08:10:00'), array('exp','is NULL'), 'or');
@@ -192,7 +210,7 @@ class AttendModel extends Model {
 		$count = $this->where($where)->count(); 
 		$this->join('RIGHT JOIN wlc_user ON wlc_user.user_id = wlc_attend.user_id')
 		->join('LEFT JOIN wlc_department ON wlc_department.department_id = wlc_user.department_id');
-		$this->field('attend_id,date,clockin,clockout,alias,department_name')->where($where)->order($order);
+		$this->field('attend_id,alias,department_name,date,clockin,clockout,comment')->where($where)->order($order);
 		
 		if($perPage != 0)
 			$list = $this->page($page.','.$perPage)->select();
@@ -325,7 +343,7 @@ class AttendModel extends Model {
 			$data['is_late'] = 1;
 		else 
 			$data['is_late'] = 0;
-		$data['user_id'] = $userId;
+		$data['user_id'] = $user_id;
 		$data['timestamp'] = $mysqltime=date('Y-m-d H:i:s',$timestamp);	
 		*/
 	
@@ -337,11 +355,11 @@ class AttendModel extends Model {
 	
 	/**
 	 * 获得最新n条签到记录
-	 * @param unknown_type $userId 		用户id
+	 * @param unknown_type $user_id 		用户id
 	 * @param unknown_type $recordNum	条数
 	 */
-	public function getLatestRecord($userId,$recordNum = 3){
-		$records = $this->where(array('user_id'=>$userId))
+	public function getLatestRecord($user_id,$recordNum = 3){
+		$records = $this->where(array('user_id'=>$user_id))
 			->order('timestamp desc')->limit(3)
 			->field('timestamp,is_late')->select();
 		
@@ -351,11 +369,11 @@ class AttendModel extends Model {
 	
 	/**
 	 * 获得最近n天的签到记录
-	 * @param unknown_type $userId 		用户id
+	 * @param unknown_type $user_id 		用户id
 	 * @param unknown_type $recordNum	条数
 	 * @param unknown_type $timestamp	开始算的时间
 	 */
-	public function getRecentRecord($userId, $recordNum = 3, $timestamp=null){
+	public function getRecentRecord($user_id, $recordNum = 3, $timestamp=null){
 		if($timestamp==null)
 			$timestamp=time();
 		
@@ -363,7 +381,7 @@ class AttendModel extends Model {
 		for ($i=0; $i<3; $i++){
   			$record = $this->where(array(
 				'timestamp'=>array('like',date('Y-m-d',$timestamp - ($i*86400)).'%'),
-				'user_id'=>$userId
+				'user_id'=>$user_id
 			))->field('timestamp,is_late')->select();
 			
 			//var_dump($record);

@@ -16,18 +16,12 @@ class AttendController extends Controller {
 	public function homeWidget($call = null){
 		check_invoke($call);
 		
-        $Attend = D('Attend');
-		$record = $Attend->isAttended($_SESSION['user']['user_id']);
-		$record_ = array(
-			'date' => $record['date'],
-			'clockin' => $record['clockin'],
-			'clockout' => $record['clockout'],
-		);
-		
-		$canClockOut = ($Attend->isValid(date('H:i:s'),1)== 0 && $record_['clockout'] == null);
-		$this->assign('canClockOut',$canClockOut?'true':'false');
+		$record = D('Attend')->isAttended($_SESSION['user']['user_id']);
+		$record['clockin_status'] = D('Attend')->isValid($record['clockin'],0) == 0;
+		$record['clockout_status'] = D('Attend')->isValid($record['clockout'],1) == 0;
+
 		$this->assign('needClock',$_SESSION['user']['need_clock']);	
-		$this->assign('attendStatus',json_encode($record_));	
+		$this->assign('attendRecord',$record);	
 		return $this->fetch('Attend/home_widget');
 		
 	}
@@ -38,35 +32,28 @@ class AttendController extends Controller {
 	 */
 	public function attend(){
 		check_login('die');
-		
+
 		if($_SESSION['user']['need_clock'] == 0)
-			die();
-		
-		$clockType = $_REQUEST['clockType'];
-		if($clockType != 0 && $clockType != 1)
-			$this->ajaxReturn('');
-		
-		
-		$Attend = D('Attend');
-		
-		//检查时间是否合理
+			die('您无需签到');
+
+		$date = date('Y-m-d');
 		$time = date('H:i:s');
-		if($Attend->isValid($time, $clockType) != 0 && $clockType ==1)
-			$this->ajaxReturn('');
+		$data = D('Attend')->isAttended($_SESSION['user']['user_id'], $date);
+		if(isset($data)){
+			if($_REQUEST['clockType'] == 0 && $data['clockin'] != null)
+				die('您已经签到');
+		}	
 		
 		//签到
-		$result = $Attend->attend($_SESSION['user']['user_id'],$clockType,time());
-		
+		$result = D('Attend')->attend(
+			$_SESSION['user']['user_id'],
+			$_REQUEST['clockType'],
+			$date,
+			$time);
+				
 		if(!$result)
-			$this->ajaxReturn('');
-		else{
-			$return = array(
-				'date' => $result['date'],
-				'clockin' => $result['clockin'],
-				'clockout' => $result['clockout'],
-			);
-			$this->ajaxReturn($return);
-		}
+			die('失败');
+		$this->ajaxReturn($result);
 	}
 
 	
@@ -80,6 +67,10 @@ class AttendController extends Controller {
 		//装载查询页面
 		$queryHtml = $this->homeQuery();
 		$this->assign('queryHtml' ,$queryHtml);
+
+		//装载多功能模态框
+		$modalHtml = $this->fetch('Attend/home_modal');
+		$this->assign('modalHtml' ,$modalHtml);
 		
 		return $this->fetch('Attend/home');
 	}
@@ -142,7 +133,26 @@ class AttendController extends Controller {
 	}
 	
 
-	 
+	/**
+	 * 个人中心——备注签到记录
+	 * AXAJ
+	 */
+	 public function commentAttend(){
+	 	check_login('die');
+
+	 	$result = D('Attend')->commentAttend(
+	 		$_REQUEST['attend_id'],
+	 		$_SESSION['user']['user_id'],
+	 		$_REQUEST['comment']);
+	 	
+		if($result == null)
+			die('提交失败');
+
+		$this->ajaxReturn($result);
+
+	 }
+
+
 	/**
 	 * 审批管理——签到管理主页面
 	 * @param unknown_type $call
@@ -170,29 +180,23 @@ class AttendController extends Controller {
 	 * 
 	 */
 	private function manageQuery($privilege){
-		$Department = D('Department');
-		$User = D('User');
-		
 		if($privilege == PRIRILEGE_ADMIN || $privilege == PRIRILEGE_BOSS ||$privilege == PRIRILEGE_PERSONNEL){
 			//可以查看所有部门
-			$departmentList = $Department->getAllDepartment();
-			$userList= $User->getDepartmentUser();
+			$departmentList = D('Department')->getAllDepartment();
+			$userList= D('User')->getDepartmentUser();
 			
 		}else if($privilege == PRIRILEGE_MINISTER){
 			//只能查看自己部门
-			$departmentList = $Department->getAllDepartment($_SESSION['user']['department_id']);
-			$userList= $User->getDepartmentUser($_SESSION['user']['department_id']);
+			$departmentList = D('Department')->getAllDepartment($_SESSION['user']['department_id']);
+			$userList= D('User')->getDepartmentUser($_SESSION['user']['department_id']);
 		}
-
-		$this->assign('isPersonnel',$privilege == PRIRILEGE_PERSONNEL);
+		$this->assign('privilege',$privilege);
 		$this->assign('departmentList',$departmentList);
 		$this->assign('userList',$userList);
 
 
-		if($privilege == PRIRILEGE_MINISTER){
+		if($privilege == PRIRILEGE_MINISTER)
 			$_REQUEST['department'] = $_SESSION['user']['department_id'];
-		}
-		
 		if(!isset($_REQUEST['department']))
 			$_REQUEST['department'] = 0;
 		if(!isset($_REQUEST['user']))
@@ -228,11 +232,9 @@ class AttendController extends Controller {
 				$order = 'date desc,wlc_user.department_id, alias'; 
 		}
 		
-		$this->assign('condition',$_REQUEST);
-
-		$Attend = D('Attend');		
+		$this->assign('condition',$_REQUEST);	
 	
-		$result = $Attend->adminQuery(
+		$result = D('Attend')->adminQuery(
 				$_REQUEST['department'],
 				$_REQUEST['user'],
 				$_REQUEST['start_date'],
@@ -255,6 +257,7 @@ class AttendController extends Controller {
 		return $this->fetch('Attend/manage_query');	
 	}
 	
+
 	/** 
 	 * 审批管理 -补签改签
 	 * AJAX
@@ -262,7 +265,7 @@ class AttendController extends Controller {
 	public function editAttend(){
 		check_privilege('die');
 		$privilege = get_privilege();
-		if($privilege != PRIRILEGE_PERSONNEL)
+		if($privilege != PRIRILEGE_ADMIN)
 			die('权限错误');
 
 		if(date('H:i:s',strtotime(date('Y-m-d').' '.$_REQUEST['clockin'])) != $_REQUEST['clockin'] && $_REQUEST['clockin'] != '')
