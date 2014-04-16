@@ -9,13 +9,16 @@ use Think\Controller;
  *
  */
 class ErrandController extends Controller {
-	
+	public function _empty(){
+		$this->home();    
+	}
+
 	/**
 	 * 个人中心——出差申请主页面
 	 * @param unknown_type $call
 	 */
-	public function home($call = null){
-		check_invoke($call);
+	public function home(){
+		check_login();
 
 		//装载查询页面
 		$queryHtml = $this->homeQuery();
@@ -77,11 +80,9 @@ class ErrandController extends Controller {
 	 * AXAJ
 	 */
 	public function addErrand(){
-		check_login('die');
+		check_login();
 		
-		//print_r($_REQUEST);
-		//die();
-
+		$date = date('Y-m-d');
 		if(date('Y-m-d',strtotime($_REQUEST['start_date']. ' 00:00:00')) != $_REQUEST['start_date'])
 			die("出发时间不正确");
 		if(date('Y-m-d',strtotime($_REQUEST['end_date']. ' 00:00:00')) != $_REQUEST['end_date'])
@@ -89,20 +90,34 @@ class ErrandController extends Controller {
 		if(strtotime($_REQUEST['start_date']. ' 00:00:00') > strtotime($_REQUEST['end_date']. ' 00:00:00'))
 			die("出发时间不能晚于返回时间");
 		
-		$result = D('Errand')->addErrand(
-			$_SESSION['user']['user_id'],
-			date('Y-m-d'),
-			$_REQUEST['start_date'],
-			$_REQUEST['end_date'],
-			$_REQUEST['place'],
-			$_REQUEST['reason'],
-			$_REQUEST['object'],
-			$_REQUEST['cost'],
-			$_REQUEST['cost_sum'],
-			$_REQUEST['summary']);
-
+		if($_REQUEST['is_summary'] == 0){
+			$result = D('Errand')->submitErrand(
+				$_SESSION['user']['user_id'],
+				null,
+				$date,
+				$_REQUEST['start_date'],
+				$_REQUEST['end_date'],
+				$_REQUEST['place'],
+				$_REQUEST['reason'],
+				false);
+		}
+		else{
+			$result = D('Errand')->submitErrand(
+				$_SESSION['user']['user_id'],
+				null,
+				$date,
+				$_REQUEST['start_date'],
+				$_REQUEST['end_date'],
+				$_REQUEST['place'],
+				$_REQUEST['reason'],
+				true,
+				$_REQUEST['object'],
+				$_REQUEST['cost'],
+				$_REQUEST['cost_sum'],
+				$_REQUEST['summary']);
+		}
 		if($result == null)
-			die('失败');
+			die('提交失败');
 		$this->ajaxReturn($result);
 	}
 
@@ -112,10 +127,23 @@ class ErrandController extends Controller {
 	 * AXAJ
 	 */
 	public function editErrand(){
-		check_login('die');
+		check_login();
 
-		//print_r($_REQUEST);
-		//die();
+		if(!empty($_FILES)){
+			//处理文件上传
+			$upload = new \Think\Upload();
+			$upload->autoSub	=	false;
+			$upload->maxSize	=	22020096;
+			$upload->exts		=	array('doc','rar','docx');
+			$upload->savePath	=	'/Attachments/';
+			// 上传单个文件
+			$info   =   $upload->uploadOne($_FILES['attachment_new']);
+			if(!$info)
+				die('文件上传失败:'.$upload->getError());
+		}else{
+			$info = array('name' => "", 'savepath'=> "", 'savename'=> "");
+		}
+		
 
 		//检查时间格式
 		if(date('Y-m-d',strtotime($_REQUEST['start_date']. ' 00:00:00')) != $_REQUEST['start_date'])
@@ -125,21 +153,40 @@ class ErrandController extends Controller {
 		if(strtotime($_REQUEST['start_date']. ' 00:00:00') >= strtotime($_REQUEST['end_date']. ' 00:00:00'))
 			die("出发时间不能晚于返回时间");
 
-		$result = D('Errand')->editErrand(
-			$_SESSION['user']['user_id'],
-			$_REQUEST['errand_id'],
-			$_REQUEST['start_date'],
-			$_REQUEST['end_date'],
-			$_REQUEST['place'],
-			$_REQUEST['reason'],
-			$_REQUEST['object'],
-			$_REQUEST['cost'],
-			$_REQUEST['cost_sum'],
-			$_REQUEST['summary']);
+		if($_REQUEST['is_summary'] == 0){
+			$result = D('Errand')->submitErrand(
+				$_SESSION['user']['user_id'],
+				$_REQUEST['errand_id'],
+				null,
+				$_REQUEST['start_date'],
+				$_REQUEST['end_date'],
+				$_REQUEST['place'],
+				$_REQUEST['reason'],
+				false);
+		}
+		else{
+			$result = D('Errand')->submitErrand(
+				$_SESSION['user']['user_id'],
+				$_REQUEST['errand_id'],
+				null,
+				$_REQUEST['start_date'],
+				$_REQUEST['end_date'],
+				$_REQUEST['place'],
+				$_REQUEST['reason'],
+				true,
+				$_REQUEST['object'],
+				$_REQUEST['cost'],
+				$_REQUEST['cost_sum'],
+				$_REQUEST['summary'],
+				$info['name'],
+				$info['savepath'].$info['savename']);
+		}
+		if($result == null){
+			if(!empty($_FILES))
+				D('Errand')->deleteAttachment('Uploads'.$info['savepath'].$info['savename']);
+			die('提交失败');
+		}
 
-
-		if(!$result)
-			die('修改失败');
 		$this->ajaxReturn($result);
 	}
 
@@ -149,7 +196,12 @@ class ErrandController extends Controller {
 	 * AXAJ
 	 */
 	public function deleteErrand(){
-		$result = D('Errand')->deleteErrand($_SESSION['user']['user_id'],$_REQUEST['errand_id']);
+		check_login();
+
+		$result = D('Errand')->deleteErrand(
+			$_SESSION['user']['user_id'],
+			$_REQUEST['errand_id'],
+			get_privilege()==PRIRILEGE_ADMIN);
 
 		if(!$result)
 			die('删除失败');
@@ -161,8 +213,8 @@ class ErrandController extends Controller {
 	 * 审批管理——出差审批主页面
 	 * @param unknown_type $call
 	 */
-	public function manage($call = null){
-		check_invoke($call);
+	public function manage(){
+		check_login();
 		
 		$privilege = get_privilege();
 		//装载查询页面
@@ -197,10 +249,9 @@ class ErrandController extends Controller {
 			$_REQUEST['department'] = $_SESSION['user']['department_id'];
 		}
 
+		$this->assign('privilege',$privilege);
 		$this->assign('departmentList',$departmentList);
 		$this->assign('userList',$userList);
-
-		$this->assign('isBoss',$privilege == PRIRILEGE_BOSS);
 
 		if(!isset($_REQUEST['department']))
 			$_REQUEST['department'] = 0;
@@ -248,7 +299,7 @@ class ErrandController extends Controller {
 	 * AXAJ
 	 */
 	public function approbateErrand(){
-		check_login('die');
+		check_login();
 
 		if(get_privilege() != PRIRILEGE_BOSS)
 			die('权限错误');

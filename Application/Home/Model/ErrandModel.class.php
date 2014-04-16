@@ -30,15 +30,15 @@ class ErrandModel extends Model {
 			'end_date'				=>	array('elt',$end_date),
 		);
 		
-		if($check_status >= 1 && $check_status <= 3)
+		if($check_status >= 1 && $check_status <= 4)
 			$where['check_status'] = $check_status;
 
 		$count = $this->where($where)->count();
 
 		$this->where($where)->order('date desc')
 		->join('LEFT JOIN wlc_user AS checker ON checker.user_id = wlc_errand.checker_id')
-		->field('errand_id,date,start_date,end_date,place,reason,object,cost,cost_sum,summary,check_status,
-			checker.alias AS checker,check_datetime,check_comment');
+		->field('errand_id,date,start_date,end_date,place,reason,object,cost,cost_sum,summary,attachment_name,attachment_path,
+			check_status,checker.alias AS checker,check_datetime,check_comment');
 
 		if($perPage != 0)
 			$list = $this->page($page.','.$perPage)->select();
@@ -48,56 +48,17 @@ class ErrandModel extends Model {
 		$return = array('count' => $count, 'list' => $list);
 		return $return;
 	}
-	
-	
+
 	/**
-	 * 新增请假申请
+	 * 新增/修改申请
 	 * 
 	 * @param int $user_id			用户id
-	 * @param string $date			提交日期
+	 * @param int $errand_id		申请条目id 为null则新增记录
+	 * @param string $date			申请日期
 	 * @param string $start_date	开始时间
 	 * @param string $end_date		结束时间
 	 * @param string $reason		出差事由
-	 * @param string $place			出差地点
-	 * @param string $object		出访目标
-	 * @param string $cost			报销金额细节
-	 * @param int $cost_sum			报销金额
-	 * @param string $summary		出差总结
-	 * @return 新增失败则返回null 否则返回数据条目
-	 */
-	public function addErrand($user_id,$date,$start_date,$end_date,$place,$reason,$object,$cost,$cost_sum,$summary){
-		
-		$data = array(
-			'user_id'		=>	$user_id,
-			'type'			=>	$type,
-			'date'			=>	$date,
-		);	
-		$data['start_date']		=	$start_date;
-		$data['end_date']		=	$end_date;
-		$data['place']			=	$place;
-		$data['reason']			=	$reason;
-		$data['object']			=	$object;
-		$data['cost']			=	$cost;
-		$data['cost_sum']		=	$cost_sum;
-		$data['summary']		=	$summary;
-		$data['check_status']	=	1;
-		$data['checker_id']		=	D('User')->getChecker($user_id);
-
-		if(!$this->add($data))
-			return null;
-		else
-			return $data;
-	}
-
-
-	/**
-	 * 修改申请
-	 * 
-	 * @param int $user_id			用户id
-	 * @param int $errand_id		申请条目id
-	 * @param string $start_date	开始时间
-	 * @param string $end_date		结束时间
-	 * @param string $reason		出差事由
+	 * @param string $is_summary	是否总结
 	 * @param string $place			出差地点
 	 * @param string $object		出访目标
 	 * @param string $cost			报销金额细节
@@ -105,34 +66,61 @@ class ErrandModel extends Model {
 	 * @param string $summary		出差总结
 	 * @return 修改失败null 否则返回数据条目
 	 */
-	public function editErrand($user_id,$errand_id,$start_date,$end_date,$place,$reason,$object,$cost,$cost_sum,$summary){
-		//获取记录
-		$data = $this->where(array('errand_id' => $errand_id))->select()[0];
-		
-		if(!$data)
-			return null;
-		
-		//检查记录所有者
-		if($data['user_id'] != $user_id)
-			return null;
-
-		//只能编辑未审批的记录
-		if($data['check_status'] != 1)
-			return null;
+	public function submitErrand(
+		$user_id,$errand_id,$date,$start_date,$end_date,$place,$reason,
+		$is_summary,$object="",$cost="",$cost_sum="",$summary="",$attachment_name="",$attachment_path=""){
+		if($errand_id == null){ //新增记录
+			$data = array(
+				'user_id'		=>	$user_id,
+				'date'			=>	$date,
+				'check_status'	=>	1,
+			);
+		}else{//编辑记录
+			//获取记录
+			$data = $this->where(array('errand_id' => $errand_id))->select()[0];
+			if(!$data)
+				return null;
+			//检查记录所有者
+			if($data['user_id'] != $user_id)
+				return null;
+			//只能编辑未审批的记录
+			if($data['check_status'] > 2)
+				return null;
+		}	
 
 		$data['start_date']	=	$start_date;
 		$data['end_date']	=	$end_date;
 		$data['place']		=	$place;
 		$data['reason']		=	$reason;
-		$data['object']		=	$object;
-		$data['cost']		=	$cost;
-		$data['cost_sum']	=	$cost_sum;
-		$data['summary']	=	$summary;
-		
-		$this->save($data);
+		if($is_summary){
+			$data['check_status']		=	2;
+			$data['object']				=	$object;
+			$data['cost']				=	$cost;
+			$data['cost_sum']			=	$cost_sum;
+			$data['summary']			=	$summary;
 
-		$result = $this->where(array('errand_id' => $errand_id))->select()[0];
-		return $result;
+			if($attachment_name != ""){ //更新附件
+				if($data['attachment_path'] != null)
+					$delete = 'Uploads'.$data['attachment_path'];
+				else
+					$delete = null;
+				$data['attachment_name'] = $attachment_name;
+				$data['attachment_path'] = $attachment_path;
+			}
+			
+		}else{
+			if($data['check_status'] == 2) //不允许总结退回到申请
+				return null;
+		}	
+		///print_r($data);
+		//die("ddasfsdf");
+		if(!$this->add($data,array(),true))
+			return null;
+		else{
+			if($delete != null)
+				$this->deleteAttachment($delete);
+			return $data;
+		}
 	}
 
 
@@ -143,23 +131,26 @@ class ErrandModel extends Model {
 	 * @param int $errand_id	申请条目id
 	 * @return 删除失败null 否则返回数据条目
 	 */
-	public function deleteErrand($user_id,$errand_id){
+	public function deleteErrand($user_id,$errand_id,$admin=false){
 		//获取记录
 		$data = $this->where(array('errand_id' => $errand_id))->select()[0];
 		if(!$data)
 			return null;
 
 		//检查记录所有者
-		if($data['user_id'] != $user_id)
+		if($data['user_id'] != $user_id && !$admin)
 			return null;
 
 		//只能编删除未审批的记录
-		if($data['check_status'] != 1)
+		if($data['check_status'] > 2)
 			return null;
 
 		//检测是否删除成功
 		if($this->where(array('errand_id' => $errand_id))->delete() == 0)
 			return null;
+
+		if($data['attachment_path'] != null)
+			$this->deleteAttachment('Uploads'.$data['attachment_path']);
 
 		return $data;
 	}
@@ -195,7 +186,7 @@ class ErrandModel extends Model {
 		if($user_id != 0)
 			$where['wlc_errand.user_id'] = $user_id;
 		
-		if($check_status >= 1 && $check_status <= 3)
+		if($check_status >= 1 && $check_status <= 4)
 			$where['check_status'] = $check_status;
 
 
@@ -224,8 +215,9 @@ class ErrandModel extends Model {
 		$this->join('RIGHT JOIN wlc_user ON wlc_user.user_id = wlc_errand.user_id')
 		->join('LEFT JOIN wlc_department ON wlc_department.department_id = wlc_user.department_id')
 		->join('LEFT JOIN wlc_user AS checker ON checker.user_id = wlc_errand.checker_id');
-		$this->field('errand_id,department_name,wlc_user.alias,date,start_date,end_date,place,reason,object,cost,cost_sum,summary,check_status,
-			checker.alias AS checker,check_datetime,check_comment')
+		$this->field('errand_id,department_name,wlc_user.alias,
+			date,start_date,end_date,place,reason,object,cost,cost_sum,summary,attachment_name,attachment_path,
+			check_status,checker.alias AS checker,check_datetime,check_comment')
 		->where($where)->order($order);
 
 
@@ -257,7 +249,7 @@ class ErrandModel extends Model {
 		if(!$data)
 			return null;
 
-		$data['check_status']	=	$is_agree=='true' ? 2 : 3;
+		$data['check_status']	=	$is_agree=='true' ? 3 : 4;
 		$data['checker_id']		=	$checker_id;
 		$data['check_datetime']	=	date('Y-m-d H:i:s',$check_datetime);
 		$data['check_comment']	=	$check_comment;
@@ -278,5 +270,9 @@ class ErrandModel extends Model {
 			'check_status' => 1,
 			'checker_id' => $user_id,
 			))->count();
+	}
+	
+	public function deleteAttachment($path){
+		@unlink($path);
 	}
 }

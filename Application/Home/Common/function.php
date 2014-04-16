@@ -9,13 +9,9 @@ define('PRIRILEGE_PERSONNEL', 4);
  * 验证当前用户，如果不是则自动跳转到登陆页面
  * 
  */
-function check_login($return = null){
-	if(!isset($_SESSION['user'])){
-		if($return == 'die')
-			die();
-		else 
-			redirect(U('User/login'),0,'');
-	}		
+function check_login(){
+	if(!isset($_SESSION['user']))
+		redirect(U('User/login'),0,'');
 }
 
 /**

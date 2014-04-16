@@ -65,88 +65,93 @@
 						<div class="col-sm-12 form-div">
 							<hr style="margin: auto;">
 						</div>
-						<div class="col-sm-12">
-							<div style="text-align: center;">出差/走访/办公对象联系方式</div>
-							<div class="table-responsive">
-								<table class="table table-condensed">
-									<thead>
-										<tr>
-											<th>姓名</th>
-											<th>性别</th>
-											<th>单位</th>
-											<th>职务</th>
-											<th>联系方式</th>							
-											<th>校友</th>
-										</tr>
-									</thead>
-									<tbody id="modal-object-tbody">
-									</tbody>
-								</table>
+						<div id="modal-summary-div" style="display: none;">
+							<div class="col-sm-12">
+								<div style="text-align: center;">出差/走访/办公对象联系方式</div>
+								<div class="table-responsive">
+									<table class="table table-condensed">
+										<thead>
+											<tr>
+												<th>姓名</th>
+												<th>性别</th>
+												<th>单位</th>
+												<th>职务</th>
+												<th>联系方式</th>							
+												<th>校友</th>
+											</tr>
+										</thead>
+										<tbody id="modal-object-tbody">
+										</tbody>
+									</table>
+								</div>
+							</div>		
+							<div class="col-sm-12 form-div">
+								<div class="form-label">总结</div>
+								<div class="textarea">
+								<textarea type="" class="form-control" id="modal-summary" name="summary" style="min-height:40px;" readonly=""> </textarea>
+								</div>
 							</div>
-						</div>		
-						<div class="col-sm-12 form-div">
-							<div class="form-label">总结</div>
-							<div class="textarea">
-							<textarea type="" class="form-control" id="modal-summary" name="summary" style="min-height:40px;" readonly=""> </textarea>
+							<div class="col-sm-12 form-div">
+								<div style="text-align: center;">总结</div>
+								<div id="modal-attachment"></div>
 							</div>
-						</div>
-						<div class="col-sm-12 form-div">
-							<hr style="margin: auto;">
-						</div>
-						<div class="col-sm-12 form-div">
-							<div style="text-align: center;">报销金额</div>
-							<div class="table-responsive">
-								<table class="table table-condensed">
-									<thead>
-										<tr>
-											<th>类型</th>
-											<th>详情</th>
-											<th>金额</th>
-										</tr>
-									</thead>
-									<tbody id="modal-cost-tbody">
-										<tr>
-											<td>
-											</td>
-											<td>
-												<strong>金额总计</strong>	
-											</td>
-											<td>
-												<span id="modal-cost_sum" style="text-align: right;" ></span>									
-											</td>
-										</tr>
-									</tbody>
-								</table>
+							<div class="col-sm-12 form-div">
+								<hr style="margin: auto;">
 							</div>
-						</div>
-
-						<div class="col-sm-12" style="text-align: center;">审批情况</div>
-						<div class="col-sm-6 form-div">
-							<div class="form-label">审批时间</div>
-							<div class="input-group">
-								<input type="input"  id='modal-check-datetime' class="form-control" readonly="">
-								<span class="input-group-addon"></span>
+							<div class="col-sm-12 form-div">
+								<div style="text-align: center;">报销金额</div>
+								<div class="table-responsive">
+									<table class="table table-condensed">
+										<thead>
+											<tr>
+												<th>类型</th>
+												<th>详情</th>
+												<th>金额</th>
+											</tr>
+										</thead>
+										<tbody id="modal-cost-tbody">
+											<tr>
+												<td>
+												</td>
+												<td>
+													<strong>金额总计</strong>	
+												</td>
+												<td>
+													<span id="modal-cost_sum" style="text-align: right;" ></span>									
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
 							</div>
-						</div>
-						<div class="col-sm-6 form-div">
-							<div class="form-label">审批状态</div>
-							<div class="div-check-status">
-								<button type="button" class="btn btn-sm btn-info btn-check-status1">等待审批</button>
-								<button type="button" class="btn btn-sm btn-success btn-check-status2">申请通过</button>
-								<button type="button" class="btn btn-sm btn-danger btn-check-status3">申请驳回</button>
-								<span class="" id="modal-checker"></span>
+							<div class="col-sm-12" style="text-align: center;">审批情况</div>
+							<div class="col-sm-6 form-div">
+								<div class="form-label">审批时间</div>
+								<div class="input-group">
+									<input type="input"  id='modal-check-datetime' class="form-control" readonly="">
+									<span class="input-group-addon"></span>
+								</div>
 							</div>
-						</div>
-						<div class="col-sm-12 form-div">
-							<div class="form-label">审批批注</div>	
-							<div class="input-group">
-								<input type="input" id="modal-check-comment" class="form-control" readonly="">
-								<span class="input-group-addon"></span>
-							</div>			
+							<div class="col-sm-6 form-div">
+								<div class="form-label">审批状态</div>
+								<div class="div-check-status">
+									<button type="button" class="btn btn-sm btn-info btn-check-status2">等待审批</button>
+									<button type="button" class="btn btn-sm btn-success btn-check-status3">申请通过</button>
+									<button type="button" class="btn btn-sm btn-danger btn-check-status4">申请驳回</button>
+									<span class="" id="modal-checker"></span>
+								</div>
+							</div>
+							<div class="col-sm-12 form-div">
+								<div class="form-label">审批批注</div>	
+								<div class="input-group">
+									<input type="input" id="modal-check-comment" class="form-control" readonly="">
+									<span class="input-group-addon"></span>
+								</div>			
+							</div>
 						</div>
 					</div>
 				</form>
-				<div class="alert alert-danger" style="margin-bottom: 0px;">
+				<div class="alert alert-danger" id="modal-alert" style="margin-bottom: 0px;">
 				</div>
 			</div>
 			<div class="modal-footer" style="margin-top: auto; white-space: nowrap;">
@@ -175,47 +180,58 @@
 		$("#modal-place").val(data.place);
 		$("#modal-reason").val(data.reason);
 
-		$(".btn-check-status"+data.check_status).show();
-		$("#modal-check-datetime").val(data.check_datetime);
-		$("#modal-check-comment").val(data.check_comment);
-		$("#modal-checker").text(data.check_status != 1 && data.checker!=null?"by "+data.checker:"").show();
+		if(data.check_status == 1){ //申请阶段
+			$("#modal-summary-div").hide();
+		}else{ //审核阶段
+			$("#modal-summary-div").show();
+			$(".btn-check-status"+data.check_status).show();
+			$("#modal-check-datetime").val(data.check_datetime);
+			$("#modal-check-comment").val(data.check_comment);
+			$("#modal-checker").text(data.check_status > 2 && data.checker!=null?"by "+data.checker:"").show();
+			$("#modal-cost_sum").text(data.cost_sum);
+			$("#modal-summary").val(data.summary);
 
-		$("#modal-cost_sum").text(data.cost_sum);
-		$("#modal-summary").val(data.summary);
-
-		//显示出差对象
-		$("#modal-object-tbody").children().remove();
-		try{
-			objectList = JSON.parse(data.object);
-			object_trList = new Array();
-			for (var i = 0; i < objectList.length; i++){
-				var object_tr = $(document.createElement("tr"));
-				object_tr.append("<td>" + objectList [i].name + "</td>");
-				object_tr.append("<td>" + objectList [i].sex + "</td>");
-				object_tr.append("<td>" + objectList [i].department + "</td>");
-				object_tr.append("<td>" + objectList [i].position + "</td>");
-				object_tr.append("<td>" + objectList [i].contact + "</td>");
-				object_tr.append("<td>" + objectList [i].alumni + "</td>");
-				object_trList.push(object_tr);
+			if(data.attachment_name==null){
+				$("#modal-attachment").html("");
+			}else{
+				$("#modal-attachment").html(createDlHref(data.attachment_path,data.attachment_name));
 			}
-			$("#modal-object-tbody").prepend(object_trList);
-		}catch(err){}
 
-		//显示报销金额
-		$("#modal-cost-tbody").children().slice(0,-1).remove();
-		try{
-			var costList = JSON.parse(data.cost);
-			var cost_trList = new Array();
-			for (var i = 0; i < costList.length; i++){
-				var cost_tr = $(document.createElement("tr"));
-				cost_tr.append("<td>" + costList[i].type + "</td>");
-				cost_tr.append("<td>" + costList[i].detail + "</td>");
-				cost_tr.append("<td>" + costList[i].cost + "</td>");
-				cost_trList.push(cost_tr);
+			//显示出差对象
+			$("#modal-object-tbody").children().remove();
+			try{
+				objectList = JSON.parse(data.object);
+				object_trList = new Array();
+				for (var i = 0; i < objectList.length; i++){
+					var object_tr = $(document.createElement("tr"));
+					object_tr.append("<td>" + objectList [i].name + "</td>");
+					object_tr.append("<td>" + objectList [i].sex + "</td>");
+					object_tr.append("<td>" + objectList [i].department + "</td>");
+					object_tr.append("<td>" + objectList [i].position + "</td>");
+					object_tr.append("<td>" + objectList [i].contact + "</td>");
+					object_tr.append("<td>" + objectList [i].alumni + "</td>");
+					object_trList.push(object_tr);
+				}
+				$("#modal-object-tbody").prepend(object_trList);
+			}catch(err){}
+
+			//显示报销金额
+			$("#modal-cost-tbody").children().slice(0,-1).remove();
+			try{
+				var costList = JSON.parse(data.cost);
+				var cost_trList = new Array();
+				for (var i = 0; i < costList.length; i++){
+					var cost_tr = $(document.createElement("tr"));
+					cost_tr.append("<td>" + costList[i].type + "</td>");
+					cost_tr.append("<td>" + costList[i].detail + "</td>");
+					cost_tr.append("<td>" + costList[i].cost + "</td>");
+					cost_trList.push(cost_tr);
+				}
+				$("#modal-cost-tbody").prepend(cost_trList);
 			}
-			$("#modal-cost-tbody").prepend(cost_trList);
+			catch(err){}
 		}
-		catch(err){}
+
 	}
 
 	//查看申请
@@ -227,7 +243,7 @@
 		$('#errand-modal').modal({backdrop:"static"});
 	}
 
-	//删除借用申请
+	//删除申请
 	function deleteErrand(data){
 		reset(data);
 
@@ -239,6 +255,6 @@
 	}
 
 	function onDeleteSubmit(){
-		postSubmit("{:U('Errand/deleteErrand')}",$("#modal-form").serialize(),"删除成功",null,$("#errand-modal"),"");
+		modal_submit("{:U('Errand/deleteErrand')}",$("#modal-form"),"删除成功",$("#modal-alert"));
 	}
 </script>

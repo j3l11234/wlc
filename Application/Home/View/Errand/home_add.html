@@ -9,8 +9,9 @@
 		<h3 class="panel-title"></h3>
 	</div>
 	<div class="panel-body">
-		<form id="append-form">
+		<form id="append-form" enctype="multipart/form-data">
 			<input type="hidden" id="append-errand-id" name="errand_id">
+			<input type="hidden" id="append-is-summary" name="is_summary">
 			<div class="row">	
 				<div class="col-lg-4 col-sm-6 form-div">
 					<div class="form-label">人员姓名</div>
@@ -62,103 +63,124 @@
 						<span class="input-group-addon"></span>
 					</div>
 				</div>
-				<div class="col-sm-12 form-div">
+				<div class="col-sm-12 form-div" style="text-align: right;">
 					<hr style="margin: 5px auto;">
+					<input type="checkbox" id="append-summary-switch" data-on-label="申请" data-off="success" data-off-label="总结" checked/>
 				</div>
-				<div class="col-sm-12">
-					<div style="text-align: center;">出差/走访/办公对象联系方式</div>
-					<div class="table-responsive">
-						<input type="hidden" id="append-object" name="object">
-						<table class="table table-condensed">
-							<thead>
-								<tr>
-									<th>姓名</th>
-									<th>性别</th>
-									<th>单位</th>
-									<th>职务</th>
-									<th>联系方式</th>							
-									<th>校友</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr id="object-input">
-									<td>
-										<input class="form-control" id="object-name-input" type="text">
-									</td>
-									<td>
-										<input class="form-control" id="object-sex-input" type="text">
-									</td>
-									<td>
-										<input class="form-control" id="object-department-input" type="text">
-									</td>
-									<td>
-										<input class="form-control" id="object-position-input" type="text">
-									</td>
-									<td>
-										<input class="form-control" id="object-contact-input" type="text">
-									</td>
-									<td>
-										<input class="form-control" id="object-alumni-input" type="text">
-									</td>
-									<td>
-										<button type="button" class="btn btn-success" onclick="addObject(this)">添加</button>
-									</td>	
-								</tr>
-							</tbody>
-						</table>
+				<div id="append-summary-div" style="display: none;">
+					<div class="col-sm-12">
+						<div style="text-align: center;">出差/走访/办公对象联系方式</div>
+						<div class="table-responsive">
+							<input type="hidden" id="append-object" name="object">
+							<table class="table table-condensed">
+								<thead>
+									<tr>
+										<th>姓名</th>
+										<th>性别</th>
+										<th>单位</th>
+										<th>职务</th>
+										<th>联系方式</th>							
+										<th>校友</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr id="object-input">
+										<td>
+											<input class="form-control" id="object-name-input" type="text">
+										</td>
+										<td>
+											<input class="form-control" id="object-sex-input" type="text">
+										</td>
+										<td>
+											<input class="form-control" id="object-department-input" type="text">
+										</td>
+										<td>
+											<input class="form-control" id="object-position-input" type="text">
+										</td>
+										<td>
+											<input class="form-control" id="object-contact-input" type="text">
+										</td>
+										<td>
+											<input class="form-control" id="object-alumni-input" type="text">
+										</td>
+										<td>
+											<button type="button" class="btn btn-success" onclick="addObject(this)">添加</button>
+										</td>	
+									</tr>
+								</tbody>
+							</table>
+						</div>
 					</div>
-				</div>
-				<div class="col-sm-12 form-div">
-					<div class="form-label">总结</div>
-					<div class="textarea">
-					<textarea type="" class="form-control" id="append-summary" name="summary" style="min-height:40px;"> </textarea>
+
+					<div class="col-sm-12">
+						<div style="text-align: center;">总结</div>
 					</div>
-				</div>
-				<div class="col-sm-12">
-					<div style="text-align: center;">出差花费</div>
-					<div class="table-responsive" style="padding-bottom: 50px;">
-						<input type="hidden" id="append-cost" name="cost">
-						<table class="table table-condensed">
-							<thead>
-								<tr>
-									<th>类型</th>
-									<th>详情</th>
-									<th>金额</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr id="cost-input">
-									<td width="33%">
-										<div class="input-group">
-											<select id="cost-type-select" class="selectpicker">
-												<option value="交通工具">交通工具</option>
-												<option value="饮食">饮食</option>
-												<option value="其他">其他</option>
-											</select>
-										</div>
-									</td>
-									<td width="33%">
-										<input class="form-control" id="cost-detail-input" type="text">
-									</td>
-									<td width="33%">
-										<input class="form-control" id="cost-cost-input" type="text" style="text-align: right;">
-									</td>
-									<td>
-										<button type="button" class="btn btn-success" onclick="addCost(this)">添加</button>
-									</td>	
-								</tr>
-								<tr>
-									<td>
-									</td>
-									<td>
-										<strong>金额总计</strong>	
-									</td>
-									<td>
-										<input type="input"  id="append-cost_sum" class="form-control"  name="cost_sum" style="text-align: right;">									
-									</td>
-								</tr>
-							</tbody>
-						</table>
+					<div class="col-sm-6 form-div">
+						<div class="form-label">文件上传</div>
+						<input type="file" class="btn-success" id="append-attachment-new" name="attachment_new" />
+					</div>
+					<div class="col-sm-6 form-div">
+						<div class="alert alert-danger" >
+							<div id="append-attachment"></div>
+							上传附件将会覆盖上一次附件，允许格式为doc
+						</div>
+					</div>
+					<div class="col-sm-12 form-div">
+						<div class="form-label">总结</div>
+						<div class="textarea">
+						<textarea type="" class="form-control" id="append-summary" name="summary" style="min-height:40px;"> </textarea>
+						</div>
+					</div>
+					<div class="col-sm-12">
+						<div style="text-align: center;">出差花费</div>
+						<div class="table-responsive" style="padding-bottom: 50px;">
+							<input type="hidden" id="append-cost" name="cost">
+							<table class="table table-condensed">
+								<thead>
+									<tr>
+										<th>类型</th>
+										<th>详情</th>
+										<th>金额</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr id="cost-input">
+										<td width="33%">
+											<div class="input-group">
+												<select id="cost-type-select" class="selectpicker">
+													<option value="市外差旅费">市外差旅费</option>
+													<option value="市内交通费">市内交通费</option>
+													<option value="办公用品费">办公用品费</option>
+													<option value="图书资料费">图书资料费</option>
+													<option value="餐费">餐费</option>
+													<option value="汽油费">汽油费</option>
+													<option value="其他">其他</option>
+												</select>
+											</div>
+										</td>
+										<td width="33%">
+											<input class="form-control" id="cost-detail-input" type="text">
+										</td>
+										<td width="33%">
+											<input class="form-control" id="cost-cost-input" type="text" style="text-align: right;">
+										</td>
+										<td>
+											<button type="button" class="btn btn-success" onclick="addCost(this)">添加</button>
+										</td>	
+									</tr>
+									<tr>
+										<td>
+										</td>
+										<td>
+											<strong>金额总计</strong>	
+										</td>
+										<td>
+											<input type="input"  id="append-cost_sum" class="form-control"  name="cost_sum" style="text-align: right;">									
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -186,6 +208,20 @@
 				minView:2,
 				forceParse: 0
 	    	});
+
+			$('#append-attachment-new').bootstrapFileInput();
+
+	    	$("#append-summary-switch").bootstrapSwitch();
+	    	$("#append-summary-switch").on('switch-change', function (e, data){
+			if(data.value){
+				$("#append-summary-div").fadeOut("fast");
+				$("#append-is-summary").val(0);
+			}
+			else{
+				$("#append-summary-div").fadeIn("fast");
+				$("#append-is-summary").val(1);
+			}
+		});
 	});
 	
 	//添加申请
@@ -205,6 +241,9 @@
 		$("#append-cost_sum").val("");
 		$("#object-input").siblings().remove();
 		$("#cost-input").siblings().slice(0,-1).remove();
+		$("#append-summary-switch").removeAttr("disabled");
+		$("#append-summary-div").hide();
+		$("#append-is-summary").val(0);
 
 		$("#append-panel").show();
 		$.scrollTo($("#append-panel").offset().top-60,300);
@@ -222,46 +261,67 @@
 		$("#append-end-date").val(data.end_date);
 		$("#append-place").val(data.place);
 		$("#append-reason").val(data.reason);
-		$("#append-cost").val(data.cost);
-		$("#append-summary").val(data.summary);
-		$("#append-cost_sum").val(data.cost_sum);
-
-		//显示出差对象
-		$("#object-input").siblings().remove();
-		try{
-			var objectList = JSON.parse(data.object);
-			var object_trList = new Array();
-			for (var i = 0; i < objectList.length; i++){
-				var object_tr = $(document.createElement("tr"));
-				object_tr.append("<td>" + objectList[i].name + "</td>");
-				object_tr.append("<td>" + objectList[i].sex + "</td>");
-				object_tr.append("<td>" + objectList[i].department + "</td>");
-				object_tr.append("<td>" + objectList[i].position + "</td>");
-				object_tr.append("<td>" + objectList[i].contact + "</td>");
-				object_tr.append("<td>" + objectList[i].alumni + "</td>");
-				object_tr.append('<td><button type="button" class="btn btn-xs btn-danger" onclick="deleteObject(this)">删除</button></td>');
-				object_trList.push(object_tr);
-			}
-			$("#object-input").before(object_trList);
+		if(data.check_status == 1){
+			$("#append-summary-switch").bootstrapSwitch('setState', true);
+			$("#append-summary-switch").removeAttr("disabled");
+			$("#append-summary-div").hide();
+			$("#append-is-summary").val(0);
 		}
-		catch(err){}
+		else{
+			$("#append-summary-switch").bootstrapSwitch('setState', false);
+			$("#append-summary-switch").attr("disabled","disabled");
+			$("#append-summary-div").show();
+			$("#append-is-summary").val(1);
 
-		//显示报销金额
-		$("#cost-input").siblings().slice(0,-1).remove();
-		try{
-			var costList = JSON.parse(data.cost);
-			var cost_trList = new Array();
-			for (var i = 0; i < costList.length; i++){
-				var cost_tr = $(document.createElement("tr"));
-				cost_tr.append("<td>" + costList[i].type + "</td>");
-				cost_tr.append("<td>" + costList[i].detail + "</td>");
-				cost_tr.append("<td>" + costList[i].cost + "</td>");
-				cost_tr.append('<td><button type="button" class="btn btn-xs btn-danger" onclick="deletecost(this)">删除</button></td>');
-				cost_trList.push(cost_tr);
+			$("#append-cost").val(data.cost);
+			$("#append-summary").val(data.summary);
+			$("#append-cost_sum").val(data.cost_sum);
+
+			if(data.attachment_name==null){
+				$("#append-attachment").html("");
+			}else{
+				$("#append-attachment").html('已存在文件：'+createDlHref(data.attachment_path,data.attachment_name));
+			}			
+			
+			//显示出差对象download
+			$("#object-input").siblings().remove();
+			try{
+				var objectList = JSON.parse(data.object);
+				var object_trList = new Array();
+				for (var i = 0; i < objectList.length; i++){
+					var object_tr = $(document.createElement("tr"));
+					object_tr.append("<td>" + objectList[i].name + "</td>");
+					object_tr.append("<td>" + objectList[i].sex + "</td>");
+					object_tr.append("<td>" + objectList[i].department + "</td>");
+					object_tr.append("<td>" + objectList[i].position + "</td>");
+					object_tr.append("<td>" + objectList[i].contact + "</td>");
+					object_tr.append("<td>" + objectList[i].alumni + "</td>");
+					object_tr.append('<td><button type="button" class="btn btn-xs btn-danger" onclick="deleteObject(this)">删除</button></td>');
+					object_trList.push(object_tr);
+				}
+				$("#object-input").before(object_trList);
 			}
-			$("#cost-input").before(cost_trList);
+			catch(err){}
+
+			//显示报销金额
+			$("#cost-input").siblings().slice(0,-1).remove();
+			try{
+				var costList = JSON.parse(data.cost);
+				var cost_trList = new Array();
+				for (var i = 0; i < costList.length; i++){
+					var cost_tr = $(document.createElement("tr"));
+					cost_tr.append("<td>" + costList[i].type + "</td>");
+					cost_tr.append("<td>" + costList[i].detail + "</td>");
+					cost_tr.append("<td>" + costList[i].cost + "</td>");
+					cost_tr.append('<td><button type="button" class="btn btn-xs btn-danger" onclick="deletecost(this)">删除</button></td>');
+					cost_trList.push(cost_tr);
+				}
+				$("#cost-input").before(cost_trList);
+			}
+			catch(err){}
 		}
-		catch(err){}
+
+		
 
 		$("#append-panel").show();
 		$.scrollTo($("#append-panel").offset().top-60,300);
@@ -312,13 +372,13 @@
 		};
 		$("#append-cost").val(JSON.stringify(costList));
 
-
 		switch(mode){
 			case "add":
-				postSubmit("{:U('Errand/addErrand')}",$("#append-form").serialize(),"提交成功",$('#append-submit'),null,"提交结果");
+				append_submit("{:U('Errand/addErrand')}",$("#append-form"),"提交结果","提交成功");
 				break;
 			case "edit":
-				postSubmit("{:U('Errand/editErrand')}",$("#append-form").serialize(),"修改成功",$('#append-submit'),null,"修改结果");
+				append_submit("{:U('Errand/editErrand')}",$("#append-form"),"提交结果","提交成功");
+				//postSubmit("{:U('Errand/editErrand')}",$("#append-form").serialize(),"修改成功",$('#append-submit'),null,"修改结果");
 				break;
 		}
 	

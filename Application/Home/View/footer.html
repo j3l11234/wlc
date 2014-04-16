@@ -28,16 +28,19 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="__PUBLIC__/bootstrap/js/bootstrap.js"></script> 
+    <script type="text/javascript" src="__PUBLIC__/bootstrap/js/jquery.scrollTo-min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/bootstrap/js/jquery.form.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/bootstrap/js/bootstrap.js"></script> 
     <script type="text/javascript" src="__PUBLIC__/bootstrap/js/bootstrap-switch.min.js"></script>
     <script type="text/javascript" src="__PUBLIC__/bootstrap/js/bootstrap-select.min.js"></script>
-    <script type="text/javascript" src="__PUBLIC__/bootstrap/js/jquery.scrollTo-min.js"></script> 
+    <script type="text/javascript" src="__PUBLIC__/bootstrap/js/bootstrap.file-input.js"></script>
 
     <!-- bootstrap-datetimepicker.js 有修改！ -->
     <script type="text/javascript" src="__PUBLIC__/datetimepicker/bootstrap-datetimepicker.js" charset="UTF-8"></script>
     <script type="text/javascript" src="__PUBLIC__/datetimepicker/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 
     <script type="text/javascript">
+
       function setCookie(c_name,value,expiredays){
         var exdate=new Date();
         exdate.setDate(exdate.getDate()+expiredays);
@@ -59,6 +62,15 @@
         return ""
       }
 
+      function createDlHref(path,name){
+      	var html = '<a href="'+encodeURI('__ROOT__/download.php?path='+'Uploads'+path+'&name='+name)+'">'+name+'</a>';
+      	return html;
+      	
+      }
+      function getDownloadUrl(path,name){	
+     		var url = encodeURI('__ROOT__/download.php?path='+'Uploads'+path+'&name='+name);
+				return url;
+      }
 
       Date.prototype.format = function(fmt)   
       { //author: meizz   
@@ -136,7 +148,7 @@
 
           function showResult(success,text){
             var alert_div =  modal.find(".alert");
-            alert_div.text(text);
+            alert_div.html(text);
             if(success)
               alert_div.removeClass("alert-danger").addClass("alert-success");
             else
@@ -159,6 +171,81 @@
               modal.on("hidden.bs.modal", function(e){location.reload();});
             }        
           }
+      }
+
+      function modal_submit(submitUrl,form,successText,alert){
+        $(form).ajaxSubmit({
+          type:'post',
+          url:submitUrl,
+          success:function(data,status){
+            if(typeof(data) == "string"){
+              showResult(false,"失败： "+data);
+            }else{
+              showResult(true,successText);
+            }
+          },
+          error:function(){
+            showResult(false,"网络错误");
+          }
+        });
+
+        function showResult(success,text){
+          alert = $(alert);
+          alert.html(text);
+          if(success)
+            alert.removeClass("alert-danger").addClass("alert-success");
+          else
+            alert.removeClass("alert-success").addClass("alert-danger");
+
+          alert.show();
+          alert
+            .animate({textIndent:10}, 100).animate({textIndent:0}, 100)
+            .animate({textIndent:10}, 100).animate({textIndent:0}, 100, 
+            function(){
+             if(success)
+                location.reload();
+            });      
+        }
+      }
+
+      function append_submit(submitUrl,form,title,successText){
+        button = $(form).find("#append-submit");
+				button.button('loading');
+
+        $(form).ajaxSubmit({
+          type:'post',
+          url:submitUrl,
+          success:function(data,status){
+            button.button('reset');
+            if(typeof(data) == "string"){
+              showResult(false,"失败： "+data);
+            }else{
+              showResult(true,successText);
+            }
+          },
+          error:function(){
+            button.button('reset');
+            showResult(false,"网络错误");
+          }
+        });
+
+        function showResult(success,text){
+          modal = $("#result-modal");
+          modal.find(".modal-title").text(title);
+          
+          var alert_div =  modal.find(".alert");
+          alert_div.html(text);
+          if(success)
+            alert_div.removeClass("alert-danger").addClass("alert-success");
+          else
+            alert_div.removeClass("alert-success").addClass("alert-danger");
+
+          alert_div.show();
+          modal.modal('show');
+
+          if(success)
+            modal.on("hidden.bs.modal", function(e){location.reload();});   
+        }
       }
 
       function showModalResult(success,title,text,reload){
