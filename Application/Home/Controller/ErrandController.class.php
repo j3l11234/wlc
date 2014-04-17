@@ -39,7 +39,6 @@ class ErrandController extends Controller {
 	 * 个人中心——请假申请 查询页面
 	 */
 	private function homeQuery(){
-		
 		if(!isset($_REQUEST['start_date']))
 			$_REQUEST['start_date'] = '';
 		if(!isset($_REQUEST['end_date']))
@@ -79,55 +78,9 @@ class ErrandController extends Controller {
 	 * 个人中心——提交申请
 	 * AXAJ
 	 */
-	public function addErrand(){
+	public function submitErrand(){
 		check_login();
-		
 		$date = date('Y-m-d');
-		if(date('Y-m-d',strtotime($_REQUEST['start_date']. ' 00:00:00')) != $_REQUEST['start_date'])
-			die("出发时间不正确");
-		if(date('Y-m-d',strtotime($_REQUEST['end_date']. ' 00:00:00')) != $_REQUEST['end_date'])
-			die("返回时间不正确");
-		if(strtotime($_REQUEST['start_date']. ' 00:00:00') > strtotime($_REQUEST['end_date']. ' 00:00:00'))
-			die("出发时间不能晚于返回时间");
-		
-		if($_REQUEST['is_summary'] == 0){
-			$result = D('Errand')->submitErrand(
-				$_SESSION['user']['user_id'],
-				null,
-				$date,
-				$_REQUEST['start_date'],
-				$_REQUEST['end_date'],
-				$_REQUEST['place'],
-				$_REQUEST['reason'],
-				false);
-		}
-		else{
-			$result = D('Errand')->submitErrand(
-				$_SESSION['user']['user_id'],
-				null,
-				$date,
-				$_REQUEST['start_date'],
-				$_REQUEST['end_date'],
-				$_REQUEST['place'],
-				$_REQUEST['reason'],
-				true,
-				$_REQUEST['object'],
-				$_REQUEST['cost'],
-				$_REQUEST['cost_sum'],
-				$_REQUEST['summary']);
-		}
-		if($result == null)
-			die('提交失败');
-		$this->ajaxReturn($result);
-	}
-
-
-	/**
-	 * 个人中心——修改申请
-	 * AXAJ
-	 */
-	public function editErrand(){
-		check_login();
 
 		if(!empty($_FILES)){
 			//处理文件上传
@@ -142,8 +95,7 @@ class ErrandController extends Controller {
 				die('文件上传失败:'.$upload->getError());
 		}else{
 			$info = array('name' => "", 'savepath'=> "", 'savename'=> "");
-		}
-		
+		}		
 
 		//检查时间格式
 		if(date('Y-m-d',strtotime($_REQUEST['start_date']. ' 00:00:00')) != $_REQUEST['start_date'])
@@ -157,7 +109,7 @@ class ErrandController extends Controller {
 			$result = D('Errand')->submitErrand(
 				$_SESSION['user']['user_id'],
 				$_REQUEST['errand_id'],
-				null,
+				$date,
 				$_REQUEST['start_date'],
 				$_REQUEST['end_date'],
 				$_REQUEST['place'],
@@ -168,16 +120,13 @@ class ErrandController extends Controller {
 			$result = D('Errand')->submitErrand(
 				$_SESSION['user']['user_id'],
 				$_REQUEST['errand_id'],
-				null,
+				$date,
 				$_REQUEST['start_date'],
 				$_REQUEST['end_date'],
 				$_REQUEST['place'],
 				$_REQUEST['reason'],
 				true,
-				$_REQUEST['object'],
 				$_REQUEST['cost'],
-				$_REQUEST['cost_sum'],
-				$_REQUEST['summary'],
 				$info['name'],
 				$info['savepath'].$info['savename']);
 		}

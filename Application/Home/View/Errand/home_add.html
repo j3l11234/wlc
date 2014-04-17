@@ -69,50 +69,6 @@
 				</div>
 				<div id="append-summary-div" style="display: none;">
 					<div class="col-sm-12">
-						<div style="text-align: center;">出差/走访/办公对象联系方式</div>
-						<div class="table-responsive">
-							<input type="hidden" id="append-object" name="object">
-							<table class="table table-condensed">
-								<thead>
-									<tr>
-										<th>姓名</th>
-										<th>性别</th>
-										<th>单位</th>
-										<th>职务</th>
-										<th>联系方式</th>							
-										<th>校友</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr id="object-input">
-										<td>
-											<input class="form-control" id="object-name-input" type="text">
-										</td>
-										<td>
-											<input class="form-control" id="object-sex-input" type="text">
-										</td>
-										<td>
-											<input class="form-control" id="object-department-input" type="text">
-										</td>
-										<td>
-											<input class="form-control" id="object-position-input" type="text">
-										</td>
-										<td>
-											<input class="form-control" id="object-contact-input" type="text">
-										</td>
-										<td>
-											<input class="form-control" id="object-alumni-input" type="text">
-										</td>
-										<td>
-											<button type="button" class="btn btn-success" onclick="addObject(this)">添加</button>
-										</td>	
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-
-					<div class="col-sm-12">
 						<div style="text-align: center;">总结</div>
 					</div>
 					<div class="col-sm-6 form-div">
@@ -123,12 +79,6 @@
 						<div class="alert alert-danger" >
 							<div id="append-attachment"></div>
 							上传附件将会覆盖上一次附件，允许格式为doc
-						</div>
-					</div>
-					<div class="col-sm-12 form-div">
-						<div class="form-label">总结</div>
-						<div class="textarea">
-						<textarea type="" class="form-control" id="append-summary" name="summary" style="min-height:40px;"> </textarea>
 						</div>
 					</div>
 					<div class="col-sm-12">
@@ -175,7 +125,7 @@
 											<strong>金额总计</strong>	
 										</td>
 										<td>
-											<input type="input"  id="append-cost_sum" class="form-control"  name="cost_sum" style="text-align: right;">									
+											<input type="input"  id="append-cost-sum" class="form-control" style="text-align: right;" readonly="">									
 										</td>
 									</tr>
 								</tbody>
@@ -187,7 +137,7 @@
 			<div class="row">
 				<div class="col-sm-12 form-div" style="text-align: center;">
 					<br>
-					<button style="min-width:150px;width:30%;" type="button" id="append-submit" data-loading-text="提交中。。" class="btn btn-success">
+					<button style="min-width:150px;width:30%;" type="button" id="append-submit" data-loading-text="提交中。。" class="btn btn-success "onclick="onSubmit()">
 					提交
 					</button>
 				</div>	
@@ -198,37 +148,35 @@
 
 <script type="text/javascript">
 	$(function(){
-			$('#append-form .form_date').datetimepicker({  
-				language:"zh-CN",
-				weekStart: 1,
-				todayBtn:  1,
-				autoclose: 1,
-				todayHighlight: 1,
-				startView: 2,
-				minView:2,
-				forceParse: 0
-	    	});
+		$('#append-form .form_date').datetimepicker({  
+			language:"zh-CN",
+			weekStart: 1,
+			todayBtn:  1,
+			autoclose: 1,
+			todayHighlight: 1,
+			startView: 2,
+			minView:2,
+			forceParse: 0
+    	});
 
-			$('#append-attachment-new').bootstrapFileInput();
+		$('#append-attachment-new').bootstrapFileInput();
 
-	    	$("#append-summary-switch").bootstrapSwitch();
-	    	$("#append-summary-switch").on('switch-change', function (e, data){
-			if(data.value){
-				$("#append-summary-div").fadeOut("fast");
-				$("#append-is-summary").val(0);
-			}
-			else{
-				$("#append-summary-div").fadeIn("fast");
-				$("#append-is-summary").val(1);
-			}
+    	$("#append-summary-switch").bootstrapSwitch();
+    	$("#append-summary-switch").on('switch-change', 
+    		function (e, data){
+				if(data.value){
+					$("#append-summary-div").fadeOut("fast");
+					$("#append-is-summary").val(0);
+				}
+				else{
+					$("#append-summary-div").fadeIn("fast");
+					$("#append-is-summary").val(1);
+				}
 		});
 	});
 	
 	//添加申请
 	function addErrand(){
-		$("#append-submit").unbind();
-		$("#append-submit").click(function(){onAdd_EditSubmit('add');});
-
 		$("#append-panel .panel-title").text("提交出差记录");
 		$("#append-errand-id").val("");
 		$("#append-date").val(new Date().format("yyyy-MM-dd"));
@@ -237,13 +185,11 @@
 		$("#append-place").val("");
 		$("#append-reason").val("");
 		$("#append-cost").val("");
-		$("#append-summary").val("");
-		$("#append-cost_sum").val("");
-		$("#object-input").siblings().remove();
 		$("#cost-input").siblings().slice(0,-1).remove();
 		$("#append-summary-switch").removeAttr("disabled");
 		$("#append-summary-div").hide();
 		$("#append-is-summary").val(0);
+		$("#append-cost-sum").val(0);
 
 		$("#append-panel").show();
 		$.scrollTo($("#append-panel").offset().top-60,300);
@@ -251,9 +197,6 @@
 
 	//编辑申请
 	function editErrand(data){
-		$("#append-submit").unbind();
-		$("#append-submit").click(function(){onAdd_EditSubmit('edit');});
-
 		$("#append-panel .panel-title").text("修改出差记录");
 		$("#append-errand-id").val(data.errand_id);
 		$("#append-date").val(data.date);
@@ -274,60 +217,39 @@
 			$("#append-is-summary").val(1);
 
 			$("#append-cost").val(data.cost);
-			$("#append-summary").val(data.summary);
-			$("#append-cost_sum").val(data.cost_sum);
 
 			if(data.attachment_name==null){
 				$("#append-attachment").html("");
 			}else{
 				$("#append-attachment").html('已存在文件：'+createDlHref(data.attachment_path,data.attachment_name));
 			}			
-			
-			//显示出差对象download
-			$("#object-input").siblings().remove();
-			try{
-				var objectList = JSON.parse(data.object);
-				var object_trList = new Array();
-				for (var i = 0; i < objectList.length; i++){
-					var object_tr = $(document.createElement("tr"));
-					object_tr.append("<td>" + objectList[i].name + "</td>");
-					object_tr.append("<td>" + objectList[i].sex + "</td>");
-					object_tr.append("<td>" + objectList[i].department + "</td>");
-					object_tr.append("<td>" + objectList[i].position + "</td>");
-					object_tr.append("<td>" + objectList[i].contact + "</td>");
-					object_tr.append("<td>" + objectList[i].alumni + "</td>");
-					object_tr.append('<td><button type="button" class="btn btn-xs btn-danger" onclick="deleteObject(this)">删除</button></td>');
-					object_trList.push(object_tr);
-				}
-				$("#object-input").before(object_trList);
-			}
-			catch(err){}
 
 			//显示报销金额
 			$("#cost-input").siblings().slice(0,-1).remove();
 			try{
 				var costList = JSON.parse(data.cost);
 				var cost_trList = new Array();
+				var costSum = 0;
 				for (var i = 0; i < costList.length; i++){
 					var cost_tr = $(document.createElement("tr"));
 					cost_tr.append("<td>" + costList[i].type + "</td>");
 					cost_tr.append("<td>" + costList[i].detail + "</td>");
 					cost_tr.append("<td>" + costList[i].cost + "</td>");
+					costSum += parseInt(costList[i].cost);
 					cost_tr.append('<td><button type="button" class="btn btn-xs btn-danger" onclick="deletecost(this)">删除</button></td>');
 					cost_trList.push(cost_tr);
 				}
+				$("#append-cost-sum").val(costSum);
 				$("#cost-input").before(cost_trList);
 			}
 			catch(err){}
 		}
 
-		
-
 		$("#append-panel").show();
 		$.scrollTo($("#append-panel").offset().top-60,300);
 	}
 
-	function onAdd_EditSubmit(mode){
+	function onSubmit(){
 	  	if($("#append-start-date").val() == ""){
 	  		showModalResult(false,"提示","请选择出发时间",false);
 			return;
@@ -345,24 +267,9 @@
 			return;
 		}
 
-		var objectList_trList = $("#object-input").siblings();
-		var objectList = new Array();
-		for (var i = 0; i < objectList_trList.length; i++){
-			var object_tdList = $(objectList_trList[i]).children();
-			object = new Object();
-			object.name = $(object_tdList[0]).text();
-			object.sex = $(object_tdList[1]).text();
-			object.department = $(object_tdList[2]).text();
-			object.position = $(object_tdList[3]).text();
-			object.contact = $(object_tdList[4]).text();
-			object.alumni = $(object_tdList[5]).text();
-			objectList.push(object);
-		};
-		$("#append-object").val(JSON.stringify(objectList));
-
-		var costList_trList = $("#cost-input").siblings().slice(0,-1);
+		var costList_trList = $("#cost-input").siblings();
 		var costList = new Array();
-		for (var i = 0; i < costList_trList.length; i++){
+		for (var i = 0; i < costList_trList.length-1; i++){
 			var cost_tdList = $(costList_trList[i]).children();
 			cost = new Object();
 			cost.type = $(cost_tdList[0]).text();
@@ -372,56 +279,9 @@
 		};
 		$("#append-cost").val(JSON.stringify(costList));
 
-		switch(mode){
-			case "add":
-				append_submit("{:U('Errand/addErrand')}",$("#append-form"),"提交结果","提交成功");
-				break;
-			case "edit":
-				append_submit("{:U('Errand/editErrand')}",$("#append-form"),"提交结果","提交成功");
-				//postSubmit("{:U('Errand/editErrand')}",$("#append-form").serialize(),"修改成功",$('#append-submit'),null,"修改结果");
-				break;
-		}
+		append_submit("{:U('Errand/submitErrand')}",$("#append-form"),"提交结果","提交成功");
 	
 	}
-
-	function addObject(button){
-		if($("#object-name-input").val() == "" ||
-			$("#object-sex-input").val() == "" ||
-			$("#object-department-input").val() == "" ||
-			$("#object-position-input").val() == "" ||
-			$("#object-contact-input").val() == "" ||
-			$("#object-alumni-input").val() == "" ){
-			showModalResult(false,"输入错误","请完整填写对象信息",false);
-			return
-		}
-		
-		var object_tr = $(document.createElement("tr"));
-		object_tr.append("<td>" + $("#object-name-input").val() + "</td>");
-		object_tr.append("<td>" + $("#object-sex-input").val() + "</td>");
-		object_tr.append("<td>" + $("#object-department-input").val() + "</td>");
-		object_tr.append("<td>" + $("#object-position-input").val() + "</td>");
-		object_tr.append("<td>" + $("#object-contact-input").val() + "</td>");
-		object_tr.append("<td>" + $("#object-alumni-input").val() + "</td>");
-		object_tr.append('<td><button type="button" class="btn btn-xs btn-danger" onclick="deleteObject(this)">删除</button></td>');
-		object_tr.hide();
-		$('#object-input').before(object_tr);
-		object_tr.fadeIn("fast");
-
-
-		$("#object-name-input").val("");
-		$("#object-sex-input").val("");
-		$("#object-department-input").val("");
-		$("#object-position-input").val("");
-		$("#object-contact-input").val("");
-		$("#object-alumni-input").val("");	
-	}
-
-
-	function deleteObject(button){
-		var object = $(button).parent().parent();
-		object.fadeOut("fast",function(){object.remove();});
-	}
-
 
 	function addCost(button){
 		if($("#cost-detail-input").val() == "" ||
@@ -435,22 +295,34 @@
 			return;
 		}
 
-		var object_tr = $(document.createElement("tr"));
-		object_tr.append("<td>" + $("#cost-type-select").val() + "</td>");
-		object_tr.append("<td>" + $("#cost-detail-input").val() + "</td>");
-		object_tr.append("<td>" + $("#cost-cost-input").val() + "</td>");
-		object_tr.append('<td><button type="button" class="btn btn-xs btn-danger" onclick="deleteObject(this)">删除</button></td>');
-		object_tr.hide();
-		$('#cost-input').before(object_tr);
-		object_tr.fadeIn("fast");
+		var cost_tr = $(document.createElement("tr"));
+		cost_tr.append("<td>" + $("#cost-type-select").val() + "</td>");
+		cost_tr.append("<td>" + $("#cost-detail-input").val() + "</td>");
+		cost_tr.append("<td>" + $("#cost-cost-input").val() + "</td>");
+		cost_tr.append('<td><button type="button" class="btn btn-xs btn-danger" onclick="deleteCost(this)">删除</button></td>');
+		cost_tr.hide();
+		$('#cost-input').before(cost_tr);
+		cost_tr.fadeIn("fast");
 
 
 		$("#cost-detail-input").val("");
 		$("#cost-cost-input").val("");
+		sumCost();
 	}
 
 	function deleteCost(button){
-		var object = $(button).parent().parent();
-		object.fadeOut("fast",function(){object.remove();});
+		var cost_tr = $(button).parent().parent();
+		cost_tr.fadeOut("fast",function(){cost_tr.remove();});
+		sumCost();
+	}
+
+	function sumCost(){
+		var costList_trList = $("#cost-input").siblings();
+		var sumCost = 0;
+		for (var i = 0; i < costList_trList.length-1; i++){
+			var cost_tdList = $(costList_trList[i]).children();
+			sumCost+=parseInt($(cost_tdList[2]).text());
+		}
+		$("#append-cost-sum").val(sumCost);
 	}
 </script>

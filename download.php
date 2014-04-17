@@ -1,8 +1,9 @@
 <?php
 $path=urldecode($_GET['path']);
-if (stripos($path,"Uploads/Attachments/") !== 0){
+if (stripos($path,"Uploads/Attachments/") !== 0)
 	die();
-}
+if(!file_exists($path))
+	die("File not exist!");
 
 $name=urldecode($_GET['name']);//重命名后的文件名
 header("Content-type:application/octet-stream");

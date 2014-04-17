@@ -208,7 +208,7 @@
 
 	function onSearch(){
 		$('#btn-search').button('loading');
-		window.location.href = "{:U('Main/errand')}"+"&"+$("#query-form");
+		window.location.href = "{:U('Main/errand')}"+"&"+$("#query-form").serialize();
 	}
 </script>
 

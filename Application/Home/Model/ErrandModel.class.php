@@ -37,11 +37,11 @@ class ErrandModel extends Model {
 
 		$this->where($where)->order('date desc')
 		->join('LEFT JOIN wlc_user AS checker ON checker.user_id = wlc_errand.checker_id')
-		->field('errand_id,date,start_date,end_date,place,reason,object,cost,cost_sum,summary,attachment_name,attachment_path,
+		->field('errand_id,date,start_date,end_date,place,reason,cost,attachment_name,attachment_path,
 			check_status,checker.alias AS checker,check_datetime,check_comment');
 
-		if($perPage != 0)
-			$list = $this->page($page.','.$perPage)->select();
+		if($per_page != 0)
+			$list = $this->page($page.','.$per_page)->select();
 		else
 			$list = $this->select();
 
@@ -68,8 +68,8 @@ class ErrandModel extends Model {
 	 */
 	public function submitErrand(
 		$user_id,$errand_id,$date,$start_date,$end_date,$place,$reason,
-		$is_summary,$object="",$cost="",$cost_sum="",$summary="",$attachment_name="",$attachment_path=""){
-		if($errand_id == null){ //新增记录
+		$is_summary,$cost="",$attachment_name="",$attachment_path=""){
+		if(empty($errand_id)){ //新增记录
 			$data = array(
 				'user_id'		=>	$user_id,
 				'date'			=>	$date,
@@ -94,10 +94,7 @@ class ErrandModel extends Model {
 		$data['reason']		=	$reason;
 		if($is_summary){
 			$data['check_status']		=	2;
-			$data['object']				=	$object;
 			$data['cost']				=	$cost;
-			$data['cost_sum']			=	$cost_sum;
-			$data['summary']			=	$summary;
 
 			if($attachment_name != ""){ //更新附件
 				if($data['attachment_path'] != null)
@@ -137,13 +134,15 @@ class ErrandModel extends Model {
 		if(!$data)
 			return null;
 
-		//检查记录所有者
-		if($data['user_id'] != $user_id && !$admin)
-			return null;
+		if(!$admin){
+			//检查记录所有者
+			if($data['user_id'] != $user_id)
+				return null;
 
-		//只能编删除未审批的记录
-		if($data['check_status'] > 2)
-			return null;
+			//只能编删除未审批的记录
+			if($data['check_status'] > 2)
+				return null;
+		}
 
 		//检测是否删除成功
 		if($this->where(array('errand_id' => $errand_id))->delete() == 0)
@@ -216,7 +215,7 @@ class ErrandModel extends Model {
 		->join('LEFT JOIN wlc_department ON wlc_department.department_id = wlc_user.department_id')
 		->join('LEFT JOIN wlc_user AS checker ON checker.user_id = wlc_errand.checker_id');
 		$this->field('errand_id,department_name,wlc_user.alias,
-			date,start_date,end_date,place,reason,object,cost,cost_sum,summary,attachment_name,attachment_path,
+			date,start_date,end_date,place,reason,cost,attachment_name,attachment_path,
 			check_status,checker.alias AS checker,check_datetime,check_comment')
 		->where($where)->order($order);
 
