@@ -94,7 +94,7 @@
 			<div class="row">
 				<div class="col-sm-12 form-div" style="text-align: center;">
 					<br>
-					<button style="min-width:150px;width:30%;" type="button" id="append-submit" data-loading-text="提交中。。" class="btn btn-success">
+					<button style="min-width:150px;width:30%;" type="button" id="append-submit" data-loading-text="提交中。。" class="btn btn-success" onclick="onSubmit()">
 					提交
 					</button>
 				</div>	
@@ -155,7 +155,7 @@
 		$.scrollTo($("#append-panel").offset().top-60,300);
 	}
 
-	function onAdd_EditSubmit(mode){
+	function onSubmit(){
 		if($("#append-start-date").val() == ""){
 			showModalResult(false,"提示","请选择借出时间",false);
 			return;
@@ -172,14 +172,6 @@
 			showModalResult(false,"提示","请请认真填写借用原因",false);
 			return;
 		}	 		
-	
-		switch(mode){
-			case "add":
-				postSubmit("{:U('Borrow/addBorrow')}",$("#append-form").serialize(),"提交成功",$('#append-submit'),null,"提交结果");
-				break;
-			case "edit":
-				postSubmit("{:U('Borrow/editBorrow')}",$("#append-form").serialize(),"提交成功",$('#append-submit'),null,"提交结果");
-				break;
-		}
+		append_submit("{:U('Borrow/submitBorrow')}",$("#append-form"),"提交结果","提交成功");
 	}
 </script>

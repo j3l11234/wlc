@@ -102,13 +102,15 @@
 						</div>
 					</div>
 				</form>
-				<div class="alert alert-danger" style="margin-bottom: 0px;"></div>
+				<div class="alert alert-danger" id="modal-alert" style="margin-bottom: 0px;"></div>
 			</div>
 			<div class="modal-footer" style="margin-top: auto; white-space: nowrap;">
 				<button type="button" class="btn btn-primary btn-modal-view" data-dismiss="modal">确定</button>
-				<button type="button" class="btn btn-default btn-modal-approbate" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-default btn-modal-approbate btn-modal-delete btn-modal-return" data-dismiss="modal">取消</button>
 				<button type="button" class="btn btn-success btn-modal-approbate" onclick="onApprobateSubmit(true)">审批通过</button>
 				<button type="button" class="btn btn-danger btn-modal-approbate" onclick="onApprobateSubmit(false)">审批驳回</button>
+				<button type="button" class="btn btn-danger btn-modal-delete" onclick="onDeleteSubmit()">确认删除</button>
+				<button type="button" class="btn btn-primary btn-modal-return" onclick="onReturnSubmit()">确认归还</button>
 			</div>
 		</div>
 	</div>
@@ -147,20 +149,45 @@
 		$('#borrow-modal').modal({backdrop:"static"});
 	}
 
-	{//人事负责人才能审批}
-	<if condition="$isPersonnel">
-		function approbateBorrow(data){
-			reset(data);
-			$("#borrow-modal .modal-title").text("审批申请");
-			$("#modal-check-comment").removeAttr("readonly");
+	function approbateBorrow(data){
+		reset(data);
+		$("#borrow-modal .modal-title").text("审批申请");
+		$("#modal-check-comment").removeAttr("readonly");
 
-			$(".btn-modal-approbate").show();
-			$('#borrow-modal').modal({backdrop:"static"});
-		}
+		$(".btn-modal-approbate").show();
+		$('#borrow-modal').modal({backdrop:"static"});
+	}
 
-		function onApprobateSubmit(isAgree){	
-			$('#modal-is-agree').val(isAgree?"true":"false");
-			postSubmit("{:U('Borrow/approbateBorrow')}",$("#modal-form").serialize(),"审批成功",null,$("#borrow-modal"),"");
-		}
-	</if>
+	function onApprobateSubmit(isAgree){	
+		$('#modal-is-agree').val(isAgree?"true":"false");
+		postSubmit("{:U('Borrow/approbateBorrow')}",$("#modal-form").serialize(),"审批成功",null,$("#borrow-modal"),"");
+	}
+
+	//删除借用申请
+	function deleteBorrow(data){
+		reset(data);
+
+		$("#borrow-modal .modal-title").text("删除申请");
+		$(".btn-modal-delete").show();
+		$("#borrow-modal .alert").text("您确定要删除该条记录吗？");
+		$("#borrow-modal .alert").show();
+		$('#borrow-modal').modal({backdrop:"static"});
+	}
+
+	function onDeleteSubmit(){
+		modal_submit("{:U('Borrow/deleteBorrow')}",$("#modal-form"),"删除成功",$("#modal-alert"));
+	}
+
+	//借用归还
+	function returnBorrow(data){
+		reset(data);
+
+		$("#borrow-modal .modal-title").text("借用归还");
+		$(".btn-modal-return").show();
+		$('#borrow-modal').modal({backdrop:"static"});
+	}
+
+	function onReturnSubmit(){
+		modal_submit("{:U('Borrow/returnBorrow')}",$("#modal-form"),"归还成功",$("#modal-alert"));
+	}
 </script>

@@ -102,13 +102,12 @@
 						</div>
 					</div>
 				</form>
-				<div class="alert alert-danger" style="margin-bottom: 0px;">
+				<div class="alert alert-danger" id="modal-alert" style="margin-bottom: 0px;">
 				</div>
 			</div>
 			<div class="modal-footer" style="margin-top: auto; white-space: nowrap;">
-				<button type="button" class="btn btn-default btn-modal-edit btn-modal-delete btn-modal-return" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-default btn-modal-edit btn-modal-delete" data-dismiss="modal">取消</button>
 				<button type="button" class="btn btn-primary btn-modal-edit" onclick="onEditSubmit()">确认修改</button>
-				<button type="button" class="btn btn-primary btn-modal-return" onclick="onReturnSubmit()">确认归还</button>
 				<button type="button" class="btn btn-primary btn-modal-view" data-dismiss="modal">确定</button>
 				<button type="button" class="btn btn-danger btn-modal-delete" onclick="onDeleteSubmit()">确认删除</button>
 			</div>
@@ -161,20 +160,7 @@
 		$('#borrow-modal').modal({backdrop:"static"});
 	}
 
-	//借用归还
-	function returnBorrow(data){
-		reset(data);
-
-		$("#borrow-modal .modal-title").text("借用归还");
-		$(".btn-modal-return").show();
-		$('#borrow-modal').modal({backdrop:"static"});
-	}
-
 	function onDeleteSubmit(){
-		postSubmit("{:U('Borrow/deleteBorrow')}",$("#modal-form").serialize(),"删除成功",null,$("#borrow-modal"),"");
-	}
-	
-	function onReturnSubmit(){
-		postSubmit("{:U('Borrow/returnBorrow')}",$("#modal-form").serialize(),"归还成功",null,$("#borrow-modal"),"");
+		modal_submit("{:U('Borrow/deleteBorrow')}",$("#modal-form"),"删除成功",$("#modal-alert"));
 	}
 </script>

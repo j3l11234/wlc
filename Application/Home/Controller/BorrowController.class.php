@@ -14,8 +14,8 @@ class BorrowController extends Controller {
 	 * 个人中心——请假申请主页面
 	 * @param unknown_type $call
 	 */
-	public function home($call = null){
-		check_invoke($call);
+	public function home(){
+		check_login();
 		
 		//装载查询页面
 		$queryHtml = $this->homeQuery();
@@ -86,8 +86,8 @@ class BorrowController extends Controller {
 	 * 个人中心——提交申请
 	 * AXAJ
 	 */
-	public function addBorrow(){
-		check_login('die');
+	public function submitBorrow(){
+		check_login();
 		
 		if(date('Y-m-d',strtotime($_REQUEST['start_date']. ' 00:00:00')) != $_REQUEST['start_date'])
 			die("借出时间不正确");
@@ -96,8 +96,9 @@ class BorrowController extends Controller {
 		if(strtotime($_REQUEST['start_date']. ' 00:00:00') >= strtotime($_REQUEST['end_date']. ' 00:00:00'))
 			die("借出时间不能晚于归还时间");
 		
-		$result = D('Borrow')->addBorrow(
+		$result = D('Borrow')->submitBorrow(
 			$_SESSION['user']['user_id'],
+			$_REQUEST['borrow_id'],
 			date('Y-m-d'),
 			$_REQUEST['start_date'],
 			$_REQUEST['end_date'],
@@ -107,38 +108,7 @@ class BorrowController extends Controller {
 			$_REQUEST['reason']);
 
 		if($result == null)
-			die('失败');
-		$this->ajaxReturn($result);
-	}
-
-
-	/**
-	 * 个人中心——修改申请
-	 * AXAJ
-	 */
-	public function editBorrow(){
-		check_login('die');
-
-		//检查时间格式
-		if(date('Y-m-d',strtotime($_REQUEST['start_date']. ' 00:00:00')) != $_REQUEST['start_date'])
-			die("借出时间不正确");
-		if(date('Y-m-d',strtotime($_REQUEST['end_date']. ' 00:00:00')) != $_REQUEST['end_date'])
-			die("归还时间不正确");
-		if(strtotime($_REQUEST['start_date']. ' 00:00:00') >= strtotime($_REQUEST['end_date']. ' 00:00:00'))
-			die("借出时间不能晚于归还时间");
-
-		$result = D('Borrow')->editBorrow(
-			$_SESSION['user']['user_id'],
-			$_REQUEST['borrow_id'],
-			$_REQUEST['start_date'],
-			$_REQUEST['end_date'],
-			$_REQUEST['goods_name'],
-			$_REQUEST['goods_parts'],
-			$_REQUEST['goods_number'],
-			$_REQUEST['reason']);
-
-		if(!$result)
-			die('修改失败');
+			die('提交失败');
 		$this->ajaxReturn($result);
 	}
 
@@ -148,11 +118,16 @@ class BorrowController extends Controller {
 	 * AXAJ
 	 */
 	public function deleteBorrow(){
-		$result = D('Borrow')->deleteBorrow($_SESSION['user']['user_id'],$_REQUEST['borrow_id']);
+		check_login();
+
+		$result = D('Borrow')->deleteBorrow(
+			$_SESSION['user']['user_id'],
+			$_REQUEST['borrow_id'],
+			get_privilege()==PRIRILEGE_ADMIN);
 
 		if(!$result)
 			die('删除失败');
-		$this->ajaxReturn(array());
+		$this->ajaxReturn($result);
 	}
 
 
@@ -161,13 +136,14 @@ class BorrowController extends Controller {
 	 * AXAJ
 	 */
 	public function returnBorrow(){
+		check_login();
 
 		$result = D('Borrow')->returnBorrow($_SESSION['user']['user_id'],$_REQUEST['borrow_id']);
 
-		if(!$result)
-			die('失败');
+		if(get_privilege() != PRIRILEGE_PERSONNEL)
+			die('权限错误');
 		//die('sss');
-		$this->ajaxReturn(array());
+		$this->ajaxReturn($result);
 	}
 
 
@@ -175,8 +151,8 @@ class BorrowController extends Controller {
 	 * 审批管理——借用审批主页面
 	 * @param unknown_type $call
 	 */
-	public function manage($call = null){
-		check_invoke($call);
+	public function manage(){
+		check_login();
 		
 		$privilege = get_privilege();
 		//装载查询页面
@@ -215,7 +191,7 @@ class BorrowController extends Controller {
 		$this->assign('departmentList',$departmentList);
 		$this->assign('userList',$userList);
 
-		$this->assign('isPersonnel',$privilege == PRIRILEGE_PERSONNEL);
+		$this->assign('privilege',$privilege);
 
 		if(!isset($_REQUEST['department']))
 			$_REQUEST['department'] = 0;

@@ -127,17 +127,6 @@
 									<button type="button" class="btn btn-xs" style="visibility:hidden;">修改</button>
 									<button type="button" class="btn btn-xs" style="visibility:hidden;">删除</button>
 							</switch>
-							<if condition="($record['check_status'] eq 2)">
-								<if condition="($record['return'] eq 1)">
-									<button type="button" class="btn btn-xs btn-danger btn-return">归还</button>
-								<elseif condition="($record['return'] eq 0)"/>
-									<button type="button" class="btn btn-xs btn-info btn-return">归还</button>
-								<else /> 
-									<button type="button" class="btn btn-xs" style="visibility:hidden;">归还</button>
-								</if>
-							<else /> 
-								<button type="button" class="btn btn-xs" style="visibility:hidden;">归还</button>
-							</if>
 						</td>	
 					</tr>
 				</foreach>
@@ -230,11 +219,6 @@
 		$(".btn-view").click(function(e){
 			var index = $(e.target).parent().parent().index();
 			viewBorrow(borrowList[index]);
-		});
-
-		$(".btn-return").click(function(e){
-			var index = $(e.target).parent().parent().index();
-			returnBorrow(borrowList[index]);
 		});
 	});
 

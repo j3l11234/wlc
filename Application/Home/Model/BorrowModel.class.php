@@ -3,33 +3,49 @@ namespace Home\Model;
 use Think\Model;
 
 class BorrowModel extends Model {
-	
+
 	/**
-	 * 新增借用申请
+	 * 提交借用申请
 	 * 
 	 * @param int $user_id			用户id
-	 * @param string $date			提交日期
+	 * @param int $borrow_id		申请条目id
+	 * @param string $date			申请日期
 	 * @param string $start_date	开始时间
 	 * @param string $end_date		结束时间
 	 * @param string $goods_name	物品名称
 	 * @param string $goods_parts	物品配件
 	 * @param int $goods_number		物品种类
 	 * @param string $reason		借用原因
-	 * @return 新增失败则返回null 否则返回数据条目
+	 * @return 修改失败null 否则返回数据条目
 	 */
-	public function addBorrow($user_id,$date,$start_date,$end_date,$goods_name,$goods_parts,$goods_number,$reason){
-		$data = array(
-			'user_id'		=>	$user_id,
-			'date'			=>	$date,
-			'start_date'	=>	$start_date,
-			'end_date'		=>	$end_date,
-			'goods_name'	=>	$goods_name,
-			'goods_parts'	=>	$goods_parts,
-			'goods_number'	=>	$goods_number,
-			'reason'		=>	$reason,
-		);
+	public function submitBorrow($user_id,$borrow_id,$date,$start_date,$end_date,$goods_name,$goods_parts,$goods_number,$reason){
+		if(empty($borrow_id)){ //新增记录
+			$data = array(
+				'user_id'		=>	$user_id,
+				'date'			=>	$date,
+				'check_status'	=>	1,
+			);
+		}else{//编辑记录
+			//获取记录
+			$data = $this->where(array('borrow_id' => $borrow_id))->select()[0];
+			if(!$data)
+				return null;
+			//检查记录所有者
+			if($data['user_id'] != $user_id)
+				return null;
+			//只能编辑未审批的记录
+			if($data['check_status'] > 1)
+				return null;
+		}	
 
-		if(!$this->add($data))
+		$data['start_date']		=	$start_date;
+		$data['end_date']		=	$end_date;
+		$data['goods_name']		=	$goods_name;
+		$data['goods_parts']	=	$goods_parts;
+		$data['goods_number']	=	$goods_number;
+		$data['reason']			=	$reason;
+
+		if(!$this->add($data,array(),true))
 			return null;
 		else
 			return $data;
@@ -71,8 +87,8 @@ class BorrowModel extends Model {
 		$this->where($where)->order('date desc')
 		->field('borrow_id,date,start_date,end_date,goods_name,goods_parts,goods_number,reason,check_status,check_datetime,check_comment,return');
 
-		if($perPage != 0)
-			$list = $this->page($page.','.$perPage)->select();
+		if($per_page != 0)
+			$list = $this->page($page.','.$per_page)->select();
 		else
 			$list = $this->select();
 
@@ -95,19 +111,21 @@ class BorrowModel extends Model {
 	 * @param int $borrow_id		请假申请条目id
 	 * @return 删除失败null 否则返回数据条目
 	 */
-	public function deleteBorrow($user_id,$borrow_id){
+	public function deleteBorrow($user_id,$borrow_id,$admin=false){
 		//获取记录
 		$data = $this->where(array('borrow_id' => $borrow_id))->select()[0];
 		if(!$data)
 			return null;
 
-		//检查记录所有者
-		if($data['user_id'] != $user_id)
-			return null;
+		if(!$admin){
+			//检查记录所有者
+			if($data['user_id'] != $user_id)
+				return null;
 
-		//只能编删除未审批的记录
-		if($data['check_status'] != 1)
-			return null;
+			//只能编删除未审批的记录
+			if($data['check_status'] != 1)
+				return null;
+		}		
 
 		//检测是否删除成功
 		if($this->where(array('borrow_id' => $borrow_id))->delete() == 0)
@@ -117,45 +135,7 @@ class BorrowModel extends Model {
 	}
 
 
-	/**
-	 * 修改借用申请
-	 * 
-	 * @param int $user_id			用户id
-	 * @param int $borrow_id		申请条目id
-	 * @param string $start_date	开始时间
-	 * @param string $end_date		结束时间
-	 * @param string $goods_name	物品名称
-	 * @param string $goods_parts	物品配件
-	 * @param int $goods_number		物品种类
-	 * @param string $reason		借用原因
-	 * @return 修改失败null 否则返回数据条目
-	 */
-	public function editBorrow($user_id,$borrow_id,$start_date,$end_date,$goods_name,$goods_parts,$goods_number,$reason){
-		//获取记录
-		$data = $this->where(array('borrow_id' => $borrow_id))->select()[0];
-		
-		if(!$data)
-			return null;
-		//检查记录所有者
-		if($data['user_id'] != $user_id)
-			return null;
-
-		//只能编辑未审批的记录
-		if($data['check_status'] != 1)
-			return null;
-
-		$data['start_date']		=	$start_date;
-		$data['end_date']		=	$end_date;
-		$data['goods_name']		=	$goods_name;
-		$data['goods_parts']	=	$goods_parts;
-		$data['goods_number']	=	$goods_number;
-		$data['reason']			=	$reason;
-
-		$this->save($data);
-
-		$result = $this->where(array('borrow_id' => $borrow_id))->select()[0];
-		return $result;
-	}
+	
 
 	/**
 	 * 归还
@@ -169,9 +149,6 @@ class BorrowModel extends Model {
 		$data = $this->where(array('borrow_id' => $borrow_id))->select()[0];
 		
 		if(!$data)
-			return null;
-		//检查记录所有者
-		if($data['user_id'] != $user_id)
 			return null;
 
 		$data['return'] = 2;
