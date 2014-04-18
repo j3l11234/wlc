@@ -13,10 +13,10 @@ class LeaveModel extends Model {
 	 * @param string $endDate		结束时间
 	 * @param int $checkStatus		审批状态
 	 * @param int $page				第几页
-	 * @param int $perPage			每页显示的数量
+	 * @param int $per_page			每页显示的数量
 	 * @return 没用户则返回null 否则返回用户id
 	 */
-	public function userQuery($user_id, $startDate='', $endDate='', $checkStatus = 4, $page = 1,$perPage = 0){
+	public function userQuery($user_id, $startDate='', $endDate='', $checkStatus = 4, $page = 1,$per_page = 0){
 		if(empty($startDate))
 			$startDate = '0000-00-00';
 		if(empty($endDate))
@@ -34,8 +34,8 @@ class LeaveModel extends Model {
 		$count = $this->where($where)->count();
 		$this->join('LEFT JOIN wlc_user AS checker ON checker.user_id = wlc_leave.checker_id')->where($where)->order('date desc')
 		->field('leave_id,date,type,start_date,start_time,end_date,end_time,reason,check_status,checker.alias AS checker,check_datetime,check_comment,report');
-		if($perPage != 0)
-			$list = $this->page($page.','.$perPage)->select();
+		if($per_page != 0)
+			$list = $this->page($page.','.$per_page)->select();
 		else
 			$list = $this->select();
 		
@@ -62,63 +62,39 @@ class LeaveModel extends Model {
 	 * @param string $reason	请假原因
 	 * @return 新增失败则返回null 否则返回数据条目
 	 */
-	public function submitLeave($user_id,$date,$type,$start,$end,$reason){
+	public function submitLeave($user_id,$leave_id,$date,$type,$start_date,$start_time,$end_date,$end_time,$reason){
+		if(empty($leave_id)){ //新增记录
+			$data = array(
+				'user_id'		=>	$user_id,
+				'date'			=>	$date,
+				'check_status'	=>	1,
+				'checker_id'	=>	D('User')->getChecker($user_id),
+			);
+		}else{//编辑记录
+			//获取记录
+			$data = $this->where(array('leave_id' => $leave_id))->select()[0];
+			if(!$data)
+				return null;
+			//检查记录所有者
+			if($data['user_id'] != $user_id)
+				return null;
+			//只能编辑未审批的记录
+			if($data['check_status'] > 1)
+				return null;
+		}
+
+		$data['type']		=	$type;
+		$data['start_date']	=	$start_date;
+		$data['start_time']	=	$start_time;
+		$data['end_date']	=	$end_date;
+		$data['end_time']	=	$end_time;
+		$data['reason']		=	$reason;
+
 		
-		$data = array(
-			'user_id'		=>	$user_id,
-			'type'	=>	$type,
-			'date'	=>	date('Y-m-d',$date),
-			'start_date'	=>	date('Y-m-d',$start),
-			'start_time'	=>	date('H:i:s',$start),
-			'end_date'		=>	date('Y-m-d',$end),
-			'end_time'		=>	date('H:i:s',$end),
-			'reason'		=>	$reason,
-			'checker_id'	=>	D('User')->getChecker($user_id),
-		);
-		
-		if(!$this->add($data))
+		if(!$this->add($data,array(),true))
 			return null;
 		else
 			return $data;
-	}
-
-
-	/**
-	 * 修改请假申请
-	 * 
-	 * @param int $user_id		用户id
-	 * @param int $leaveId		请假申请条目id
-	 * @param int $type			请假类型
-	 * @param timestamp $start	开始时间
-	 * @param timestamp $end	结束时间
-	 * @param string $reason	请假原因
-	 * @return 修改失败null 否则返回数据条目
-	 */
-	public function editLeave($user_id,$leaveId,$type,$start,$end,$reason){
-		//获取记录
-		$data = $this->where(array('leave_id' => $leaveId))->select()[0];
-		
-		if(!$data)
-			return null;
-		//检查记录所有者
-		if($data['user_id'] != $user_id)
-			return null;
-
-		//只能编辑未审批的记录
-		if($data['check_status'] != 1)
-			return null;
-
-		$data['type']	=	$type;
-		$data['start_date']	=	date('Y-m-d',$start);
-		$data['start_time']	=	date('H:i:s',$start);
-		$data['end_date']	=	date('Y-m-d',$end);
-		$data['end_time']	=	date('H:i:s',$end);
-		$data['reason']		=	$reason;
-
-		$this->save($data);
-
-		$result = $this->where(array('leave_id' => $leaveId))->select()[0];
-		return $result;
 	}
 
 
@@ -129,19 +105,22 @@ class LeaveModel extends Model {
 	 * @param int $leave_id		请假申请条目id
 	 * @return 删除失败null 否则返回数据条目
 	 */
-	public function deleteLeave($user_id,$leave_id){
+	public function deleteLeave($user_id,$leave_id,$admin=false){
 		//获取记录
 		$data = $this->where(array('leave_id' => $leave_id))->select()[0];
 		if(!$data)
 			return null;
 
-		//检查记录所有者
-		if($data['user_id'] != $user_id)
-			return null;
+		if(!$admin){
+			//检查记录所有者
+			if($data['user_id'] != $user_id)
+				return null;
 
-		//只能编删除未审批的记录
-		if($data['check_status'] != 1)
-			return null;
+			//只能编删除未审批的记录
+			if($data['check_status'] != 1)
+				return null;
+		}
+		
 
 		//检测是否删除成功
 		if($this->where(array('leave_id' => $leave_id))->delete() == 0)
@@ -161,10 +140,10 @@ class LeaveModel extends Model {
 	 * @param int $checkStatus		审批状态
 	 * @param int $order			顺序
 	 * @param int $page				第几页
-	 * @param int $perPage			每页显示的数量
+	 * @param int $per_page			每页显示的数量
 	 * @return 没用户则返回null 否则返回用户id
 	 */
-	public function adminQuery($department_id = 0, $user_id = 0, $start_date='', $end_date='', $check_status = null, $report = null, $order='', $page = 1,$perPage = 0){
+	public function adminQuery($department_id = 0, $user_id = 0, $start_date='', $end_date='', $check_status = null, $report = null, $order='', $page = 1,$per_page = 0){
 		if(empty($start_date))
 			$start_date = '0000-00-00';
 		if(empty($end_date))
@@ -216,8 +195,8 @@ class LeaveModel extends Model {
 		$this->field('leave_id,date,type,start_date,start_time,end_date,end_time,reason,check_status,check_datetime,check_comment,wlc_user.alias,checker.alias AS checker,department_name,report')
 		->where($where)->order($order);
 		//var_dump($count);
-		if($perPage != 0)
-			$list = $this->page($page.','.$perPage)->select();
+		if($per_page != 0)
+			$list = $this->page($page.','.$per_page)->select();
 		else
 			$list = $this->select();
 		

@@ -95,7 +95,7 @@
 						</div>
 					</div>
 				</form>
-				<div class="alert alert-danger" style="margin-bottom: 0px;">
+				<div class="alert alert-danger" id="modal-alert" style="margin-bottom: 0px;">
 				</div>
 			</div>
 			<div class="modal-footer" style="margin-top: auto; white-space: nowrap;">
@@ -152,6 +152,6 @@
 	}
 
 	function onDeleteSubmit(){
-		postSubmit("{:U('Leave/delete')}",$("#modal-form").serialize(),"删除成功",null,$("#leave-modal"),"");	
+		modal_submit("{:U('Leave/deleteLeave')}",$("#modal-form"),"删除成功",$("#modal-alert"));
 	}
 </script>

@@ -74,6 +74,8 @@
 					<div class="col-sm-6 form-div">
 						<div class="form-label">文件上传</div>
 						<input type="file" class="btn-success" id="append-attachment-new" name="attachment_new" />
+						<br>
+						<a href="__ROOT__/外联处出差-走访-外出办公总结表.doc">模版下载</a>	
 					</div>
 					<div class="col-sm-6 form-div">
 						<div class="alert alert-danger" >
@@ -312,8 +314,8 @@
 
 	function deleteCost(button){
 		var cost_tr = $(button).parent().parent();
-		cost_tr.fadeOut("fast",function(){cost_tr.remove();});
-		sumCost();
+		cost_tr.fadeOut("fast",function(){cost_tr.remove();sumCost();});
+		
 	}
 
 	function sumCost(){

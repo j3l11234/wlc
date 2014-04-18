@@ -102,7 +102,7 @@ class ErrandController extends Controller {
 			die("出发时间不正确");
 		if(date('Y-m-d',strtotime($_REQUEST['end_date']. ' 00:00:00')) != $_REQUEST['end_date'])
 			die("返回时间不正确");
-		if(strtotime($_REQUEST['start_date']. ' 00:00:00') >= strtotime($_REQUEST['end_date']. ' 00:00:00'))
+		if(strtotime($_REQUEST['start_date']. ' 00:00:00') > strtotime($_REQUEST['end_date']. ' 00:00:00'))
 			die("出发时间不能晚于返回时间");
 
 		if($_REQUEST['is_summary'] == 0){

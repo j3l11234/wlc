@@ -74,6 +74,7 @@ class ErrandModel extends Model {
 				'user_id'		=>	$user_id,
 				'date'			=>	$date,
 				'check_status'	=>	1,
+				'checker_id'	=>	D('User')->getChecker($user_id),
 			);
 		}else{//编辑记录
 			//获取记录

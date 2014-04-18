@@ -77,59 +77,34 @@ class LeaveController extends Controller {
 	 * 个人中心——提交申请
 	 * AXAJ
 	 */
-	public function addLeave(){
-		check_login('die');
+	public function submitLeave(){
+		check_login();
 		
 		//print_r($_REQUEST);
 		//die();
-
-		if(date('Y-m-d H',strtotime($_REQUEST['start_date']. ':00:00')) != $_REQUEST['start_date'])
+		$start = strtotime($_REQUEST['start_date']. ':00:00');
+		$end = strtotime($_REQUEST['end_date']. ':00:00');
+		if(date('Y-m-d H',$start) != $_REQUEST['start_date'])
 			die("开始时间不正确");
-		if(date('Y-m-d H',strtotime($_REQUEST['end_date']. ':00:00')) != $_REQUEST['end_date'])
+		if(date('Y-m-d H',$end) != $_REQUEST['end_date'])
 			die("结束时间不正确");
-		if(strtotime($_REQUEST['start_date']. ':00:00') >= strtotime($_REQUEST['end_date']. ':00:00'))
+		if($start > $end)
 			die("开始时间不能晚于结束时间");
 		
 		$result = D('Leave')->submitLeave(
 			$_SESSION['user']['user_id'],
-			time(),
+			$_REQUEST['leave_id'],
+			date('Y-m-d'),
 			$_REQUEST['type'],
-			strtotime($_REQUEST['start_date']. ':00:00'),
-			strtotime($_REQUEST['end_date']. ':00:00'),
+			date('Y-m-d',$start),
+			date('H:i:s',$start),
+			date('Y-m-d',$end),
+			date('H:i:s',$end),
 			$_REQUEST['reason']);
 		
 		if($result == null)
 			die('失败');
-		$this->ajaxReturn($result);
-	}
-
-
-	/**
-	 * 个人中心——修改申请
-	 * AXAJ
-	 */
-	public function editLeave(){
-		check_login('die');
-
-		//检查时间格式
-		if(date('Y-m-d H',strtotime($_REQUEST['start_date']. ':00:00')) != $_REQUEST['start_date'])
-			die("开始时间不正确");
-		if(date('Y-m-d H',strtotime($_REQUEST['end_date']. ':00:00')) != $_REQUEST['end_date'])
-			die("结束时间不正确");
-		if(strtotime($_REQUEST['start_date']. ':00:00') >= strtotime($_REQUEST['end_date']. ':00:00'))
-			die("开始时间不能晚于结束时间");
-
-		$result = D('Leave')->editLeave(
-			$_SESSION['user']['user_id'],
-			$_REQUEST['leave_id'],
-			$_REQUEST['type'],
-			strtotime($_REQUEST['start_date']. ':00:00'),
-			strtotime($_REQUEST['end_date']. ':00:00'),
-			$_REQUEST['reason']);
-
-		if(!$result)
-			die('修改失败');
-		$this->ajaxReturn($result);
+		$this->ajaxReturn($result);	
 	}
 
 
@@ -137,12 +112,15 @@ class LeaveController extends Controller {
 	 * 个人中心——删除申请
 	 * AXAJ
 	 */
-	public function delete(){
-		$result = D('Leave')->deleteLeave($_SESSION['user']['user_id'],$_REQUEST['leave_id']);
+	public function deleteLeave(){
+		$result = D('Leave')->deleteLeave(
+			$_SESSION['user']['user_id'],
+			$_REQUEST['leave_id'],
+			get_privilege()==PRIRILEGE_ADMIN);
 
 		if(!$result)
 			die('删除失败');
-		$this->ajaxReturn(array());
+		$this->ajaxReturn($result);
 	}
 
 
@@ -191,9 +169,7 @@ class LeaveController extends Controller {
 		$this->assign('departmentList',$departmentList);
 		$this->assign('userList',$userList);
 
-		$this->assign('isBoss',$privilege == PRIRILEGE_BOSS);
-		$this->assign('isPersonnel',$privilege == PRIRILEGE_PERSONNEL);
-
+		$this->assign('privilege',$privilege);
 
 		if(!isset($_REQUEST['department']))
 			$_REQUEST['department'] = 0;

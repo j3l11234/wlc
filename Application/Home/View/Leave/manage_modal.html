@@ -96,14 +96,15 @@
 						</div>
 					</div>
 				</form>
-				<div class="alert alert-danger" style="margin-bottom: 0px;"></div>
+				<div class="alert alert-danger" id="modal-alert" style="margin-bottom: 0px;"></div>
 			</div>
 			<div class="modal-footer" style="margin-top: auto; white-space: nowrap;">
 				<button type="button" class="btn btn-primary btn-modal-view" data-dismiss="modal">确定</button>
-				<button type="button" class="btn btn-default btn-modal-approbate btn-modal-report" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-default btn-modal-approbate btn-modal-report btn-modal-delete" data-dismiss="modal">取消</button>
 				<button type="button" class="btn btn-success btn-modal-approbate" onclick="onApprobateSubmit(true)">审批通过</button>
 				<button type="button" class="btn btn-danger btn-modal-approbate" onclick="onApprobateSubmit(false)">审批驳回</button>
 				<button type="button" class="btn btn-success btn-modal-report" onclick="onReportSubmit()">确认销假</button>
+				<button type="button" class="btn btn-danger btn-modal-delete" onclick="onDeleteSubmit()">确认删除</button>
 			</div>
 		</div>
 	</div>
@@ -142,35 +143,41 @@
 		$('#leave-modal').modal({backdrop:"static"});
 	}
 
-	{//处长级别才能审批}
-	<if condition="$isBoss">
-		function approbateLeave(data){
-			reset(data);
-			$("#leave-modal .modal-title").text("审批请假申请");
-			$("#modal-check-comment").removeAttr("readonly");
+	function approbateLeave(data){
+		reset(data);
+		$("#leave-modal .modal-title").text("审批请假申请");
+		$("#modal-check-comment").removeAttr("readonly");
 
-			$(".btn-modal-approbate").show();
-			$('#leave-modal').modal({backdrop:"static"});
-		}
+		$(".btn-modal-approbate").show();
+		$('#leave-modal').modal({backdrop:"static"});
+	}
 
-		function onApprobateSubmit(isAgree){	
-			$('#modal-is-agree').val(isAgree?"true":"false");
-			postSubmit("{:U('Leave/approbateLeave')}",$("#modal-form").serialize(),"审批成功",null,$("#leave-modal"),"");
-		}
-	</if>
+	function onApprobateSubmit(isAgree){	
+		$('#modal-is-agree').val(isAgree?"true":"false");
+		modal_submit("{:U('Leave/approbateLeave')}",$("#modal-form"),"审批成功",$("#modal-alert"));
+	}
 
-	{//人事负责人才能销假}
-	<if condition="$isPersonnel">
-		function reportLeave(data){
-			reset(data);
-			$("#leave-modal .modal-title").text("确认销假");
-			$(".btn-modal-report").show();
-			$('#leave-modal').modal({backdrop:"static"});
-		}
+	function reportLeave(data){
+		reset(data);
+		$("#leave-modal .modal-title").text("确认销假");
+		$(".btn-modal-report").show();
+		$('#leave-modal').modal({backdrop:"static"});
+	}
 
-		function onReportSubmit(){
-			postSubmit("{:U('Leave/reportLeave')}",$("#modal-form").serialize(),"销假成功",null,$("#leave-modal"),"");
-		}
-		
-	</if>	
+	function onReportSubmit(){
+		modal_submit("{:U('Leave/reportLeave')}",$("#modal-form"),"销假成功",$("#modal-alert"));
+	}
+	
+	function deleteLeave(data){
+		reset(data);
+		$("#leave-modal .modal-title").text("编辑请假申请");
+		$(".btn-modal-delete").show();
+		$("#leave-modal .alert").text("您确定要删除该条记录吗？");
+		$("#leave-modal .alert").show();
+		$('#leave-modal').modal({backdrop:"static"});
+	}
+
+	function onDeleteSubmit(){
+		modal_submit("{:U('Leave/deleteLeave')}",$("#modal-form"),"删除成功",$("#modal-alert"));
+	}
 </script>
