@@ -2,7 +2,7 @@
 namespace Home\Model;
 use Think\Model;
 
-class LeaveModel extends Model {
+class ExtraModel extends Model {
 	
 	
 	/**
@@ -16,37 +16,29 @@ class LeaveModel extends Model {
 	 * @param int $per_page			每页显示的数量
 	 * @return 没用户则返回null 否则返回用户id
 	 */
-	public function userQuery($user_id, $startDate='', $endDate='', $checkStatus = 4,$report=0, $page = 1,$per_page = 0){
+	public function userQuery($user_id, $startDate='', $endDate='', $checkStatus = 4, $page = 1,$per_page = 0){
 		if(empty($startDate))
 			$startDate = '0000-00-00';
 		if(empty($endDate))
 			$endDate = '9999-12-31';
 		
 		$where = array(
-			'wlc_leave.user_id'		=>	$user_id,
-			'start_date'	=>	array('egt',$startDate),
-			'end_date'		=>	array('elt',$endDate),
+			'wlc_extra.user_id'		=>	$user_id,
+			'start_date'			=>	array('egt',$startDate),
+			'end_date'				=>	array('elt',$endDate),
 		);
 		
 		if($checkStatus >= 1 && $checkStatus <= 3)
 			$where['check_status'] = $checkStatus;
-		if($report >= 1 && $report <= 2)
-			$where['report'] = $report;
 		
 		$count = $this->where($where)->count();
-		$this->join('LEFT JOIN wlc_user AS checker ON checker.user_id = wlc_leave.checker_id')->where($where)->order('date desc')
-		->field('leave_id,date,type,start_date,start_time,end_date,end_time,reason,check_status,checker.alias AS checker,check_datetime,check_comment,report');
+		$this->join('LEFT JOIN wlc_user AS checker ON checker.user_id = wlc_extra.checker_id')->where($where)->order('date desc')
+		->field('extra_id,date,start_date,start_time,end_date,end_time,reason,
+			check_status,checker.alias AS checker,check_datetime,check_comment');
 		if($per_page != 0)
 			$list = $this->page($page.','.$per_page)->select();
 		else
 			$list = $this->select();
-		
-		//判断是否可以销假
-		$now = time();
-		foreach ($list as $key => $record){
-			if($now < strtotime($record['end_date'].' '.$record['end_time']))
-				$list[$key]['report'] = 0;	
-		}
 
 		$return = array('count' => $count, 'list' => $list);
 		return $return;
@@ -64,8 +56,8 @@ class LeaveModel extends Model {
 	 * @param string $reason	请假原因
 	 * @return 新增失败则返回null 否则返回数据条目
 	 */
-	public function submitLeave($user_id,$leave_id,$date,$type,$start_date,$start_time,$end_date,$end_time,$reason){
-		if(empty($leave_id)){ //新增记录
+	public function submitExtra($user_id,$extra_id,$date,$start_date,$start_time,$end_date,$end_time,$reason){
+		if(empty($extra_id)){ //新增记录
 			$data = array(
 				'user_id'		=>	$user_id,
 				'date'			=>	$date,
@@ -74,7 +66,7 @@ class LeaveModel extends Model {
 			);
 		}else{//编辑记录
 			//获取记录
-			$data = $this->where(array('leave_id' => $leave_id))->select()[0];
+			$data = $this->where(array('extra_id' => $extra_id))->select()[0];
 			if(!$data)
 				return null;
 			//检查记录所有者
@@ -85,7 +77,6 @@ class LeaveModel extends Model {
 				return null;
 		}
 
-		$data['type']		=	$type;
 		$data['start_date']	=	$start_date;
 		$data['start_time']	=	$start_time;
 		$data['end_date']	=	$end_date;
@@ -104,12 +95,12 @@ class LeaveModel extends Model {
 	 * 删除请假申请
 	 * 
 	 * @param int $user_id		用户id
-	 * @param int $leave_id		请假申请条目id
+	 * @param int $extra_id		请假申请条目id
 	 * @return 删除失败null 否则返回数据条目
 	 */
-	public function deleteLeave($user_id,$leave_id,$admin=false){
+	public function deleteExtra($user_id,$extra_id,$admin=false){
 		//获取记录
-		$data = $this->where(array('leave_id' => $leave_id))->select()[0];
+		$data = $this->where(array('extra_id' => $extra_id))->select()[0];
 		if(!$data)
 			return null;
 
@@ -125,7 +116,7 @@ class LeaveModel extends Model {
 		
 
 		//检测是否删除成功
-		if($this->where(array('leave_id' => $leave_id))->delete() == 0)
+		if($this->where(array('extra_id' => $extra_id))->delete() == 0)
 			return null;
 
 		return $data;
@@ -151,7 +142,6 @@ class LeaveModel extends Model {
 		if(empty($end_date))
 			$end_date = '9999-12-31';
 
-
 		$where = array(
 			'start_date'	=>	array('egt',$start_date),
 			'end_date'		=>	array('elt',$end_date),
@@ -161,7 +151,7 @@ class LeaveModel extends Model {
 			$where['wlc_user.department_id'] = $department_id;
 		
 		if($user_id != 0)
-			$where['wlc_leave.user_id'] = $user_id;
+			$where['wlc_extra.user_id'] = $user_id;
 		
 		if($check_status >= 1 && $check_status <= 3)
 			$where['check_status'] = $check_status;
@@ -187,14 +177,15 @@ class LeaveModel extends Model {
 		}
 
 		//var_dump($where);
-		$this->join('RIGHT JOIN wlc_user ON wlc_user.user_id = wlc_leave.user_id')
+		$this->join('RIGHT JOIN wlc_user ON wlc_user.user_id = wlc_extra.user_id')
 		->join('LEFT JOIN wlc_department ON wlc_department.department_id = wlc_user.department_id');
 		$count = $this->where($where)->count(); 
 		//var_dump($where);
-		$this->join('RIGHT JOIN wlc_user ON wlc_user.user_id = wlc_leave.user_id')
+		$this->join('RIGHT JOIN wlc_user ON wlc_user.user_id = wlc_extra.user_id')
 		->join('LEFT JOIN wlc_department ON wlc_department.department_id = wlc_user.department_id')
-		->join('LEFT JOIN wlc_user AS checker ON checker.user_id = wlc_leave.checker_id');
-		$this->field('leave_id,date,type,start_date,start_time,end_date,end_time,reason,check_status,check_datetime,check_comment,wlc_user.alias,checker.alias AS checker,department_name,report')
+		->join('LEFT JOIN wlc_user AS checker ON checker.user_id = wlc_extra.checker_id');
+		$this->field('extra_id,date,start_date,start_time,end_date,end_time,reason,
+			check_status,check_datetime,check_comment,wlc_user.alias,checker.alias AS checker,department_name')
 		->where($where)->order($order);
 		//var_dump($count);
 		if($per_page != 0)
@@ -217,15 +208,15 @@ class LeaveModel extends Model {
 	 * 审批请假申请
 	 * 
 	 * @param int $checker_id			审批者id
-	 * @param int $leave_id				请假申请条目id
+	 * @param int $extra_id				请假申请条目id
 	 * @param int $isAgree				是否同意
 	 * @param timestamp $check_datetime	审批时间
 	 * @param string $check_comment		请假原因
 	 * @return 审批失败null 否则返回数据条目
 	 */
-	public function approbateLeave($checker_id,$leave_id,$isAgree,$check_datetime,$check_comment){
+	public function approbateExtra($checker_id,$extra_id,$isAgree,$check_datetime,$check_comment){
 		//获取记录
-		$data = $this->where(array('leave_id' => $leave_id))->select()[0];
+		$data = $this->where(array('extra_id' => $extra_id))->select()[0];
 		
 		if(!$data)
 			return null;
@@ -238,19 +229,19 @@ class LeaveModel extends Model {
 
 		$this->save($data);
 
-		$result = $this->where(array('leave_id' => $leave_id))->select()[0];
+		$result = $this->where(array('extra_id' => $extra_id))->select()[0];
 		return $result;
 	}
 
 	/**
 	 * 销假
 	 * 
-	 * @param int $leave_id		请假申请条目id
+	 * @param int $extra_id		请假申请条目id
 	 * @return 审批失败null 否则返回数据条目
 	 */
-	public function reportLeave($leave_id){
+	public function reportExtra($extra_id){
 		//获取记录
-		$data = $this->where(array('leave_id' => $leave_id))->select()[0];
+		$data = $this->where(array('extra_id' => $extra_id))->select()[0];
 		
 		if(!$data)
 			return null;
@@ -259,7 +250,7 @@ class LeaveModel extends Model {
 
 		$this->save($data);
 
-		$result = $this->where(array('leave_id' => $leave_id))->select()[0];
+		$result = $this->where(array('extra_id' => $extra_id))->select()[0];
 		return $result;
 	}
 

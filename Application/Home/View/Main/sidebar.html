@@ -14,6 +14,8 @@
       </a>
       <a href="{:U('Main/order')}" class="list-group-item {:getIsActive('sidebar-order',$sidebar_item)}">订餐申请
       </a> 
+      <a href="{:U('Main/extra')}" class="list-group-item {:getIsActive('sidebar-extra',$sidebar_item)}">加班记录
+      </a>
       <a href="{:U('Main/borrow')}" class="list-group-item {:getIsActive('sidebar-borrow',$sidebar_item)}">设备申请
         <span class="badge">{:getPendingNum('borrow',1)}</span>
       </a>

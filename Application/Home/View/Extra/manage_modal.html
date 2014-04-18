@@ -1,6 +1,6 @@
 {//审批管理-模态框}
 
-<div class="modal fade" id="leave-modal">
+<div class="modal fade" id="extra-modal">
 	<div class="modal-dialog" style="margin: 10px auto;">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -9,7 +9,7 @@
 			</div>
 			<div class="modal-body">
 				<form id="modal-form">
-					<input type="hidden" id="modal-leave-id" name="leave_id">
+					<input type="hidden" id="modal-extra-id" name="extra_id">
 					<input type="hidden" id="modal-is-agree" name="is_agree">
 					<div class="row">	
 						<div class="col-sm-6 form-div">
@@ -17,20 +17,6 @@
 							<div class="input-group">
 								<input type="input"  id="modal-user" class="form-control" readonly="">
 								<span class="input-group-addon"></span>
-							</div>
-						</div>
-						<div class="col-sm-6 form-div">
-							<div class="form-label">请假类型</div>
-							<div class="input-group">
-								<select id="modal-type" class="selectpicker" disabled="disabled">
-									<option value="0">婚假</option>
-									<option value="1">丧假</option>
-									<option value="2">产假</option>
-									<option value="3">事假</option>
-									<option value="4">病假</option>
-									<option value="5">休假</option>
-									<option value="6">其他</option>
-								</select>
 							</div>
 						</div>
 						<div class="col-sm-6 form-div">
@@ -47,6 +33,7 @@
 								<span class="input-group-addon"></span>
 							</div>
 						</div>
+						<div class="clearfix visible-lg visible-md visible-sm"></div>
 						<div class="col-sm-6 form-div">
 							<div class="form-label">开始日期</div>
 							<div class="input-group date form_date"  data-date-format="yyyy-mm-dd hh">	
@@ -115,12 +102,11 @@
 	function reset(data){
 		$("#modal-check-status").children().hide();
 		$("#modal-check-comment").attr("readonly","");
-		$("#leave-modal .modal-footer").children().hide();
-		$("#leave-modal .alert").hide();
+		$("#extra-modal .modal-footer").children().hide();
+		$("#extra-modal .alert").hide();
 
-		$("#modal-leave-id").val(data.leave_id);
+		$("#modal-extra-id").val(data.extra_id);
 		$("#modal-user").val(data.alias);
-		$("#modal-type option[value='"+data.leave_type+"']").attr("selected", "selected");
 		$("#modal-department").val(data.department_name);
 		$("#modal-date").val(data.date);
 		$("#modal-start-date").val(data.start_date+" "+data.start_time.substr(0,2));
@@ -130,54 +116,52 @@
 		$("#modal-check-datetime").val(data.check_datetime);
 		$("#modal-check-status"+data.check_status).show();
 		$("#modal-check-comment").val(data.check_comment);
-
-		$("#modal-form .selectpicker").selectpicker('refresh');
-		$("#leave-modal .alert").removeClass("alert-success").addClass("alert-danger");
 	}
 
-	function viewLeave(data){
+	function viewExtra(data){
 		reset(data);
-		$("#leave-modal .modal-title").text("查看请假申请");
+		$("#extra-modal .modal-title").text("查看加班记录");
 
 		$(".btn-modal-view").show();	
-		$('#leave-modal').modal({backdrop:"static"});
+		$('#extra-modal').modal({backdrop:"static"});
 	}
 
-	function approbateLeave(data){
+	function approbateExtra(data){
 		reset(data);
-		$("#leave-modal .modal-title").text("审批请假申请");
+		$("#extra-modal .modal-title").text("审批加班记录");
 		$("#modal-check-comment").removeAttr("readonly");
 
 		$(".btn-modal-approbate").show();
-		$('#leave-modal').modal({backdrop:"static"});
+		$('#extra-modal').modal({backdrop:"static"});
 	}
 
 	function onApprobateSubmit(isAgree){	
 		$('#modal-is-agree').val(isAgree?"true":"false");
-		modal_submit("{:U('Leave/approbateLeave')}",$("#modal-form"),"审批成功",$("#modal-alert"));
+		modal_submit("{:U('Extra/approbateExtra')}",$("#modal-form"),"审批成功",$("#modal-alert"));
 	}
 
-	function reportLeave(data){
+	function reportExtra(data){
 		reset(data);
-		$("#leave-modal .modal-title").text("确认销假");
+		$("#extra-modal .modal-title").text("确认销假");
 		$(".btn-modal-report").show();
-		$('#leave-modal').modal({backdrop:"static"});
+		$('#extra-modal').modal({backdrop:"static"});
 	}
 
 	function onReportSubmit(){
-		modal_submit("{:U('Leave/reportLeave')}",$("#modal-form"),"销假成功",$("#modal-alert"));
+		modal_submit("{:U('Extra/reportExtra')}",$("#modal-form"),"销假成功",$("#modal-alert"));
 	}
 	
-	function deleteLeave(data){
+	function deleteExtra(data){
 		reset(data);
-		$("#leave-modal .modal-title").text("删除请假记录");
+		$("#extra-modal .modal-title").text("删除加班记录");
 		$(".btn-modal-delete").show();
-		$("#leave-modal .alert").text("您确定要删除该条记录吗？");
-		$("#leave-modal .alert").show();
-		$('#leave-modal').modal({backdrop:"static"});
+		$("#extra-modal .alert").removeClass("alert-success").addClass("alert-danger");
+		$("#extra-modal .alert").text("您确定要删除该条记录吗？");
+		$("#extra-modal .alert").show();
+		$('#extra-modal').modal({backdrop:"static"});
 	}
 
 	function onDeleteSubmit(){
-		modal_submit("{:U('Leave/deleteLeave')}",$("#modal-form"),"删除成功",$("#modal-alert"));
+		modal_submit("{:U('Extra/deleteExtra')}",$("#modal-form"),"删除成功",$("#modal-alert"));
 	}
 </script>

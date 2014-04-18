@@ -105,7 +105,7 @@ class ManageController extends Controller {
 
 	
 	/**
-	 * 审批管理——加班订餐审批
+	 * 审批管理——订餐审批
 	 */
 	public function order(){
 		check_privilege();
@@ -116,6 +116,22 @@ class ManageController extends Controller {
 		
 		$this->assign('navbar_item','navbar-manage');
 		$this->assign('sidebar_item','sidebar-order');
+		$this->display('template');
+	}
+
+
+	/**
+	 * 审批管理——加班订餐审批
+	 */
+	public function extra(){
+		check_privilege();
+		
+		$Extra = new ExtraController();
+		$htmlContent = $Extra->manage(C('AUTH_PARA'));
+		$this->assign('htmlContent',$htmlContent);
+		
+		$this->assign('navbar_item','navbar-manage');
+		$this->assign('sidebar_item','sidebar-extra');
 		$this->display('template');
 	}
 

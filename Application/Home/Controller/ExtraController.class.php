@@ -8,7 +8,7 @@ use Think\Controller;
  * @author j3l11234
  *
  */
-class LeaveController extends Controller {
+class ExtraController extends Controller {
 	
 	/**
 	 * 个人中心——请假申请主页面
@@ -22,14 +22,14 @@ class LeaveController extends Controller {
 		$this->assign('queryHtml' ,$queryHtml);
 
 		//装载多功能模态框
-		$modalHtml = $this->fetch('Leave/home_modal');
+		$modalHtml = $this->fetch('Extra/home_modal');
 		$this->assign('modalHtml' ,$modalHtml);
 
 		//装载提交页
-		$addHtml = $this->fetch('Leave/home_add');
+		$addHtml = $this->fetch('Extra/home_add');
 		$this->assign('addHtml' ,$addHtml);
 		
-		return $this->fetch('Leave/home');
+		return $this->fetch('Extra/home');
 	}
 	
 	/**
@@ -40,17 +40,8 @@ class LeaveController extends Controller {
 			$_REQUEST['start_date'] = '';
 		if(!isset($_REQUEST['end_date']))
 			$_REQUEST['end_date'] = '';
-		$check_status= 0;
-		$report = 0;
-		if(isset($_REQUEST['status'])){
-			if($_REQUEST['status'] >= 0 && $_REQUEST['status'] <= 3)
-				$check_status = $_REQUEST['status'];
-			if($_REQUEST['status'] >= 11 && $_REQUEST['status'] <= 12){
-				$report = $_REQUEST['status']-10;
-				$check_status = 2;
-			}
-		}else
-			$_REQUEST['status'] = 0;
+		if(!isset($_REQUEST['check_status']))
+			$_REQUEST['check_status'] = 0;
 		if(!isset($_REQUEST['order']))
 			$_REQUEST['order'] = 0;
 		if(!isset($_REQUEST['p']))
@@ -60,38 +51,35 @@ class LeaveController extends Controller {
 		
 		$this->assign('condition',$_REQUEST);
 		
-		$Leave = D('Leave');
-		$result = $Leave->userQuery(
+		$Extra = D('Extra');
+		$result = $Extra->userQuery(
 			$_SESSION['user']['user_id'], 
 			$_REQUEST['start_date'], 
 			$_REQUEST['end_date'], 
-			$check_status, 
-			$report,
+			$_REQUEST['check_status'], 
 			$_REQUEST['p'],
 			$_REQUEST['per_page']);
 		
 		$count = $result['count'];
-		$leaveList = $result['list'];
+		$extraList = $result['list'];
 		
 		$page  = new \Think\Page($count,$_REQUEST['per_page'] );
 		$pageHtml = $page->show();
 		
 		$this->assign('condition',$_REQUEST);
 		$this->assign('pageHtml',$pageHtml);
-		$this->assign('leaveList',$leaveList);
+		$this->assign('extraList',$extraList);
 			
-		return $this->fetch('Leave/home_query');
+		return $this->fetch('Extra/home_query');
 	}
 	
 	/**
 	 * 个人中心——提交申请
 	 * AXAJ
 	 */
-	public function submitLeave(){
+	public function submitExtra(){
 		check_login();
 		
-		//print_r($_REQUEST);
-		//die();
 		$start = strtotime($_REQUEST['start_date']. ':00:00');
 		$end = strtotime($_REQUEST['end_date']. ':00:00');
 		if(date('Y-m-d H',$start) != $_REQUEST['start_date'])
@@ -101,11 +89,10 @@ class LeaveController extends Controller {
 		if($start > $end)
 			die("开始时间不能晚于结束时间");
 		
-		$result = D('Leave')->submitLeave(
+		$result = D('Extra')->submitExtra(
 			$_SESSION['user']['user_id'],
-			$_REQUEST['leave_id'],
+			$_REQUEST['extra_id'],
 			date('Y-m-d'),
-			$_REQUEST['type'],
 			date('Y-m-d',$start),
 			date('H:i:s',$start),
 			date('Y-m-d',$end),
@@ -122,10 +109,10 @@ class LeaveController extends Controller {
 	 * 个人中心——删除申请
 	 * AXAJ
 	 */
-	public function deleteLeave(){
-		$result = D('Leave')->deleteLeave(
+	public function deleteExtra(){
+		$result = D('Extra')->deleteExtra(
 			$_SESSION['user']['user_id'],
-			$_REQUEST['leave_id'],
+			$_REQUEST['extra_id'],
 			get_privilege()==PRIRILEGE_ADMIN);
 
 		if(!$result)
@@ -148,11 +135,11 @@ class LeaveController extends Controller {
 		$this->assign('queryHtml' ,$queryHtml);
 
 		//装载模态框
-		$modalHtml = $this->fetch('Leave/manage_modal');
+		$modalHtml = $this->fetch('Extra/manage_modal');
 		$this->assign('modalHtml' ,$modalHtml);
 
 
-		return $this->fetch('Leave/manage');
+		return $this->fetch('Extra/manage');
 	}
 
 	/**
@@ -194,9 +181,6 @@ class LeaveController extends Controller {
 		if(isset($_REQUEST['status'])){
 			if($_REQUEST['status'] >= 0 && $_REQUEST['status'] <= 3)
 				$check_status = $_REQUEST['status'];
-			if($_REQUEST['status'] >= 11 && $_REQUEST['status'] <= 12){
-				$report = $_REQUEST['status']-10;
-				$check_status = 2;
 			}
 		}else
 			$_REQUEST['status'] = 0;
@@ -209,8 +193,8 @@ class LeaveController extends Controller {
 
 		$this->assign('condition',$_REQUEST);
 
-		$Leave = D('Leave');
-		$result = $Leave->adminQuery(
+		$Extra = D('Extra');
+		$result = $Extra->adminQuery(
 			$_REQUEST['department'],
 			$_REQUEST['user'], 
 			$_REQUEST['start_date'], 
@@ -223,16 +207,16 @@ class LeaveController extends Controller {
 		
 
 		$count = $result['count'];
-		$leaveList = $result['list'];
+		$extraList = $result['list'];
 		
 		$page  = new \Think\Page($count,$_REQUEST['per_page'] );
 		$pageHtml = $page->show();
 		
 		
 		$this->assign('pageHtml',$pageHtml);
-		$this->assign('leaveList',$leaveList);
+		$this->assign('extraList',$extraList);
 			
-		return $this->fetch('Leave/manage_query');
+		return $this->fetch('Extra/manage_query');
 	}
 
 	
@@ -240,15 +224,15 @@ class LeaveController extends Controller {
 	 * 审批管理——审批申请
 	 * AXAJ
 	 */
-	public function approbateLeave(){
+	public function approbateExtra(){
 		check_login('die');
 		if(get_privilege() != PRIRILEGE_BOSS)
 			die('权限错误');
 		//print_r($_REQUEST);
 		//die('');
-		$result = D('Leave')->approbateLeave(
+		$result = D('Extra')->approbateExtra(
 			$_SESSION['user']['user_id'],
-			$_REQUEST['leave_id'],
+			$_REQUEST['extra_id'],
 			$_REQUEST['is_agree'],
 			time(),
 			$_REQUEST['check_comment']);
@@ -262,13 +246,13 @@ class LeaveController extends Controller {
 	 * 审批管理——销假
 	 * AXAJ
 	 */
-	public function reportLeave(){
+	public function reportExtra(){
 		check_login('die');
 		if(get_privilege() != PRIRILEGE_PERSONNEL)
 			die('权限错误');
 		//print_r($_REQUEST);
 		//die('');
-		$result = D('Leave')->reportLeave($_REQUEST['leave_id']);
+		$result = D('Extra')->reportExtra($_REQUEST['extra_id']);
 
 		if(!$result)
 			die('销假失败');

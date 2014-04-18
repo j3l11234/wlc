@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50616
 File Encoding         : 65001
 
-Date: 2014-04-18 15:25:23
+Date: 2014-04-18 19:34:35
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -923,7 +923,7 @@ INSERT INTO `wlc_attend` VALUES ('9533', '17', '2014-04-17', null, null, null);
 INSERT INTO `wlc_attend` VALUES ('9534', '2', '2014-04-18', null, null, null);
 INSERT INTO `wlc_attend` VALUES ('9535', '3', '2014-04-18', null, null, null);
 INSERT INTO `wlc_attend` VALUES ('9536', '4', '2014-04-18', null, null, null);
-INSERT INTO `wlc_attend` VALUES ('9537', '5', '2014-04-18', '08:46:02', '15:21:41', null);
+INSERT INTO `wlc_attend` VALUES ('9537', '5', '2014-04-18', '08:46:02', '19:34:24', null);
 INSERT INTO `wlc_attend` VALUES ('9538', '10', '2014-04-18', null, null, null);
 INSERT INTO `wlc_attend` VALUES ('9539', '11', '2014-04-18', null, null, null);
 INSERT INTO `wlc_attend` VALUES ('9540', '12', '2014-04-18', null, null, null);
@@ -1031,6 +1031,41 @@ INSERT INTO `wlc_errand` VALUES ('113', '5', '2014-04-17', '2014-04-01', '2014-0
 INSERT INTO `wlc_errand` VALUES ('114', '5', '2014-04-18', '2014-04-01', '2014-04-02', '北京', '测试测试', 0x5B7B2274797065223A22E5B882E5A496E5B7AEE69785E8B4B9222C2264657461696C223A223232222C22636F7374223A223232227D5D, '出差总结表.doc', '/Attachments/535080d55c895.doc', '3', '6', '2014-04-18 09:33:39', '');
 
 -- ----------------------------
+-- Table structure for wlc_extra
+-- ----------------------------
+DROP TABLE IF EXISTS `wlc_extra`;
+CREATE TABLE `wlc_extra` (
+  `extra_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL COMMENT '申请人',
+  `date` date NOT NULL COMMENT '申请日期',
+  `start_date` date NOT NULL COMMENT '开始时间',
+  `start_time` time NOT NULL COMMENT '开始时间',
+  `end_date` date NOT NULL,
+  `end_time` time NOT NULL COMMENT '结束时间',
+  `reason` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '请假原因',
+  `checker_id` int(11) DEFAULT NULL COMMENT '审核人id',
+  `check_status` smallint(6) NOT NULL DEFAULT '1' COMMENT '审核状态：1未审核2审核通过\r\n3审核驳回\r\n',
+  `check_datetime` datetime DEFAULT NULL COMMENT '审核时间',
+  `check_comment` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '批注注释',
+  `report` smallint(6) DEFAULT '1' COMMENT '1为未销假 2为已销假',
+  PRIMARY KEY (`extra_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of wlc_extra
+-- ----------------------------
+INSERT INTO `wlc_extra` VALUES ('4', '5', '2014-03-13', '2014-03-03', '04:00:00', '2014-03-19', '17:00:00', ' dasdsaasdas', '8', '2', '2014-03-20 08:23:38', 'aaa', '2');
+INSERT INTO `wlc_extra` VALUES ('5', '5', '2014-03-11', '2014-03-03', '04:00:00', '2014-03-19', '17:00:00', ' dasdsaasdas', '8', '3', '2014-03-14 08:23:43', 'aaaa', '1');
+INSERT INTO `wlc_extra` VALUES ('13', '12', '2014-03-11', '2014-03-03', '04:00:00', '2014-03-19', '17:00:00', ' dasdsaasdas', '8', '3', '2014-03-21 08:23:55', 'bbbb', '1');
+INSERT INTO `wlc_extra` VALUES ('14', '11', '2014-03-10', '2014-03-03', '04:00:00', '2014-03-19', '17:00:00', ' dasdsaasdas', '7', '3', '2014-03-19 22:16:19', '', '1');
+INSERT INTO `wlc_extra` VALUES ('15', '12', '2014-03-10', '2014-03-03', '04:00:00', '2014-03-19', '17:00:00', ' dasdsaasdas', '7', '2', '2014-03-19 22:10:18', '', '2');
+INSERT INTO `wlc_extra` VALUES ('18', '5', '2014-03-10', '2014-03-03', '04:00:00', '2014-03-27', '20:00:00', ' dasdsaasdas大叔大叔', '7', '2', '2014-03-20 00:53:44', '', '1');
+INSERT INTO `wlc_extra` VALUES ('23', '14', '2014-04-11', '2014-04-01', '00:00:00', '2014-04-06', '09:00:00', '我要请假！', '7', '2', '2014-04-11 00:19:19', '同意！', '2');
+INSERT INTO `wlc_extra` VALUES ('29', '5', '2014-04-18', '2014-04-01', '01:00:00', '2014-04-04', '05:00:00', 'test擦擦擦擦擦', '6', '3', '2014-04-18 19:20:00', '而我认为搭档', '1');
+INSERT INTO `wlc_extra` VALUES ('30', '5', '2014-04-18', '2014-04-01', '00:00:00', '2014-04-02', '05:00:00', '大叔大叔萨达似懂非懂', '6', '3', '2014-04-18 10:46:49', '大叔大叔', '1');
+INSERT INTO `wlc_extra` VALUES ('33', '5', '2014-04-18', '2014-04-01', '01:00:00', '2014-04-11', '10:00:00', '撒大叔大叔', '7', '2', '2014-04-18 19:25:27', 'dsa', '1');
+
+-- ----------------------------
 -- Table structure for wlc_leave
 -- ----------------------------
 DROP TABLE IF EXISTS `wlc_leave`;
@@ -1097,7 +1132,6 @@ INSERT INTO `wlc_order` VALUES ('11', '5', '2014-03-22', 'ppp', 'kkk', '99', '99
 INSERT INTO `wlc_order` VALUES ('12', '5', '2014-04-02', '测试', '测试2', '113', '22', '3', '7', '2014-04-02 10:36:23', '是');
 INSERT INTO `wlc_order` VALUES ('13', '5', '2014-04-08', '王德福', '工作太多', '2', '60', '3', '7', '2014-04-08 17:06:57', '不通过 太贵了！');
 INSERT INTO `wlc_order` VALUES ('14', '5', '2014-04-09', 'dsadas', '大苏打', '22', '21', '3', '7', '2014-04-10 10:50:10', 'testsss');
-INSERT INTO `wlc_order` VALUES ('21', '5', '2014-04-18', '收拾收拾是', '宿舍事实上身上试试', '11', '22', '3', '6', null, 'FSDSD ');
 INSERT INTO `wlc_order` VALUES ('22', '5', '2014-04-18', '111111111', '33333333333333', '1', '1', '1', null, null, null);
 
 -- ----------------------------

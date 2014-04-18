@@ -105,10 +105,9 @@
 						<th>部门</th>
 						<th>姓名</th>
 						<th>申请日期</th>
+						<th>订餐地点</th>
 						<th>金额</th>
 						<th>审批状态</th>
-						<th>审批时间</th>
-						<th></th>
 					</tr>
 				</thead>
 				<tbody> 		
@@ -116,7 +115,8 @@
 						<tr>
 							<td>{$record['department_name']}</td>
 							<td>{$record['alias']}</td>
-							<td>{$record['datetime']}</td>
+							<td>{$record['date']}</td>
+							<td>{$record['place']}</td>
 							<td>{$record['cost']}</td>
 							<td>
 								<switch name="record['check_status']">
@@ -130,12 +130,6 @@
 										<button type="button" class="btn btn-xs btn-danger">审批驳回</button>
 									</case>
 								</switch>
-							</td>
-							<td>
-								<if condition="$record['check_status'] neq 1">
-									{$record['check_datetime']}
-									<else /> 未审批
-								</if>				
 							</td>
 							<td style="text-align: right;">
 								<button type="button" class="btn btn-xs btn-primary btn-view" onclick="onViewClick(this)">查看</button>

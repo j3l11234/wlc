@@ -1,6 +1,5 @@
 {//个人中心-请假申请-提交申请页面} 
 
-
 {//个人中心-请假申请-提交表单} 
 <div class="panel panel-success" id="append-panel" style="display:none;">
 	<div class="panel-heading">
@@ -8,7 +7,7 @@
 	</div>
 	<div class="panel-body">
 		<form id="append-form">
-			<input type="hidden" id="append-leave-id" name="leave_id">
+			<input type="hidden" id="append-extra-id" name="extra_id">
 			<div class="row">
 				<div class="col-lg-4 col-sm-6 form-div">
 					<div class="form-label">人员姓名</div>
@@ -31,36 +30,23 @@
 						<span class="input-group-addon"></span>
 					</div>
 				</div>
-				<div class="col-lg-4 col-sm-6 form-div">
-					<div class="form-label">请假类型</div>
-					<div class="input-group">
-						<select id="append-type" name="type" class="selectpicker">
-							<option value="0">婚假</option>
-							<option value="1">丧假</option>
-							<option value="2">产假</option>
-							<option value="3">事假</option>
-							<option value="4">病假</option>
-							<option value="5">休假</option>
-							<option value="6">其他</option>
-						</select>
-					</div>
-				</div>
-				<div class="col-lg-4 col-sm-6 form-div">
-					<div class="form-label">开始日期</div>
+				<div class="clearfix visible-lg visible-md visible-sm"></div>
+				<div class="col-sm-6 form-div">
+					<div class="form-label">开始时间</div>
 					<div class="input-group date form_date"  data-date-format="yyyy-mm-dd hh">	
 						<input class="form-control" type="text" id="append-start-date" name="start_date" readonly>
 						<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 					</div>
 				</div>
-				<div class="col-lg-4 col-sm-6 form-div">
-					<div class="form-label">结束日期</div>
+				<div class="col-sm-6 form-div">
+					<div class="form-label">结束时间</div>
 					<div class="input-group date form_date" data-date-format="yyyy-mm-dd hh">
 						<input class="form-control" type="text" id="append-end-date" name="end_date" readonly>
 						<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 					</div>
 				</div>
 				<div class="col-sm-12 form-div">
-					<div class="form-label">请假原因</div>
+					<div class="form-label">加班原因</div>
 					<div class="textarea">
 					<textarea type="" class="form-control" id="append-reason" name="reason" style="min-height:100px;"> </textarea>
 					</div>
@@ -95,12 +81,10 @@
     	});		
 	});
 
-	function addLeave(){
-		$("#append-panel .panel-title").text("提交申请");
-		$("#append-leave_id").val("");
+	function addExtra(){
+		$("#append-panel .panel-title").text("提交加班记录");
+		$("#append-extra_id").val("");
 		$("#append-date").val(new Date().format("yyyy-MM-dd"));
-		$("#append-type option[value=0]").attr("selected", "selected");
-		$("#append-form .selectpicker").selectpicker('refresh');	
 		$("#append-start-date").val("");
 		$("#append-end-date").val("");
 		$("#append-reason").val("");
@@ -110,12 +94,10 @@
 	}
 
 	//编辑签到申请
-	function editLeave(data){
-		$("#append-panel .panel-title").text("修改申请");
-		$("#append-leave-id").val(data.leave_id);
-		$("#append-date").val(data.date);
-		$("#append-type option[value='"+data.leave_type+"']").attr("selected", "selected");
-		$("#append-form .selectpicker").selectpicker('refresh');	
+	function editExtra(data){
+		$("#append-panel .panel-title").text("修改加班记录");
+		$("#append-extra-id").val(data.extra_id);
+		$("#append-date").val(data.date);	
 		$("#append-start-date").val(data.start_date+" "+data.start_time.substr(0,2));
 		$("#append-end-date").val(data.end_date+" "+data.end_time.substr(0,2));
 		$("#append-reason").val(data.reason);
@@ -134,12 +116,12 @@
 			return;
 		}	
 		if($("#append-reason").val().length < 5){
-			showModalResult(false,"提示","请认真填写请假原因",false);
+			showModalResult(false,"提示","请认真填写加班原因",false);
 			return;
 		}	 
 		 		
 		$('#append-submit').button('loading');
 	
-		append_submit("{:U('Leave/submitLeave')}",$("#append-form"),"提交结果","提交成功");
+		append_submit("{:U('Extra/submitExtra')}",$("#append-form"),"提交结果","提交成功");
 	}
 </script>

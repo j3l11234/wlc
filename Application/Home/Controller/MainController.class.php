@@ -74,7 +74,7 @@ class MainController extends Controller {
 	public function errand(){
 		check_login();
 		$Errand = new ErrandController();
-		$htmlContent = $Errand->home(C('AUTH_PARA'));
+		$htmlContent = $Errand->home();
 		$this->assign('htmlContent',$htmlContent);
 		
 		$this->assign('navbar_item','navbar-main');
@@ -89,7 +89,7 @@ class MainController extends Controller {
 	public function leave(){
 		check_login();
 		$Leave = new LeaveController();
-		$htmlContent = $Leave->home(C('AUTH_PARA'));
+		$htmlContent = $Leave->home();
 		$this->assign('htmlContent',$htmlContent);
 		
 		$this->assign('navbar_item','navbar-main');
@@ -99,16 +99,30 @@ class MainController extends Controller {
 
 	
 	/**
-	 * 个人中心——加班提交
+	 * 个人中心——订餐申请
 	 */
 	public function order(){
 		check_login();
 		$Order = new OrderController();
-		$htmlContent = $Order->home(C('AUTH_PARA'));
+		$htmlContent = $Order->home();
 		$this->assign('htmlContent',$htmlContent);
 		
 		$this->assign('navbar_item','navbar-main');
 		$this->assign('sidebar_item','sidebar-order');
+		$this->display('template');
+	}
+
+	/**
+	 * 个人中心——加班记录
+	 */
+	public function extra(){
+		check_login();
+		$Extra = new ExtraController();
+		$htmlContent = $Extra->home();
+		$this->assign('htmlContent',$htmlContent);
+		
+		$this->assign('navbar_item','navbar-main');
+		$this->assign('sidebar_item','sidebar-extra');
 		$this->display('template');
 	}
 
@@ -118,7 +132,7 @@ class MainController extends Controller {
 	public function borrow(){
 		check_login();
 		$Borrow = new BorrowController();
-		$htmlContent = $Borrow->home(C('AUTH_PARA'));
+		$htmlContent = $Borrow->home();
 		$this->assign('htmlContent',$htmlContent);
 		
 		$this->assign('navbar_item','navbar-main');
