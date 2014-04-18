@@ -70,6 +70,7 @@
 				<thead>
 					<tr>
 						<th>申请日期</th>
+						<th>订餐地点</th>
 						<th>申请金额</th>
 						<th>审批状态</th>
 						<th></th>
@@ -78,7 +79,8 @@
 				<tbody> 		
 				<foreach name="orderList" item="record">		
 					<tr>
-						<td>{$record['datetime']}</td>
+						<td>{$record['date']}</td>
+						<td>{$record['place']}</td>
 						<td>{$record['cost']}</td>
 						<td>
 							<switch name="record['check_status']">

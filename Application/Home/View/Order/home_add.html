@@ -57,14 +57,14 @@
 					</div>
 				</div>
 				<div class="col-sm-12 form-div">
-					<div class="form-label">加班原因</div>
+					<div class="form-label">订餐原因</div>
 					<div class="input-group">
 						<input class="form-control" id="append-reason" name="reason">
 						<span class="input-group-addon"></span>
 					</div>
 				</div>
 				<div class="col-sm-6 form-div">
-					<div class="form-label">加班人数</div>
+					<div class="form-label">订餐人数</div>
 					<div class="input-group">
 						<input class="form-control" id="append-number" name="number">
 						<span class="input-group-addon"></span>
@@ -81,7 +81,7 @@
 			<div class="row">
 				<div class="col-sm-12 form-div" style="text-align: center;">
 					<br>
-						<button style="min-width:150px;width:30%;" type="button" id="append-submit" data-loading-text="提交中。。" class="btn btn-success">
+						<button style="min-width:150px;width:30%;" type="button" id="append-submit" data-loading-text="提交中。。" class="btn btn-success" onclick="onSubmit()">
 							提交
 						</button>
 				</div>	
@@ -90,13 +90,8 @@
 	</div>
 </div>
 
-
-
 <script type="text/javascript">
-function addOrder(){	
-		$("#append-submit").unbind();
-		$("#append-submit").click(function(){onAdd_EditSubmit('add');});
-
+	function addOrder(){	
 		$("#append-panel .panel-title").text("提交申请");
 		$("#append-order-id").val("");
 		$("#append-datetime").val(new Date().format("yyyy-MM-dd"));
@@ -109,11 +104,7 @@ function addOrder(){
 		$.scrollTo($("#append-panel").offset().top-60,300);
 	}
 
-	//编辑签到申请
 	function editOrder(data){
-		$("#append-submit").unbind();
-		$("#append-submit").click(function(){onAdd_EditSubmit('edit');});
-
 		$("#append-panel .panel-title").text("修改申请");
 		$("#append-order-id").val(data.order_id);
 		$("#append-datetime").val(data.datetime);
@@ -126,33 +117,26 @@ function addOrder(){
 		$.scrollTo($("#append-panel").offset().top-60,300);
 	}
 
-	function onAdd_EditSubmit(mode){
+	function onSubmit(){
 		if($("#append-place").val() == ""){
 			showModalResult(false,"输入错误","请输入订餐地点",false);
 			return;
 		}
 		if($("#append-reason").val() == ""){
-			showModalResult(false,"输入错误","请输入订餐地点",false);
+			showModalResult(false,"输入错误","请输入订餐原因",false);
 			return;
 		}
 		var number = $("#append-number").val();
 		if(parseInt(number) != number){
-			showModalResult(false,"输入错误","请输入订餐地点",false);
+			showModalResult(false,"输入错误","请输入订餐人数",false);
 			return;
 		}
 		var standard = $("#append-standard").val();
 		if(parseInt(standard) != standard){
 			showModalResult(false,"输入错误","请输入每人标准",false);
 			return;
-		} 		
-	
-		switch(mode){
-			case "add":
-				postSubmit("{:U('Order/addOrder')}",$("#append-form").serialize(),"提交成功",$('#append-submit'),null,"提交结果");
-				break;
-			case "edit":
-				postSubmit("{:U('Order/editOrder')}",$("#append-form").serialize(),"提交成功",$('#append-submit'),null,"提交结果");
-				break;
-		}
+		} 
+
+		append_submit("{:U('Order/submitOrder')}",$("#append-form"),"提交结果","提交成功");
 	}		
 </script>

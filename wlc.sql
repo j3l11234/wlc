@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50616
 File Encoding         : 65001
 
-Date: 2014-04-17 11:47:26
+Date: 2014-04-18 15:25:23
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -27,7 +27,7 @@ CREATE TABLE `wlc_attend` (
   `clockout` time DEFAULT NULL COMMENT '下班打卡时间',
   `comment` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`attend_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9534 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=9546 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Records of wlc_attend
@@ -920,6 +920,18 @@ INSERT INTO `wlc_attend` VALUES ('9530', '14', '2014-04-17', null, null, null);
 INSERT INTO `wlc_attend` VALUES ('9531', '15', '2014-04-17', null, null, null);
 INSERT INTO `wlc_attend` VALUES ('9532', '16', '2014-04-17', null, null, null);
 INSERT INTO `wlc_attend` VALUES ('9533', '17', '2014-04-17', null, null, null);
+INSERT INTO `wlc_attend` VALUES ('9534', '2', '2014-04-18', null, null, null);
+INSERT INTO `wlc_attend` VALUES ('9535', '3', '2014-04-18', null, null, null);
+INSERT INTO `wlc_attend` VALUES ('9536', '4', '2014-04-18', null, null, null);
+INSERT INTO `wlc_attend` VALUES ('9537', '5', '2014-04-18', '08:46:02', '15:21:41', null);
+INSERT INTO `wlc_attend` VALUES ('9538', '10', '2014-04-18', null, null, null);
+INSERT INTO `wlc_attend` VALUES ('9539', '11', '2014-04-18', null, null, null);
+INSERT INTO `wlc_attend` VALUES ('9540', '12', '2014-04-18', null, null, null);
+INSERT INTO `wlc_attend` VALUES ('9541', '13', '2014-04-18', null, null, null);
+INSERT INTO `wlc_attend` VALUES ('9542', '14', '2014-04-18', null, null, null);
+INSERT INTO `wlc_attend` VALUES ('9543', '15', '2014-04-18', null, null, null);
+INSERT INTO `wlc_attend` VALUES ('9544', '16', '2014-04-18', null, null, null);
+INSERT INTO `wlc_attend` VALUES ('9545', '17', '2014-04-18', null, null, null);
 
 -- ----------------------------
 -- Table structure for wlc_borrow
@@ -940,7 +952,7 @@ CREATE TABLE `wlc_borrow` (
   `check_comment` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '批注注释',
   `return` smallint(6) DEFAULT '1' COMMENT '是否归还 1为未归还 2为已归还',
   PRIMARY KEY (`borrow_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Records of wlc_borrow
@@ -956,10 +968,9 @@ INSERT INTO `wlc_borrow` VALUES ('20', '7', '2014-03-23', '2014-03-03', '2014-03
 INSERT INTO `wlc_borrow` VALUES ('21', '7', '2014-03-23', '2014-03-13', '2014-03-26', null, null, '1', ' ╮(╯_╰)╭╮(╯_╰)╭寂寞', '1', null, null, '1');
 INSERT INTO `wlc_borrow` VALUES ('22', '5', '2014-03-23', '2014-03-03', '2014-03-21', '测试', 'tt', '3', '宿舍', '3', '2014-03-25 04:53:50', null, '1');
 INSERT INTO `wlc_borrow` VALUES ('25', '5', '2014-03-24', '2014-03-03', '2014-03-19', '宿舍', '收拾', '0', '大大叔大叔', '2', '2014-03-25 04:53:43', null, '2');
-INSERT INTO `wlc_borrow` VALUES ('26', '5', '2014-03-25', '2014-03-18', '2014-03-26', '相机', '镜头', '1', '=  = \r\n测试的是是', '1', null, null, '1');
-INSERT INTO `wlc_borrow` VALUES ('27', '5', '2014-04-08', '2014-04-01', '2014-04-10', '投影仪', '数据线', '1', '借来玩', '2', '2014-04-08 17:09:29', '通过', '1');
 INSERT INTO `wlc_borrow` VALUES ('28', '14', '2014-04-11', '2014-04-01', '2014-04-02', '投影仪', '数据线', '1', '111', '2', '2014-04-11 00:51:51', '', '2');
-INSERT INTO `wlc_borrow` VALUES ('29', '14', '2014-04-11', '2014-04-01', '2014-04-02', '投影仪', '11', '1', '测试测试测试', '2', '2014-04-11 09:01:43', '', '1');
+INSERT INTO `wlc_borrow` VALUES ('29', '14', '2014-04-11', '2014-04-01', '2014-04-02', '投影仪', '11', '1', '测试测试测试', '2', '2014-04-11 09:01:43', '', '2');
+INSERT INTO `wlc_borrow` VALUES ('30', '5', '2014-04-17', '2014-04-01', '2014-04-02', '投影仪', '11', '1', 'test232323232131', '2', '2014-04-18 07:36:00', 'sddfs ', '2');
 
 -- ----------------------------
 -- Table structure for wlc_department
@@ -999,7 +1010,7 @@ CREATE TABLE `wlc_errand` (
   `check_datetime` datetime DEFAULT NULL COMMENT '申请审核时间',
   `check_comment` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '申请审核批注',
   PRIMARY KEY (`errand_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=114 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=115 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Records of wlc_errand
@@ -1012,13 +1023,12 @@ INSERT INTO `wlc_errand` VALUES ('14', '11', '2014-03-10', '2014-03-03', '2014-0
 INSERT INTO `wlc_errand` VALUES ('15', '12', '2014-03-10', '2014-03-03', '2014-03-19', null, ' dasdsaasdas', null, null, null, '1', '7', '2014-03-19 22:10:18', '');
 INSERT INTO `wlc_errand` VALUES ('18', '5', '2014-03-10', '2014-03-03', '2014-03-27', null, ' dasdsaasdas大叔大叔', null, null, null, '1', '7', '2014-03-20 00:53:44', '通过！');
 INSERT INTO `wlc_errand` VALUES ('22', '5', '2014-03-28', '2014-03-03', '2014-03-11', '北京', 'ssssss', 0x5B5D, null, null, '2', '7', '2014-03-29 01:16:24', '是');
-INSERT INTO `wlc_errand` VALUES ('30', '5', '2014-03-30', '2014-03-03', '2014-03-19', '上海', 'asdasd', null, null, null, '1', '7', '2014-03-31 20:10:04', null);
 INSERT INTO `wlc_errand` VALUES ('31', '5', '2014-03-30', '2014-03-03', '2014-03-12', '= =', 'asdasda', null, null, null, '1', '8', null, null);
 INSERT INTO `wlc_errand` VALUES ('36', '5', '2014-04-10', '2014-04-01', '2014-04-02', '北京', '测试测试', 0x5B7B2274797065223A22E4BAA4E9809AE5B7A5E585B7222C2264657461696C223A22E9A39EE69CBA222C22636F7374223A22393939227D2C7B2274797065223A22E4BAA4E9809AE5B7A5E585B7222C2264657461696C223A22E781ABE8BDA6222C22636F7374223A2238383838227D5D, null, null, '3', '8', '2014-04-10 08:48:21', null);
-INSERT INTO `wlc_errand` VALUES ('39', '14', '2014-04-11', '2014-04-01', '2014-04-02', '美国', '合作合作', 0x5B7B2274797065223A22E4BAA4E9809AE5B7A5E585B7222C2264657461696C223A22E9A39EE69CBA222C22636F7374223A2239393939227D5D, null, null, '4', '6', '2014-04-17 11:14:55', 'dsadas');
 INSERT INTO `wlc_errand` VALUES ('40', '5', '2014-04-15', '2014-04-01', '2014-04-02', '11', '3333333333', 0x5B5D, null, null, '3', '6', '2014-04-15 11:12:59', null);
 INSERT INTO `wlc_errand` VALUES ('111', '5', '2014-04-15', '2014-04-01', '2014-04-02', '22', '2232131232', 0x5B7B2274797065223A22E5B882E5A496E5B7AEE69785E8B4B9222C2264657461696C223A22E5AEBFE8888D222C22636F7374223A22323232227D5D, '学活场地申请系统 需求分析 (1).doc', '/Attachments/534eaef2209ea.doc', '3', '6', '2014-04-17 11:10:23', null);
-INSERT INTO `wlc_errand` VALUES ('113', '5', '2014-04-17', '2014-04-01', '2014-04-02', '11111', '222222', 0x5B7B2274797065223A22E5B882E5A496E5B7AEE69785E8B4B9222C2264657461696C223A22647361222C22636F7374223A223131227D5D, '学活场地申请系统 需求分析 (1).rar', '/Attachments/534f481b3a62d.rar', '2', null, null, null);
+INSERT INTO `wlc_errand` VALUES ('113', '5', '2014-04-17', '2014-04-01', '2014-04-02', '11111', '222222', 0x5B7B2274797065223A22E5B882E5A496E5B7AEE69785E8B4B9222C2264657461696C223A22647361222C22636F7374223A223131227D5D, '出差总结表.doc', '/Attachments/53507fba3e4d8.doc', '2', null, null, null);
+INSERT INTO `wlc_errand` VALUES ('114', '5', '2014-04-18', '2014-04-01', '2014-04-02', '北京', '测试测试', 0x5B7B2274797065223A22E5B882E5A496E5B7AEE69785E8B4B9222C2264657461696C223A223232222C22636F7374223A223232227D5D, '出差总结表.doc', '/Attachments/535080d55c895.doc', '3', '6', '2014-04-18 09:33:39', '');
 
 -- ----------------------------
 -- Table structure for wlc_leave
@@ -1040,22 +1050,20 @@ CREATE TABLE `wlc_leave` (
   `check_comment` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '批注注释',
   `report` smallint(6) DEFAULT '1' COMMENT '1为未销假 2为已销假',
   PRIMARY KEY (`leave_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Records of wlc_leave
 -- ----------------------------
 INSERT INTO `wlc_leave` VALUES ('4', '5', '2014-03-13', '2', '2014-03-03', '04:00:00', '2014-03-19', '17:00:00', ' dasdsaasdas', '8', '2', '2014-03-20 08:23:38', 'aaa', '2');
 INSERT INTO `wlc_leave` VALUES ('5', '5', '2014-03-11', '3', '2014-03-03', '04:00:00', '2014-03-19', '17:00:00', ' dasdsaasdas', '8', '3', '2014-03-14 08:23:43', 'aaaa', '1');
-INSERT INTO `wlc_leave` VALUES ('10', '15', '2014-03-14', '0', '2014-03-05', '09:00:00', '2014-03-13', '14:00:00', ' dsadasdsadas', '7', '2', '2014-03-22 23:17:20', '', '1');
 INSERT INTO `wlc_leave` VALUES ('13', '12', '2014-03-11', '3', '2014-03-03', '04:00:00', '2014-03-19', '17:00:00', ' dasdsaasdas', '8', '3', '2014-03-21 08:23:55', 'bbbb', '1');
 INSERT INTO `wlc_leave` VALUES ('14', '11', '2014-03-10', '4', '2014-03-03', '04:00:00', '2014-03-19', '17:00:00', ' dasdsaasdas', '7', '3', '2014-03-19 22:16:19', '', '1');
 INSERT INTO `wlc_leave` VALUES ('15', '12', '2014-03-10', '5', '2014-03-03', '04:00:00', '2014-03-19', '17:00:00', ' dasdsaasdas', '7', '2', '2014-03-19 22:10:18', '', '2');
 INSERT INTO `wlc_leave` VALUES ('18', '5', '2014-03-10', '3', '2014-03-03', '04:00:00', '2014-03-27', '20:00:00', ' dasdsaasdas大叔大叔', '7', '2', '2014-03-20 00:53:44', '', '1');
-INSERT INTO `wlc_leave` VALUES ('19', '5', '2014-03-20', '0', '2014-03-11', '04:00:00', '2014-03-27', '22:00:00', ' 从V多给点分是是', '7', '1', null, null, '1');
-INSERT INTO `wlc_leave` VALUES ('22', '5', '2014-03-31', '5', '2014-03-03', '05:00:00', '2014-03-27', '09:00:00', 'jlkjlk', '8', '1', null, null, '1');
 INSERT INTO `wlc_leave` VALUES ('23', '14', '2014-04-11', '0', '2014-04-01', '00:00:00', '2014-04-06', '09:00:00', '我要请假！', '7', '2', '2014-04-11 00:19:19', '同意！', '2');
-INSERT INTO `wlc_leave` VALUES ('27', '14', '2014-04-11', '0', '2014-04-15', '10:00:00', '2014-04-18', '09:00:00', '我就是测试下= =', '7', '3', '2014-04-11 00:44:12', '不给！', '1');
+INSERT INTO `wlc_leave` VALUES ('29', '5', '2014-04-18', '0', '2014-04-01', '01:00:00', '2014-04-04', '05:00:00', 'test擦擦擦擦擦', '6', '2', '2014-04-18 09:34:58', '', '2');
+INSERT INTO `wlc_leave` VALUES ('30', '5', '2014-04-18', '0', '2014-04-01', '00:00:00', '2014-04-02', '05:00:00', '大叔大叔萨达似懂非懂', '6', '3', '2014-04-18 10:46:49', '大叔大叔', '1');
 
 -- ----------------------------
 -- Table structure for wlc_order
@@ -1064,7 +1072,7 @@ DROP TABLE IF EXISTS `wlc_order`;
 CREATE TABLE `wlc_order` (
   `order_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '订餐Id',
   `user_id` int(11) NOT NULL COMMENT '申请人',
-  `datetime` datetime DEFAULT NULL COMMENT '申请时间',
+  `date` date DEFAULT NULL COMMENT '申请时间',
   `place` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '订餐地点',
   `reason` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '订餐原因',
   `number` int(11) NOT NULL COMMENT '加班人数',
@@ -1074,23 +1082,23 @@ CREATE TABLE `wlc_order` (
   `check_datetime` datetime DEFAULT NULL COMMENT '审批时间',
   `check_comment` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`order_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Records of wlc_order
 -- ----------------------------
-INSERT INTO `wlc_order` VALUES ('1', '5', '2014-03-21 13:30:31', '爱仕达', '爱仕达', '22', '22', '3', '7', '2014-03-22 00:33:49', '333');
-INSERT INTO `wlc_order` VALUES ('3', '11', '2014-03-18 20:50:11', 'dsadasfewrwer', 'dasdasrwerwerewrewre', '111', '3', '2', '7', '2014-03-22 00:44:24', '1395419455');
-INSERT INTO `wlc_order` VALUES ('4', '12', '2014-03-17 20:50:11', 'dsadas', 'dasdas', '6', '8', '1', '7', null, null);
-INSERT INTO `wlc_order` VALUES ('5', '13', '2014-03-16 20:50:11', 'dsadas', 'dasdas', '1', '7', '1', '8', null, null);
-INSERT INTO `wlc_order` VALUES ('6', '14', '2014-03-15 20:50:11', '王德福', '工作太多', '3', '20', '2', '7', '2014-04-11 00:24:38', '恩准！');
-INSERT INTO `wlc_order` VALUES ('7', '15', '2014-03-15 20:50:11', 'dsadasfsd', 'dasdas', '1', '2', '1', '7', null, null);
-INSERT INTO `wlc_order` VALUES ('11', '5', '2014-03-22 11:04:40', 'ppp', 'kkk', '99', '99', '2', '7', '2014-03-23 16:19:29', '');
-INSERT INTO `wlc_order` VALUES ('12', '5', '2014-04-02 10:29:34', '测试', '测试2', '113', '22', '3', '7', '2014-04-02 10:36:23', '是');
-INSERT INTO `wlc_order` VALUES ('13', '5', '2014-04-08 17:05:29', '王德福', '工作太多', '2', '60', '3', '7', '2014-04-08 17:06:57', '不通过 太贵了！');
-INSERT INTO `wlc_order` VALUES ('14', '5', '2014-04-09 16:26:52', 'dsadas', '大苏打', '22', '21', '3', '7', '2014-04-10 10:50:10', 'testsss');
-INSERT INTO `wlc_order` VALUES ('15', '14', '2014-04-11 00:24:59', '王德福', '工作。==', '1', '30', '1', '3', null, null);
-INSERT INTO `wlc_order` VALUES ('16', '14', '2014-04-11 00:46:43', '全聚德', '测试', '1', '999', '3', '7', '2014-04-11 00:47:06', '不费！');
+INSERT INTO `wlc_order` VALUES ('1', '5', '2014-03-21', '爱仕达', '爱仕达', '22', '22', '3', '7', '2014-03-22 00:33:49', '333');
+INSERT INTO `wlc_order` VALUES ('3', '11', '2014-03-18', 'dsadasfewrwer', 'dasdasrwerwerewrewre', '111', '3', '2', '7', '2014-03-22 00:44:24', '1395419455');
+INSERT INTO `wlc_order` VALUES ('4', '12', '2014-03-17', 'dsadas', 'dasdas', '6', '8', '1', '7', null, null);
+INSERT INTO `wlc_order` VALUES ('5', '13', '2014-03-16', 'dsadas', 'dasdas', '1', '7', '1', '8', null, null);
+INSERT INTO `wlc_order` VALUES ('6', '14', '2014-03-15', '王德福', '工作太多', '3', '20', '2', '7', '2014-04-11 00:24:38', '恩准！');
+INSERT INTO `wlc_order` VALUES ('7', '15', '2014-03-15', 'dsadasfsd', 'dasdas', '1', '2', '1', '7', null, null);
+INSERT INTO `wlc_order` VALUES ('11', '5', '2014-03-22', 'ppp', 'kkk', '99', '99', '2', '7', '2014-03-23 16:19:29', '');
+INSERT INTO `wlc_order` VALUES ('12', '5', '2014-04-02', '测试', '测试2', '113', '22', '3', '7', '2014-04-02 10:36:23', '是');
+INSERT INTO `wlc_order` VALUES ('13', '5', '2014-04-08', '王德福', '工作太多', '2', '60', '3', '7', '2014-04-08 17:06:57', '不通过 太贵了！');
+INSERT INTO `wlc_order` VALUES ('14', '5', '2014-04-09', 'dsadas', '大苏打', '22', '21', '3', '7', '2014-04-10 10:50:10', 'testsss');
+INSERT INTO `wlc_order` VALUES ('21', '5', '2014-04-18', '收拾收拾是', '宿舍事实上身上试试', '11', '22', '3', '6', null, 'FSDSD ');
+INSERT INTO `wlc_order` VALUES ('22', '5', '2014-04-18', '111111111', '33333333333333', '1', '1', '1', null, null, null);
 
 -- ----------------------------
 -- Table structure for wlc_user
@@ -1115,21 +1123,21 @@ CREATE TABLE `wlc_user` (
 -- Records of wlc_user
 -- ----------------------------
 INSERT INTO `wlc_user` VALUES ('1', 'admin', 'e10adc3949ba59abbe56e057f20f883e', '管理员', '0', null, '1', '0', null, null);
-INSERT INTO `wlc_user` VALUES ('2', '8304', 'e10adc3949ba59abbe56e057f20f883e', '黄晨', '2', '1', '7', '1', '2014-04-17', '2014-04-14');
-INSERT INTO `wlc_user` VALUES ('3', '8003', 'e10adc3949ba59abbe56e057f20f883e', '毕斐', '2', '2', '8', '1', '2014-04-17', '2014-04-14');
-INSERT INTO `wlc_user` VALUES ('4', '70030', 'e10adc3949ba59abbe56e057f20f883e', '孙雪亮\r\n', '2', '3', '8', '1', '2014-04-17', '2014-04-14');
-INSERT INTO `wlc_user` VALUES ('5', '70028', 'e10adc3949ba59abbe56e057f20f883e', '黄微', '2', '4', '7', '1', '2014-04-17', '2014-04-14');
+INSERT INTO `wlc_user` VALUES ('2', '8304', 'e10adc3949ba59abbe56e057f20f883e', '黄晨', '2', '1', '7', '1', '2014-04-18', '2014-04-14');
+INSERT INTO `wlc_user` VALUES ('3', '8003', 'e10adc3949ba59abbe56e057f20f883e', '毕斐', '2', '2', '8', '1', '2014-04-18', '2014-04-14');
+INSERT INTO `wlc_user` VALUES ('4', '70030', 'e10adc3949ba59abbe56e057f20f883e', '孙雪亮\r\n', '2', '3', '8', '1', '2014-04-18', '2014-04-14');
+INSERT INTO `wlc_user` VALUES ('5', '70028', 'e10adc3949ba59abbe56e057f20f883e', '黄微', '2', '4', '7', '1', '2014-04-18', '2014-04-14');
 INSERT INTO `wlc_user` VALUES ('6', '7767', 'e10adc3949ba59abbe56e057f20f883e', '尹激', '1', null, '6', '0', null, null);
 INSERT INTO `wlc_user` VALUES ('7', '2642', 'e10adc3949ba59abbe56e057f20f883e', '徐劲松', '1', null, '7', '0', null, null);
 INSERT INTO `wlc_user` VALUES ('8', '544', 'e10adc3949ba59abbe56e057f20f883e', '白雁', '1', null, '8', '0', null, null);
-INSERT INTO `wlc_user` VALUES ('10', '70029', 'e10adc3949ba59abbe56e057f20f883e', '饶芳', '3', '2', '3', '1', '2014-04-17', '2014-04-14');
-INSERT INTO `wlc_user` VALUES ('11', '70389', 'e10adc3949ba59abbe56e057f20f883e', '李文一', '3', '2', '3', '1', '2014-04-17', '2014-04-14');
-INSERT INTO `wlc_user` VALUES ('12', '70423', 'e10adc3949ba59abbe56e057f20f883e', '包涵', '3', '2', '3', '1', '2014-04-17', '2014-04-14');
-INSERT INTO `wlc_user` VALUES ('13', '70437', 'e10adc3949ba59abbe56e057f20f883e', '王晓霞', '3', '2', '3', '1', '2014-04-17', '2014-04-14');
-INSERT INTO `wlc_user` VALUES ('14', '70740', 'e10adc3949ba59abbe56e057f20f883e', '王娴', '3', '1', '2', '1', '2014-04-17', '2014-04-14');
-INSERT INTO `wlc_user` VALUES ('15', '70558', 'e10adc3949ba59abbe56e057f20f883e', '耿雪姣', '3', '1', '2', '1', '2014-04-17', '2014-04-14');
-INSERT INTO `wlc_user` VALUES ('16', '201401', 'e10adc3949ba59abbe56e057f20f883e', '高默咛', '3', '1', '2', '1', '2014-04-17', '2014-04-14');
-INSERT INTO `wlc_user` VALUES ('17', '201402', 'e10adc3949ba59abbe56e057f20f883e', '黄庆华', '3', '1', '2', '1', '2014-04-17', '2014-04-14');
+INSERT INTO `wlc_user` VALUES ('10', '70029', 'e10adc3949ba59abbe56e057f20f883e', '饶芳', '3', '2', '3', '1', '2014-04-18', '2014-04-14');
+INSERT INTO `wlc_user` VALUES ('11', '70389', 'e10adc3949ba59abbe56e057f20f883e', '李文一', '3', '2', '3', '1', '2014-04-18', '2014-04-14');
+INSERT INTO `wlc_user` VALUES ('12', '70423', 'e10adc3949ba59abbe56e057f20f883e', '包涵', '3', '2', '3', '1', '2014-04-18', '2014-04-14');
+INSERT INTO `wlc_user` VALUES ('13', '70437', 'e10adc3949ba59abbe56e057f20f883e', '王晓霞', '3', '2', '3', '1', '2014-04-18', '2014-04-14');
+INSERT INTO `wlc_user` VALUES ('14', '70740', 'e10adc3949ba59abbe56e057f20f883e', '王娴', '3', '1', '2', '1', '2014-04-18', '2014-04-14');
+INSERT INTO `wlc_user` VALUES ('15', '70558', 'e10adc3949ba59abbe56e057f20f883e', '耿雪姣', '3', '1', '2', '1', '2014-04-18', '2014-04-14');
+INSERT INTO `wlc_user` VALUES ('16', '201401', 'e10adc3949ba59abbe56e057f20f883e', '高默咛', '3', '1', '2', '1', '2014-04-18', '2014-04-14');
+INSERT INTO `wlc_user` VALUES ('17', '201402', 'e10adc3949ba59abbe56e057f20f883e', '黄庆华', '3', '1', '2', '1', '2014-04-18', '2014-04-14');
 
 -- ----------------------------
 -- Table structure for wlc_work
@@ -1202,7 +1210,7 @@ INSERT INTO `wlc_work` VALUES ('82', '5', '2014-03-03', null, null, '1', null, n
 INSERT INTO `wlc_work` VALUES ('83', '5', '2014-03-10', null, null, '1', null, null, null);
 INSERT INTO `wlc_work` VALUES ('84', '5', '2014-03-17', null, null, '4', null, '8', null);
 INSERT INTO `wlc_work` VALUES ('85', '5', '2014-03-24', null, null, '3', null, null, null);
-INSERT INTO `wlc_work` VALUES ('86', '5', '2014-03-31', 0x5B7B2264657461696C223A223232E5B9B45F5FE69C885F5FE697A5EFBC8CE59CA85F5F5F5FEFBC88E5B7A5E4BD9CE59CB0E782B9EFBC89EFBC8CE5928C5F5F5F5F5F5F5F5FEFBC88E5908CE4BA8BE38081E9A286E5AFBCE38081E68EA5E5BE85E5AFB9E8B1A1E7AD89EFBC89EFBC8C5F5F5F5F5F5F5F5FEFBC88E5B7A5E4BD9CE58685E5AEB9EFBC89E38082222C2266696E697368223A66616C73652C22726561736F6E223A223131227D2C7B2264657461696C223A225F33335FE5B9B45F5FE69C885F5FE697A5EFBC8CE59CA85F5F5F5FEFBC88E5B7A5E4BD9CE59CB0E782B9EFBC89EFBC8CE5928C5F5F5F5F5F5F5F5FEFBC88E5908CE4BA8BE38081E9A286E5AFBCE38081E68EA5E5BE85E5AFB9E8B1A1E7AD89EFBC89EFBC8C5F5F5F5F5F5F5F5FEFBC88E5B7A5E4BD9CE58685E5AEB9EFBC89E38082222C2266696E697368223A747275652C22726561736F6E223A22227D2C7B2264657461696C223A225F5F5F5FE5B9B45F5FE69C885F5FE697A5EFBC8CE59CA85F5F5F5FEFBC88E5B7A5E4BD9CE59CB0E782B9EFBC89EFBC8CE5928C5F5F5F5F5F5F5F5FEFBC88E5908CE4BA8BE38081E9A286E5AFBCE38081E68EA5E5BE85E5AFB9E8B1A1E7AD89EFBC89EFBC8C5F5F5F5F5F5F5F5FEFBC88E5B7A5E4BD9CE58685E5AEB9EFBC89E38082222C2266696E697368223A66616C73652C22726561736F6E223A223232227D2C7B2264657461696C223A225F5F5F5FE5B9B45F5FE69C885F5FE697A5EFBC8CE59CA85F5F5F5FEFBC88E5B7A5E4BD9CE59CB0E782B9EFBC89EFBC8CE5928C5F5F5F5F5F5F5F5FEFBC88E5908CE4BA8BE38081E9A286E5AFBCE38081E68EA5E5BE85E5AFB9E8B1A1E7AD89EFBC89EFBC8C5F5F5F5F5F5F5F5FEFBC88E5B7A5E4BD9CE58685E5AEB9EFBC89E38082222C2266696E697368223A66616C73652C22726561736F6E223A22227D5D, 0x7361646164, '3', null, null, null);
+INSERT INTO `wlc_work` VALUES ('86', '5', '2014-03-31', 0x5B7B2264657461696C223A22222C2266696E697368223A66616C73652C22726561736F6E223A22227D2C7B2264657461696C223A22222C2266696E697368223A747275652C22726561736F6E223A22227D2C7B2264657461696C223A22222C2266696E697368223A747275652C22726561736F6E223A22227D5D, 0x7361646164, '3', null, null, null);
 INSERT INTO `wlc_work` VALUES ('87', '10', '2014-01-06', null, null, '1', null, null, null);
 INSERT INTO `wlc_work` VALUES ('88', '10', '2014-01-13', null, null, '1', null, null, null);
 INSERT INTO `wlc_work` VALUES ('89', '10', '2014-01-20', null, null, '1', null, null, null);

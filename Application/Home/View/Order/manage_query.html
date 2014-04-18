@@ -58,7 +58,7 @@
 							</select>
 						</div>
 					</div>
-					<if condition="$isBoss">
+					<if condition="$privilege eq PRIRILEGE_BOSS">
 						<div class="col-lg-4 col-sm-6 form-div">
 							<div class="form-label">修改审批</div>
 							<div class="input-group">									
@@ -138,15 +138,17 @@
 								</if>				
 							</td>
 							<td style="text-align: right;">
-								<button type="button" class="btn btn-xs btn-primary btn-view">查看</button>
-								<if condition="$isBoss">
-									<switch name="record['check_status']">
-										<case value="1">
-											<button type="button" class="btn btn-xs btn-info btn-approbate">审批</button>
-										</case>
-										<default />
-										<button type="button" class="btn btn-xs btn-warning btn-approbate btn-edit" disabled="disabled">改批</button>
-									</switch>	
+								<button type="button" class="btn btn-xs btn-primary btn-view" onclick="onViewClick(this)">查看</button>
+								<if condition="$privilege eq PRIRILEGE_BOSS">
+									<if condition="($record['check_status'] eq 1) ">
+										<button type="button" class="btn btn-xs btn-info" onclick="onApprobateClick(this)">审批</button>
+									<elseif condition="($record['check_status'] eq 2) OR ($record['check_status'] eq 3)"/>
+										<button type="button" class="btn btn-xs btn-warning btn-edit" onclick="onApprobateClick(this)" disabled="disabled">改批</button>
+									<else />
+										<button type="button" class="btn btn-xs" style="visibility:hidden;">审批</button>
+									</if>
+								<elseif condition="$privilege eq PRIRILEGE_ADMIN"/>
+									<button type="button" class="btn btn-xs btn-danger" onclick="onDeleteClick(this)">删除</button>
 								</if>										
 							</td>	
 						</tr>
@@ -231,22 +233,23 @@
 			}
 				
 		});
-
-		$(".btn-view").click(function(e){
-			var index = $(e.target).parent().parent().index();
-			viewOrder(orderList[index]);
-		});
-
-		{//人事负责人才能审批}
-		<if condition="$isBoss">
-			$(".btn-approbate").click(function(e){
-				var index = $(e.target).parent().parent().index();
-				approbateOrder(orderList[index]);
-			});
-		</if>	
-
 	});
 	
+	function onApprobateClick(button){
+		var index = $(button).parent().parent().index();
+		approbateOrder(orderList[index]);
+	}
+
+	function onDeleteClick(button){
+		var index = $(button).parent().parent().index();
+		deleteOrder(orderList[index]);
+	}
+	
+	function onViewClick(button){
+		var index = $(button).parent().parent().index();
+		viewOrder(orderList[index]);
+	}
+
 	function get_department_user(){
 		var departmentId = $("select[name='department']").val();
 		var userSelct = $("select[name='user']");

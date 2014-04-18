@@ -8,27 +8,41 @@ class OrderModel extends Model {
 	 * 新增订餐申请
 	 * 
 	 * @param int $user_id			用户id
-	 * @param timestamp $datetime	提交日期
+	 * @param int $order_id			申请条目id
+	 * @param string $date			提交日期
 	 * @param string $place			开始时间
 	 * @param string $reason		请假原因
 	 * @param int $number			订餐人数
 	 * @param int $standard			没人标准
 	 * @return 新增失败则返回null 否则返回数据条目
 	 */
-	public function addOrder($user_id, $datetime, $place, $reason, $number, $standard){
-		$data = array(
-			'user_id'	=>	$user_id,
-			'datetime'	=>	date('Y-m-d H:i:s',$datetime),
-			'place'		=>	$place,
-			'reason'	=>	$reason,
-			'number'	=>	$number,
-			'standard'	=>	$standard,
-			'checker_id' => D('User')->getChecker($user_id),
-		);
+	public function submitOrder($user_id, $order_id, $date, $place, $reason, $number, $standard){
+		if(empty($order_id)){ //新增记录
+			$data = array(
+				'user_id'		=>	$user_id,
+				'date'			=>	$date,
+				'check_status'	=>	1,
+				'checker_id'	=>	D('User')->getChecker($user_id),
+			);
+		}else{//编辑记录
+			//获取记录
+			$data = $this->where(array('order_id' => $order_id))->select()[0];
+			if(!$data)
+				return null;
+			//检查记录所有者
+			if($data['user_id'] != $user_id)
+				return null;
+			//只能编辑未审批的记录
+			if($data['check_status'] > 1)
+				return null;
+		}	
 
+		$data['place']		=	$place;
+		$data['reason']		=	$reason;
+		$data['number']		=	$number;
+		$data['standard']	=	$standard;
 
-		//print_r($data);
-		if(!$this->add($data))
+		if(!$this->add($data,array(),true))
 			return null;
 		else
 			return $data;
@@ -54,17 +68,17 @@ class OrderModel extends Model {
 		
 		$where = array(
 			'wlc_order.user_id'	=>	$user_id,
-			'datetime'			=>	array('between',array($start_date, $end_date)),
+			'date'				=>	array('between',array($start_date, $end_date)),
 		);
 		
 		if($check_status >= 1 && $check_status <= 3)
 			$where['check_status'] = $check_status;
 		
-		//var_dump(expression)
+		//var_dump($where);
 		$count = $this->where($where)->count();
-		$this->where($where)->order('datetime desc')
+		$this->where($where)->order('date desc')
 		->join('LEFT JOIN wlc_user AS checker ON checker.user_id = wlc_order.checker_id')
-		->field('order_id,datetime,place,reason,number,standard,
+		->field('order_id,date,place,reason,number,standard,
 			check_status,checker.alias AS checker,check_datetime,check_comment');
 
 		if($per_page != 0)
@@ -83,62 +97,27 @@ class OrderModel extends Model {
 
 
 	/**
-	 * 修改订餐申请
-	 * @param int $user_id			用户id
-	 * @param int $order_id			申请条目id
-	 * @param timestamp $datetime	提交日期
-	 * @param string $place			开始时间
-	 * @param string $reason		请假原因
-	 * @param int $number			订餐人数
-	 * @param int $standard			没人标准
-	 * @return 修改失败null 否则返回数据条目
-	 */
-	public function editLeave($user_id, $order_id, $place, $reason, $number, $standard){
-		//获取记录
-		$data = $this->where(array('order_id' => $order_id))->select()[0];
-		
-		if(!$data)
-			return null;
-		//检查记录所有者
-		if($data['user_id'] != $user_id)
-			return null;
-
-		//只能编辑未审批的记录
-		if($data['check_status'] != 1)
-			return null;
-
-		$data['place']		=	$place;
-		$data['reason']		=	$reason;
-		$data['number']		=	$number;
-		$data['standard']	=	$standard;
-
-		$this->save($data);
-
-		$result = $this->where(array('order_id' => $order_id))->select()[0];
-		return $result;
-	}
-
-
-	/**
 	 * 删除订餐申请
 	 * 
 	 * @param int $user_id		用户id
 	 * @param int $order_id		请假申请条目id
 	 * @return 删除失败null 否则返回数据条目
 	 */
-	public function deleteLeave($user_id,$order_id){
+	public function deleteOrder($user_id,$order_id,$admin=false){
 		//获取记录
 		$data = $this->where(array('order_id' => $order_id))->select()[0];
 		if(!$data)
 			return null;
 
-		//检查记录所有者
-		if($data['user_id'] != $user_id)
-			return null;
+		if(!$admin){
+			//检查记录所有者
+			if($data['user_id'] != $user_id)
+				return null;
 
-		//只能编删除未审批的记录
-		if($data['check_status'] != 1)
-			return null;
+			//只能编删除未审批的记录
+			if($data['check_status'] != 1)
+				return null;
+		}		
 
 		$this->where(array('order_id' => $order_id))->delete();
 		//检测是否删除成功
@@ -169,7 +148,7 @@ class OrderModel extends Model {
 			$end_date = '9999-12-31';
 
 		$where = array(
-			'datetime'	=>	array('between',array($start_date, $end_date)),
+			'date'	=>	array('between',array($start_date, $end_date)),
 		);
 		
 		if($department_id != 0)
@@ -183,19 +162,19 @@ class OrderModel extends Model {
 
 		switch ($order){
 			case 0: //日期倒序
-				$order = 'datetime desc,wlc_user.department_id,wlc_user.alias'; 
+				$order = 'date desc,wlc_user.department_id,wlc_user.alias'; 
 				break;  
 			case 1: //日期顺序
-				$order = 'datetime ,wlc_user.department_id,wlc_user.alias'; 
+				$order = 'date ,wlc_user.department_id,wlc_user.alias'; 
 				break;
 			case 2: //部门顺序
-				$order = 'wlc_user.department_id,wlc_user.alias,datetime desc'; 
+				$order = 'wlc_user.department_id,wlc_user.alias,date desc'; 
 				break;
 			case 3: //名称顺序
-				$order = 'wlc_user.alias,wlc_user.department_id,datetime desc'; 
+				$order = 'wlc_user.alias,wlc_user.department_id,date desc'; 
 				break;
 			default:
-				$order = 'datetime desc,wlc_user.department_id, wlc_user.alias'; 
+				$order = 'date desc,wlc_user.department_id, wlc_user.alias'; 
 		}
 
 		//var_dump($where);
@@ -206,7 +185,7 @@ class OrderModel extends Model {
 		$this->join('RIGHT JOIN wlc_user ON wlc_user.user_id = wlc_order.user_id')
 		->join('LEFT JOIN wlc_department ON wlc_department.department_id = wlc_user.department_id')
 		->join('LEFT JOIN wlc_user AS checker ON checker.user_id = wlc_order.checker_id');
-		$this->field('order_id,wlc_user.alias,department_name,datetime,place,reason,number,standard,
+		$this->field('order_id,wlc_user.alias,department_name,date,place,reason,number,standard,
 			check_status,checker.alias AS checker,check_datetime,check_comment')
 		->where($where)->order($order);
 
@@ -232,11 +211,11 @@ class OrderModel extends Model {
 	 * 
 	 * @param int $order_id				请假申请条目id
 	 * @param int $is_agree				是否同意
-	 * @param timestamp $check_datetime	审批时间
+	 * @param timestamp $check_date	审批时间
 	 * @param string $check_comment		请假原因
 	 * @return 审批失败null 否则返回数据条目
 	 */
-	public function approbateOrder($checker_id,$order_id,$is_agree,$check_datetime,$check_comment){
+	public function approbateOrder($checker_id,$order_id,$is_agree,$check_date,$check_comment){
 		//获取记录
 		$data = $this->where(array('order_id' => $order_id))->select()[0];
 		
@@ -245,7 +224,7 @@ class OrderModel extends Model {
 
 		$data['checker_id']		=	$checker_id;
 		$data['check_status'] 	= 	$is_agree=='true' ? 2 : 3;
-		$data['check_datetime']	=	date('Y-m-d H:i:s',$check_datetime);
+		$data['check_date']	=	date('Y-m-d H:i:s',$check_date);
 		$data['check_comment']	=	$check_comment;
 
 

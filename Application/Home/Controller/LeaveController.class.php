@@ -261,7 +261,7 @@ class LeaveController extends Controller {
 		$result = D('Leave')->reportLeave($_REQUEST['leave_id']);
 
 		if(!$result)
-			die('修改失败');
+			die('销假失败');
 		$this->ajaxReturn($result);
 	}
 }

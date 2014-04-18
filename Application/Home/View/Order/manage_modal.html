@@ -41,14 +41,14 @@
 							</div>
 						</div>
 						<div class="col-sm-12 form-div">
-							<div class="form-label">加班原因</div>
+							<div class="form-label">订餐原因</div>
 							<div class="input-group">
 								<input class="form-control" id="modal-reason" type="text" name="reason" readonly="">
 								<span class="input-group-addon"></span>
 							</div>
 						</div>
 						<div class="col-sm-6 form-div">
-							<div class="form-label">加班人数</div>
+							<div class="form-label">订餐人数</div>
 							<div class="input-group">
 								<input class="form-control" id="modal-number" type="text" name="number" readonly="">
 								<span class="input-group-addon"></span>
@@ -95,14 +95,15 @@
 						</div>
 					</div>
 				</form>
-				<div class="alert alert-danger" style="margin-bottom: 0px;"></div>
+				<div class="alert alert-danger" id="modal-alert" style="margin-bottom: 0px;"></div>
 			</div>
 			<div class="modal-footer" style="margin-top: auto; white-space: nowrap;">
 				<button type="button" class="btn btn-primary btn-modal-view" data-dismiss="modal">确定</button>
-				<button type="button" class="btn btn-default btn-modal-approbate btn-modal-report" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-default btn-modal-approbate btn-modal-report btn-modal-delete" data-dismiss="modal">取消</button>
 				<button type="button" class="btn btn-success btn-modal-approbate" onclick="onApprobateSubmit(true)">审批通过</button>
 				<button type="button" class="btn btn-danger btn-modal-approbate" onclick="onApprobateSubmit(false)">审批驳回</button>
 				<button type="button" class="btn btn-success btn-modal-report" onclick="onReportSubmit()">确认销假</button>
+				<button type="button" class="btn btn-danger btn-modal-delete" onclick="onDeleteSubmit()">确认删除</button>
 			</div>
 		</div>
 	</div>
@@ -138,20 +139,34 @@
 		$('#order-modal').modal({backdrop:"static"});
 	}
 
-	{//处长级别才能审批}
-	<if condition="$isBoss">
-		function approbateOrder(data){
-			reset(data);
-			$("#order-modal .modal-title").text("审批订餐申请");
-			$("#modal-check-comment").removeAttr("readonly");
+	function deleteOrder(data){
+		reset(data);
 
-			$(".btn-modal-approbate").show();
-			$('#order-modal').modal({backdrop:"static"});
-		}
+		$("#order-modal .modal-title").text("删除申请");
+		$("#modal-check-comment").attr("readonly","");
+		$(".btn-modal-delete").show();
 
-		function onApprobateSubmit(isAgree){	
-			$('#modal-is-agree').val(isAgree?"true":"false");
-			postSubmit("{:U('Order/approbateOrder')}",$("#modal-form").serialize(),"审批成功",null,$("#order-modal"),"");
-		}
-	</if>
+		$("#order-modal .alert").text("您确定要删除该条记录吗？");
+		$("#order-modal .alert").show();
+
+		$('#order-modal').modal({backdrop:"static"});
+	}
+
+	function onDeleteSubmit(){
+		modal_submit("{:U('Order/deleteOrder')}",$("#modal-form"),"删除成功",$("#modal-alert"));
+	}
+
+	function approbateOrder(data){
+		reset(data);
+		$("#order-modal .modal-title").text("审批订餐申请");
+		$("#modal-check-comment").removeAttr("readonly");
+
+		$(".btn-modal-approbate").show();
+		$('#order-modal').modal({backdrop:"static"});
+	}
+
+	function onApprobateSubmit(isAgree){	
+		$('#modal-is-agree').val(isAgree?"true":"false");
+		postSubmit("{:U('Order/approbateOrder')}",$("#modal-form").serialize(),"审批成功",null,$("#order-modal"),"");
+	}
 </script>

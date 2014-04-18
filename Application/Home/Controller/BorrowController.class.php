@@ -138,11 +138,13 @@ class BorrowController extends Controller {
 	public function returnBorrow(){
 		check_login();
 
-		$result = D('Borrow')->returnBorrow($_SESSION['user']['user_id'],$_REQUEST['borrow_id']);
-
 		if(get_privilege() != PRIRILEGE_PERSONNEL)
 			die('权限错误');
-		//die('sss');
+
+		$result = D('Borrow')->returnBorrow($_SESSION['user']['user_id'],$_REQUEST['borrow_id']);
+
+		if(!$result)
+			die('归还失败');
 		$this->ajaxReturn($result);
 	}
 
@@ -252,7 +254,8 @@ class BorrowController extends Controller {
 	 * AXAJ
 	 */
 	public function approbateBorrow(){
-		check_login('die');
+		check_login();
+		
 		if(get_privilege() != PRIRILEGE_PERSONNEL)
 			die('权限错误');
 

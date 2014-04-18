@@ -27,9 +27,9 @@
 							</div>
 						</div>
 						<div class="col-sm-12 form-div">
-							<div class="form-label">申请时间</div>
+							<div class="form-label">申请日期</div>
 							<div class="input-group">
-								<input type="input" class="form-control" id="modal-datetime" readonly="" value="">
+								<input type="input" class="form-control" id="modal-date" readonly="" value="">
 								<span class="input-group-addon"></span>
 							</div>
 						</div>
@@ -41,14 +41,14 @@
 							</div>
 						</div>
 						<div class="col-sm-12 form-div">
-							<div class="form-label">加班原因</div>
+							<div class="form-label">订餐原因</div>
 							<div class="input-group">
 								<input class="form-control" id="modal-reason" type="text" name="reason" readonly>
 								<span class="input-group-addon"></span>
 							</div>
 						</div>
 						<div class="col-sm-6 form-div">
-							<div class="form-label">加班人数</div>
+							<div class="form-label">订餐人数</div>
 							<div class="input-group">
 								<input class="form-control" id="modal-number" type="text" name="number" readonly>
 								<span class="input-group-addon"></span>
@@ -89,7 +89,7 @@
 						</div>
 					</div>
 				</form>
-				<div class="alert alert-danger" style="margin-bottom: 0px;">
+				<div class="alert alert-danger" id="modal-alert" style="margin-bottom: 0px;">
 				</div>
 			</div>
 			<div class="modal-footer" style="margin-top: auto;">
@@ -112,7 +112,7 @@
 		$("#order-modal .alert").removeClass("alert-success").addClass("alert-danger");
 
 		$("#modal-order-id").val(data.order_id);
-		$("#modal-datetime").val(data.datetime);
+		$("#modal-date").val(data.date);
 		$("#modal-place").val(data.place);
 		$("#modal-reason").val(data.reason);
 		$("#modal-number").val(data.number);
@@ -143,6 +143,6 @@
 	}
 
 	function onDeleteSubmit(){
-		postSubmit("{:U('Order/deleteOrder')}",$("#modal-form").serialize(),"删除成功",null,$("#order-modal"),"");	
+		modal_submit("{:U('Order/deleteOrder')}",$("#modal-form"),"删除成功",$("#modal-alert"));
 	}
 </script>

@@ -14,8 +14,8 @@ class OrderController extends Controller {
 	 * 个人中心——加班订餐
 	 * @param unknown_type $call
 	 */
-	public function home($call = null){
-		check_invoke($call);
+	public function home(){
+		check_login();
 		
 		//装载查询页面
 		$queryHtml = $this->homeQuery();
@@ -75,39 +75,20 @@ class OrderController extends Controller {
 	 * 个人中心——提交申请
 	 * AXAJ
 	 */
-	public function addOrder(){
-		check_login('die');
+	public function submitOrder(){
+		check_login();
 	
-		$result = D('Order')->addOrder(
+		$result = D('Order')->submitOrder(
 			$_SESSION['user']['user_id'],
-			time(),
+			$_REQUEST['order_id'],
+			date('Y-m-d'),
 			$_REQUEST['place'],
 			$_REQUEST['reason'],
 			$_REQUEST['number'],
 			$_REQUEST['standard']);
 
 		if($result == null)
-			die('失败');
-		$this->ajaxReturn($result);
-	}
-
-	/**
-	 * 个人中心——修改申请
-	 * AXAJ
-	 */
-	public function editOrder(){
-		check_login('die');
-
-		$result = D('Order')->editLeave(
-			$_SESSION['user']['user_id'],
-			$_REQUEST['order_id'],
-			$_REQUEST['place'],
-			$_REQUEST['reason'],
-			$_REQUEST['number'],
-			$_REQUEST['standard']);
-
-		if(!$result)
-			die('修改失败');
+			die('提交失败');
 		$this->ajaxReturn($result);
 	}
 
@@ -116,11 +97,16 @@ class OrderController extends Controller {
 	 * AXAJ
 	 */
 	public function deleteOrder(){
-		$result = D('Order')->deleteLeave($_SESSION['user']['user_id'],$_REQUEST['order_id']);
+		check_login();
+
+		$result = D('Order')->deleteOrder(
+			$_SESSION['user']['user_id'],
+			$_REQUEST['order_id'],
+			get_privilege()==PRIRILEGE_ADMIN);
 
 		if(!$result)
 			die('删除失败');
-		$this->ajaxReturn(array());
+		$this->ajaxReturn($result);
 	}
 
 
@@ -129,8 +115,8 @@ class OrderController extends Controller {
 	 * 审批管理——加班订餐
 	 * @param unknown_type $call
 	 */
-	public function manage($call = null){
-				check_invoke($call);
+	public function manage(){
+		check_login();
 		
 		$privilege = get_privilege();
 		//装载查询页面
@@ -163,7 +149,7 @@ class OrderController extends Controller {
 
 		$this->assign('departmentList',$departmentList);
 		$this->assign('userList',$userList);
-		$this->assign('isBoss',$privilege == PRIRILEGE_BOSS);
+		$this->assign('privilege',$privilege);
 
 		if(!isset($_REQUEST['department']))
 			$_REQUEST['department'] = 0;
@@ -215,7 +201,8 @@ class OrderController extends Controller {
 	 * AXAJ
 	 */
 	public function approbateOrder(){
-		check_login('die');
+		check_login();
+
 		if(get_privilege() != PRIRILEGE_BOSS)
 			die('权限错误');
 
