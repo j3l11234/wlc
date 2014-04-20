@@ -4,6 +4,7 @@ use Think\Controller;
 
 class UserController extends Controller {
    	public function login(){
+   		$this->assign('login' ,true);
 		$this->display();
     }
 	   

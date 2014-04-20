@@ -1,0 +1,111 @@
+.navbar-inverse {
+	background-color: rgba(34, 34, 34, 0.80);
+	border-color: none;
+}
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
+	color: #fff;
+	background-color: rgba(8, 8, 8, 0.30);
+}
+
+/* ====================================== */
+.list-group-item {
+	background-color: rgba(255, 255, 255, 0.3);
+}
+a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.active:focus {
+background-color: rgba(66, 139, 202, 0.63);
+border: none;
+}
+
+
+/* ====================================== */
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+border-top: 1px solid rgba(117, 117, 117, 0.60);
+}
+.table > thead > tr > th {
+vertical-align: bottom;
+border-bottom: 2px solid rgba(117, 117, 117, 0.60);
+}
+.table-hover > tbody > tr:hover > td, .table-hover > tbody > tr:hover > th {
+background-color: rgba(200, 200, 200, 0.5);
+}
+
+
+/* ====================================== */
+.panel {
+	background-color: rgba(255, 255, 255, 0.50);
+}
+
+.panel-primary {
+	border: none;
+}
+
+.panel-primary > .panel-heading {
+	background-color: rgba(66, 139, 202, 0.60);
+	border: none;
+}
+
+.panel-info {
+	border: none;
+}
+.panel-info > .panel-heading {
+	background-color: rgba(217, 237, 247, 0.60);
+	border: none;
+}
+
+.panel-success {
+	border: none;
+}
+.panel-success > .panel-heading {
+	background-color: rgba(223, 240, 216, 0.60);
+	border: none;
+}
+
+
+/* ====================================== */
+.alert-danger {
+	background-color: rgba(242, 222, 222, 0.66);
+	border: none;
+}
+
+
+/* ====================================== */
+.has-switch label {
+	background: rgba(255, 255, 255, 0.5);
+}
+
+/* ====================================== */
+.dropdown-menu {
+	background-color: rgba(255, 255, 255, 0.50);
+}
+
+
+/* ====================================== */
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+	background-color: rgba(66, 139, 202, 0.6);
+	border: none;
+}
+
+.pagination > li > a:hover, .pagination > li > span:hover, .pagination > li > a:focus, .pagination > li > span:focus {
+background-color: rgba(238, 238, 238, 0.5);
+border: none;
+}
+
+.pagination > li > a, .pagination > li > span {
+background-color: rgba(255, 255, 255, 0.5);
+border: none;
+}
+
+.pagination > .disabled > span, .pagination > .disabled > span:hover, .pagination > .disabled > span:focus, .pagination > .disabled > a, .pagination > .disabled > a:hover, .pagination > .disabled > a:focus {
+background-color: rgba(255, 255, 255, 0.5);
+border: none;
+}
+
+/* ====================================== */
+.form-control {
+background-color: rgba(255, 255, 255, 0.60);
+}
+
+/* ====================================== */
+#footer {
+background-color: rgba(245, 245, 245, 0.35);
+}

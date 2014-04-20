@@ -176,13 +176,7 @@ class ExtraController extends Controller {
 			$_REQUEST['start_date'] = '';
 		if(!isset($_REQUEST['end_date']))
 			$_REQUEST['end_date'] = '';
-		$check_status= 0;
-		$report = 0;
-		if(isset($_REQUEST['status'])){
-			if($_REQUEST['status'] >= 0 && $_REQUEST['status'] <= 3)
-				$check_status = $_REQUEST['status'];
-			}
-		}else
+		if(!isset($_REQUEST['status']))
 			$_REQUEST['status'] = 0;
 		if(!isset($_REQUEST['order']))
 			$_REQUEST['order'] = 0;
@@ -199,8 +193,7 @@ class ExtraController extends Controller {
 			$_REQUEST['user'], 
 			$_REQUEST['start_date'], 
 			$_REQUEST['end_date'],
-			$check_status, 
-			$report,
+			$_REQUEST['status'], 
 			$_REQUEST['order'],
 			$_REQUEST['p'],
 			$_REQUEST['per_page']);

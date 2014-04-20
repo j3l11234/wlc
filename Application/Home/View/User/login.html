@@ -1,152 +1,41 @@
 <include file="./Application/Home/View/header.html" /> 
 
-<style>
+<div class="login">
+	<div class="login-screen">
+		<div class="login-icon">
+			<img src="__PUBLIC__/images/login/icon.png" alt="Welcome to Mail App">
+			<h4>欢迎使用<br/><small style="color: #ffffff;">外联处管理系统</small></h4>
+		</div>
 
-.login {
-background: url(__PUBLIC__/images/login/imac.png) 0 0 no-repeat;
-background-size: 940px 778px;
-color: #ffffff;
-margin-bottom: 77px;
-padding: 38px 38px 267px;
-position: relative;
-}
+		<form class="login-form" id="loginform">
+			<div class="form-group">
+				<input type="text" class="form-control login-field" value="" placeholder="工号" name="username" id="login-name">					
+				<label class="login-field-icon fui-user glyphicon glyphicon-user" for="login-name"></label>
+			</div>
 
-.login-screen {
-background-color: #1abc9c;
-min-height: 473px;
-padding: 123px 199px 33px 306px;
-}
+			<div class="form-group">
+				<input type="password" class="form-control login-field" value="" placeholder="密码" name="password" id="login-pass">
+				<label class="login-field-icon fui-lock glyphicon glyphicon-lock"  for="login-pass"></label>
+			</div>
+			<h2 style="color: #F00; font-size: 15px" id="tooltip"></h2>
+			<a class="btn btn-primary btn-lg btn-block" style="background-image:none;" onclick="login()" >登录</a>	
+		</form>
+	</div>
+</div>  
 
-.login-icon {
-left: 200px;
-position: absolute;
-top: 160px;
-width: 96px;
-}
-
-.login-icon > img {
-display: block;
-margin-bottom: 6px;
-width: 100%;
-}
-
-.login-form {
-background-color: #edeff1;
-padding: 24px 23px 20px;
-position: relative;
-border-radius: 6px;
-}
-
-.form-group {
-position: relative;
-margin-bottom: 20px;
-}
-
-.login-form .login-field {
-border-color: transparent;
-font-size: 17px;
-text-indent: 3px;
-}
-.form-control {
-border: 2px solid #bdc3c7;
-color: #34495e;
-font-family: "Lato", Helvetica, Arial, sans-serif;
-font-size: 15px;
-line-height: 1.467;
-padding: 8px 12px;
-height: 42px;
--webkit-appearance: none;
-border-radius: 6px;
--webkit-box-shadow: none;
-box-shadow: none;
--webkit-transition: border .25s linear, color .25s linear, background-color .25s linear;
-transition: border .25s linear, color .25s linear, background-color .25s linear;
-}
-
-.login-form .login-field:focus {
-border-color: #1abc9c;
-}
-
-.form-group.focus .form-control, .form-control:focus {
-border-color: #1abc9c;
-outline: 0;
--webkit-box-shadow: none;
-box-shadow: none;
-}
-
-.btn-block {
-white-space: normal;
-}
-.btn-lg {
-padding: 10px 19px;
-font-size: 17px;
-line-height: 1.471;
-border-radius: 6px;
-}
-.btn-primary {
-color: #ffffff;
-background-color: #1abc9c;
-}
-.btn {
-border: none;
-font-size: 15px;
-font-weight: normal;
-line-height: 1.4;
-border-radius: 4px;
-padding: 10px 15px;
--webkit-font-smoothing: subpixel-antialiased;
--webkit-transition: border .25s linear, color .25s linear, background-color .25s linear;
-transition: border .25s linear, color .25s linear, background-color .25s linear;
-}
-.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
-color: #ffffff;
-background-color: #48c9b0;
-border-color: #48c9b0;
-}
-.btn:hover, .btn:focus {
-outline: none;
-color: #ffffff;
-}
-.login-icon > h4 {
-font-size: 17px;
-font-weight: 300;
-line-height: 34px;
-opacity: 0.95;
-filter: alpha(opacity=95);
-}
-
-
-.login-form .glyphicon {
-color: #bfc9ca;
-font-size: 16px;
-position: absolute;
-right: 15px;
-top: 13px;
--webkit-transition: 0.25s;
-transition: 0.25s;
-}
-
-.login-form .login-field:focus + .glyphicon {
-color: #1abc9c;
-}
-
-</style>
 <script type="text/javascript">
-
 var doLogin = false;
 
 function login() {
 	if(doLogin)
 		return false;
 	doLogin = true;
-	var username = $("#login-name").text();
-	var password = $("#login-pass").text();
 	$.post('{:U('chklogin')}', $("#loginform").serialize(), function(result) {
 		doLogin = false;
 		if(result == 'ok')
 			document.location.href = '{:U('Index/index')}';
 		else {
-			$('#tooltip').html(result);
+			$('#tooltip').text(result);
 			$('#tooltip').animate({textIndent:10}, 100)
 							.animate({textIndent:0}, 100)
 							.animate({textIndent:10}, 100)
@@ -166,33 +55,4 @@ document.onkeydown = function(evt){
 }
 </script>
 
-  <div class="row">
-    <div class="col-md-12">
-      <div class="login"style="width: 940px;height: 778px;margin-left: auto;margin-right: auto;">
-        <div class="login-screen">
-          <div class="login-icon">
-            <img src="__PUBLIC__/images/login/icon.png" alt="Welcome to Mail App">
-            <h4>欢迎使用<br/><small style="color: #ffffff;">外联处管理系统</small></h4>
-          </div>         
-          <div class="login-form" id="login-form">
-          	<form method="post" id="loginform" onsubmit="">
-	            <div class="form-group">
-	              <input type="text" class="form-control login-field" value="" placeholder="工号" name="username" id="login-name">
-	              <span class="glyphicon glyphicon-user"/>
-	            </div>
-	            <div class="form-group">
-	              <input type="password" class="form-control login-field" value="" placeholder="密码" name="password" id="login-pass">
-	              <span class="glyphicon glyphicon-lock"/>
-	            </div>
-	            <h2 style="color: #F00; font-size: 15px" id="tooltip"></h2>
-				
-	            <a class="btn btn-primary btn-lg btn-block" onclick="login()" style="background-image:none;">登录</a>
-	
-	          </form>
-          </div>
-        </div>
-      </div><!-- /login -->
-    </div>
-  </div>   
-  
-  <include file="./Application/Home/View/footer.html" />
+<include file="./Application/Home/View/footer.html" />
