@@ -202,7 +202,7 @@
             .animate({textIndent:10}, 100).animate({textIndent:0}, 100, 
             function(){
              if(success)
-                location.reload();
+                window.location.href=window.location.href;
             });      
         }
       }
@@ -263,7 +263,7 @@
           .animate({textIndent:10}, 100).animate({textIndent:0}, 100, 
             function(){
               if(reload)
-                location.reload();
+                window.location.href=window.location.href;
             });
       }
 

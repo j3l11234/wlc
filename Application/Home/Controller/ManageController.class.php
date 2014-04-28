@@ -16,25 +16,12 @@ class ManageController extends Controller {
 	 */
 	public function index(){
 		check_privilege();
-		/*
-		//检查是否签到
-		if(D('Attendance')->chkAttendance($_SESSION['user']['user_id'])){
-			$attendanceTplName='./Application/Home/View/Attendance/attendance_widget_done.html';
-			//加载最近签到记录
-			$Attendance = new AttendanceController();
-			$records = D('Attendance')->getRecentRecord($_SESSION['user']['user_id']);
-			$table = $Attendance->displayRecord($records);
-			$this->assign('table',$table);
-		}
-		else
-			$attendanceTplName='./Application/Home/View/Attendance/attendance_widget_not.html';
-		$this->assign('attendanceTplName',$attendanceTplName);
-		 */
-		$htmlContent = $this->fetch('Main/index');
+
+		$htmlContent = $this->fetch('Manage/index');
 		$this->assign('htmlContent',$htmlContent);
 		
 		$this->assign('navbar_item','navbar-manage');
-		$this->assign('sidebar_item','sidebar-home');
+		$this->assign('sidebar_item','sidebar-index');
 		
 		$this->display('template');
 	}

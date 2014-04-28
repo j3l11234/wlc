@@ -24,8 +24,7 @@ class ExtraModel extends Model {
 		
 		$where = array(
 			'wlc_extra.user_id'		=>	$user_id,
-			'start_date'			=>	array('egt',$startDate),
-			'end_date'				=>	array('elt',$endDate),
+			'date'					=>	array('between',array($startDate,$endDate)),
 		);
 		
 		if($checkStatus >= 1 && $checkStatus <= 3)
@@ -143,8 +142,7 @@ class ExtraModel extends Model {
 			$end_date = '9999-12-31';
 
 		$where = array(
-			'start_date'	=>	array('egt',$start_date),
-			'end_date'		=>	array('elt',$end_date),
+			'date'	=>	array('between',array($start_date,$end_date)),
 			);
 		
 		if($department_id != 0)

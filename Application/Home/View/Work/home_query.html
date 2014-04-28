@@ -31,7 +31,7 @@
 					<div class="col-lg-4 col-sm-6 form-div">
 						<div class="form-label">审批情况</div>
 						<div class="input-group">
-							<select name="check_status" class="selectpicker">
+							<select name="status" class="selectpicker">
 								<option value="0">全部</option>
 								<option value="1">不能填写</option>
 								<option value="2">允许填写</option>
@@ -93,9 +93,6 @@
 								<case value="4">
 									<button type="button" class="btn btn-xs btn-success">已经审阅</button>
 								</case>
-								<case value="5">
-									<button type="button" class="btn btn-xs btn-success">已经存档</button>
-								</case>
 							</switch>
 						</td>
 						<td style="text-align: right;">
@@ -136,7 +133,7 @@
 
 		//===控件初始化===
 		//状态筛选
-		$("select[name='check_status'] option[value='{$condition['check_status']}']").attr("selected", "selected");
+		$("select[name='status'] option[value='{$condition['status']}']").attr("selected", "selected");
 		$('.selectpicker').selectpicker('refresh');
 		//编辑开关
 		if(getCookie('switch-edit') == 1){

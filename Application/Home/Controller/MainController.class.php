@@ -30,7 +30,7 @@ class MainController extends Controller {
 		$this->assign('htmlContent',$htmlContent);
 		
 		$this->assign('navbar_item','navbar-main');
-		$this->assign('sidebar_item','sidebar-home');
+		$this->assign('sidebar_item','sidebar-index');
 		$this->display('template');
 	}
 
