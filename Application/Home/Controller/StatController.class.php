@@ -4,16 +4,21 @@ namespace Home\Controller;
 use Think\Controller;
 
 class StatController extends Controller {
-	public function home(){
-		check_login();
-		$privilege = get_privilege();
-		if ($privilege == PRIRILEGE_ADMIN or privilege == PRIRILEGE_ADMIN)
-			$this->display();
-		elseif($privilege == PRIRILEGE_MINISTER)
-			$this->display();
-		else
-			$this->error('您没有权限', U('Index/home'));
+	/**
+	 * 统计管理主页
+	 */
+	public function index(){
+		check_privilege();
+
+		$htmlContent = $this->fetch('Stat/index');
+		$this->assign('htmlContent',$htmlContent);
+		
+		$this->assign('navbar_item','navbar-stat');
+		$this->assign('sidebar_item','sidebar-home');
+		
+		$this->display('template');
 	}
+
 	
 	public function attend(){
 		check_login();

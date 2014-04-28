@@ -9,7 +9,7 @@
     
     <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
 
-    <title>外联处管理系统</title>
+    <title>外联处管理系统 beta</title>
 
     <!-- Bootstrap core CSS -->
     <link href="__PUBLIC__/bootstrap/css/bootstrap.css" rel="stylesheet">
@@ -85,7 +85,7 @@
           <ul class="nav navbar-nav">
             <li class="{:getIsActive('navbar-main',$navbar_item)}"><a href="{:U('Main/index')}">个人中心</a></li>
             <li class="{:getIsActive('navbar-manage',$navbar_item)}"><a href="{:U('Manage/index')}">审批管理</a></li>
-            <li id="navbar-stat"><a href="{:U('Stat/home')}">数据统计</a></li>
+            <li class="{:getIsActive('navbar-stat',$navbar_item)}"><a href="{:U('Stat/index')}">数据统计</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">消息 <b class="caret"></b></a>
               <ul class="dropdown-menu">
