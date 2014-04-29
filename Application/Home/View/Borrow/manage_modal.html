@@ -33,24 +33,10 @@
 								<span class="input-group-addon"></span>
 							</div>
 						</div>
-						<div class="col-sm-6 form-div">
-							<div class="form-label">物品名称</div>
+						<div class="col-sm-12 form-div">
+							<div class="form-label">借用物品</div>
 							<div class="input-group">
-								<input type="input" class="form-control" id="modal-goods-name" readonly="">
-								<span class="input-group-addon"></span>
-							</div>
-						</div>
-						<div class="col-sm-6 form-div">
-							<div class="form-label">物品配件</div>
-							<div class="input-group">
-								<input type="input" class="form-control" id="modal-goods-parts" readonly="">
-								<span class="input-group-addon"></span>
-							</div>
-						</div>
-						<div class="col-sm-6 form-div">
-							<div class="form-label">物品数量</div>
-							<div class="input-group">
-								<input type="input" class="form-control" id="modal-goods-number" readonly="">
+								<input type="input" class="form-control" id="modal-goods"readonly>
 								<span class="input-group-addon"></span>
 							</div>
 						</div>
@@ -132,9 +118,7 @@
 		$("#modal-start-date").val(data.start_date);
 		$("#modal-end-date").val(data.end_date);
 		$("#modal-reason").val(data.reason);
-		$("#modal-goods-name").val(data.goods_name);
-		$("#modal-goods-parts").val(data.goods_parts);
-		$("#modal-goods-number").val(data.goods_number);	
+		$("#modal-goods").val(data.goods_sn+" "+data.goods_name+" "+data.goods_parts);
 
 		$("#modal-check-datetime").val(data.check_datetime);
 		$("#modal-check-status"+data.check_status).show();

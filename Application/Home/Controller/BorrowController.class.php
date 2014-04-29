@@ -26,6 +26,8 @@ class BorrowController extends Controller {
 		$this->assign('modalHtml' ,$modalHtml);
 
 		//装载提交页
+		$goodsList = D('Borrow')->getGoodsList();
+		$this->assign('goodsList' ,$goodsList);
 		$addHtml = $this->fetch('Borrow/home_add');
 		$this->assign('addHtml' ,$addHtml);
 		
@@ -101,10 +103,7 @@ class BorrowController extends Controller {
 			$_REQUEST['borrow_id'],
 			date('Y-m-d'),
 			$_REQUEST['start_date'],
-			$_REQUEST['end_date'],
-			$_REQUEST['goods_name'],
-			$_REQUEST['goods_parts'],
-			$_REQUEST['goods_number'],
+			$_REQUEST['goods_id'],
 			$_REQUEST['reason']);
 
 		if($result == null)
@@ -141,7 +140,7 @@ class BorrowController extends Controller {
 		if(get_privilege() != PRIRILEGE_PERSONNEL)
 			die('权限错误');
 
-		$result = D('Borrow')->returnBorrow($_SESSION['user']['user_id'],$_REQUEST['borrow_id']);
+		$result = D('Borrow')->returnBorrow($_SESSION['user']['user_id'],$_REQUEST['borrow_id'],date('Y-m-d'));
 
 		if(!$result)
 			die('归还失败');

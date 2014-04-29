@@ -36,26 +36,25 @@
 						<div class="col-sm-12 form-div">
 							<hr style="margin: 5px auto;">
 						</div>
-						<div class="col-sm-12">
-							<div class="table-responsive">
-								<table class="table table-condensed">
-									<thead>
-										<tr>
-											<th width="50%">工作计划</th>
-											<th width="50%">工作完成情况</th>
-										</tr>
-									</thead>
-									<tbody id="modal-workplan-list">
-									</tbody>
-								</table>
+						<div class="col-sm-12 form-div">
+							<div class="form-label">计划</div>
+							<div class="textarea">
+							<textarea type="" class="form-control" id="modal-workplan"  style="min-height:80px;" readonly=""> </textarea>
 							</div>
-						</div>
+						</div>	
 						<div class="col-sm-12 form-div">
 							<div class="form-label">总结</div>
 							<div class="textarea">
-							<textarea type="" class="form-control" id="modal-summary" name="summary" style="min-height:100px;" readonly=""> </textarea>
+							<textarea type="" class="form-control" id="modal-summary"  style="min-height:80px;" readonly=""> </textarea>
 							</div>
 						</div>
+						<div class="col-sm-12 form-div">
+							<div class="form-label">备注</div>
+							<div class="textarea">
+							<textarea type="" class="form-control" id="modal-comment"  style="min-height:80px;" readonly=""> </textarea>
+							</div>
+						</div>
+
 						<div class="col-sm-6 form-div">
 							<div class="form-label">审批时间</div>
 							<div class="input-group">
@@ -105,26 +104,15 @@
 
 		$("#modal-work-id").val(data.work_id);
 		$("#modal-date").val(data.date);
+		$("#modal-workplan").val(data.workplan);
 		$("#modal-summary").val(data.summary);
+		$("#modal-comment").val(data.comment);
+
 
 		$(".btn-status"+data.status).show();
 		$("#modal-check-datetime").val(data.check_datetime);
 		$("#modal-check-comment").val(data.check_comment);
 		$("#modal-checker").text(data.checker!=null && data.status==4? "by "+data.checker : "").show();
-		
-		$("#modal-workplan-list").children().remove();
-		try{
-			workplanList = JSON.parse(data.workplan);
-			workplan_trList = new Array();
-			for (var i = 0; i < workplanList.length; i++){
-				var object_tr = $(document.createElement("tr"));
-				object_tr.append('<td style="white-space:normal;">' + workplanList[i].detail + "</td>");
-				object_tr.append("<td>" + (workplanList[i].finish?"已完成":("未完成"+"<br>原因:"+workplanList[i].reason)) + "</td>");
-				workplan_trList.push(object_tr);
-			}
-			$("#modal-workplan-list").append(workplan_trList);
-		}catch(err){}
-
 	}
 
 	//查看申请
@@ -134,20 +122,5 @@
 		$("#work-modal .modal-title").text("查看申请");
 		$(".btn-modal-view").show();
 		$('#work-modal').modal({backdrop:"static"});
-	}
-
-	//删除借用申请
-	function deleteWork(data){
-		reset(data);
-
-		$("#work-modal .modal-title").text("删除申请");
-		$(".btn-modal-delete").show();
-		$("#work-modal .alert").text("您确定要删除该条记录吗？");
-		$("#work-modal .alert").show();
-		$('#work-modal').modal({backdrop:"static"});
-	}
-
-	function onDeleteSubmit(){
-		postSubmit("{:U('Work/deleteWork')}",$("#modal-form").serialize(),"删除成功",null,$("#work-modal"),"");
 	}
 </script>
