@@ -34,33 +34,29 @@
 				<div class="col-sm-12 form-div">
 					<hr style="margin: 5px auto;">
 				</div>
-				<div class="col-sm-12">
-					<div class="table-responsive">
-						<input type="hidden" id="append-workplan" name="workplan">
-						<table class="table table-condensed">
-							<thead>
-								<tr>
-									<th width="50%">工作计划</th>
-									<th width="50%">工作完成情况</th>
-								</tr>
-							</thead>
-							<tbody id="workplan-list">
-							</tbody>
-						</table>
+				<div class="col-sm-12 form-div">
+					<div class="form-label">计划</div>
+					<div class="textarea">
+					<textarea type="" class="form-control" id="append-workplan" name="workplan" style="min-height:100px;"> </textarea>
 					</div>
-					<button type="button" class="btn btn-success center-block" onclick="addWorkplan(null)">添加工作计划</button>
-				</div>
+				</div>	
 				<div class="col-sm-12 form-div">
 					<div class="form-label">总结</div>
 					<div class="textarea">
 					<textarea type="" class="form-control" id="append-summary" name="summary" style="min-height:100px;"> </textarea>
 					</div>
-				</div>	
+				</div>
+				<div class="col-sm-12 form-div">
+					<div class="form-label">备注</div>
+					<div class="textarea">
+					<textarea type="" class="form-control" id="append-comment" name="comment" style="min-height:100px;"> </textarea>
+					</div>
+				</div>
 			</div>
 			<div class="row">
 				<div class="col-sm-12 form-div" style="text-align: center;">
 					<br>
-					<button style="min-width:150px;width:30%;" type="button" id="append-submit" data-loading-text="提交中。。" class="btn btn-success">
+					<button style="min-width:150px;width:30%;" type="button" id="append-submit" data-loading-text="提交中。。" onclick="onEditSubmit()" class="btn btn-success">
 					提交
 					</button>
 				</div>	
@@ -69,22 +65,6 @@
 	</div>
 </div>
 
-<table style="display: none;">
-	<tr id="new-workplan" style="display: none;">
-		<td>
-			<textarea type="" class="form-control workplan-detail" style="min-height:80px;white-space:normal;"></textarea>
-		</td>
-		<td>
-			<div style="margin-bottom: 10px;">
-				<input type="checkbox" class="workplan-finish" data-on="success" data-on-label="已完成" data-off="danger" data-off-label="未完成" />
-			</div>					
-			<input type="input"  class="form-control workplan-reason" placeholder="未完成原因">
-		</td>
-		<td>
-			<button type="button" class="btn btn-xs btn-danger" onclick="deleteWorkPlan(this)" style="float:right;">删除</button>
-		</td>
-	</tr>
-</table>
 
 <script type="text/javascript">
 	var workplanList;
@@ -95,23 +75,15 @@
 	
 	//填写工作计划
 	function editWork(data){
-		$("#append-submit").unbind();
-		$("#append-submit").click(function(){onEditSubmit('edit');});
 
 		//setApplyFormEnable(true);
 		$("#append-panel-title").text("填写工作计划");
 		$("#append-work-id").val(data.work_id);
 		$("#append-date").val(data.date);
-		$("#append-summary").val(data.summary);
 
-		$("#workplan-list").children().remove();
-		try{
-			var workplanList = JSON.parse(data.workplan);
-			for (var i = 0; i < workplanList.length; i++){
-				addWorkplan(workplanList[i]);
-			}
-		}
-		catch(err){}
+		$("#append-workplan").val(data.workplan);
+		$("#append-summary").val(data.summary);
+		$("#append-comment").val(data.comment);	
 
 		$("#append-panel").show();
 		$.scrollTo($("#append-panel").offset().top-60,300);
@@ -120,105 +92,6 @@
 
 
 	function onEditSubmit(){
-
-		var workplan_trlList = $("#workplan-list").children();
-		var workplanList = new Array();
-		for (var i = 0; i < workplan_trlList.length; i++){
-			var workplan_tr = $(workplan_trlList[i]);
-
-			var workplan = new Object();
-			workplan.detail = workplan_tr.find(".workplan-detail").val();
-			workplan.finish = workplan_tr.find(".workplan-finish").is(':checked');
-			workplan.reason = workplan_tr.find(".workplan-reason").val();
-			workplanList.push(workplan);
-		}
-
-		$("#append-workplan").val(JSON.stringify(workplanList));
-
-		postSubmit("{:U('Work/editWork')}",$("#append-form").serialize(),"填写成功",$('#append-submit'),null,"提交结果");
-	}
-
-	function summarizeWork(data){
-		
-		$("#append-submit").unbind();
-		$("#append-submit").click(function(){onSummarizeSubmit('edit');});
-
-		setApplyFormEnable(false);
-		$("#append-summary-div").show();
-		$("#append-panel .panel-title").text("出差总结");
-		$("#append-work-id").val(data.work_id);
-		$("#append-date").val(data.date);
-		$("#append-start-date").val(data.start_date);
-		$("#append-end-date").val(data.end_date);
-		$("#append-place").val(data.place);
-		$("#append-reason").val(data.reason);
-		$("#append-cost").val(data.cost);
-		$("#append-summary").val(data.summary);
-
-
-	
-
-		$("#append-panel").show();
-		$.scrollTo($("#append-panel").offset().top-60,300);
-	}
-
-	function onSummarizeSubmit(){
-		if($("#append-summary").val().length < 3){
-			showModalResult(false,"提示","请填写出差总结",false);
-			return;
-		}
-		if($("#append-cost").val() == ''){
-			showModalResult(false,"提示","请填写报销金额",false);
-			return;
-		}
-
-		var workplanList_trList = $('#append-workplan-tbody').children();
-		var workplanList = new Array();
-		for (var i = 0; i < workplanList_trList.length-1; i++) {
-			var workplan_tdList = $(workplanList_trList[i]).children();
-			workplan = new Object();
-			workplan.name = $(workplan_tdList[0]).text();
-			workplan.sex = $(workplan_tdList[1]).text();
-			workplan.department = $(workplan_tdList[2]).text();
-			workplan.position = $(workplan_tdList[3]).text();
-			workplan.contact = $(workplan_tdList[4]).text();
-			workplan.alumni = $(workplan_tdList[5]).text();
-			workplanList.push(workplan);
-		};
-		$("#append-workplan").val(JSON.stringify(workplanList));
-		postSubmit("{:U('Work/summarizeWork')}",$("#append-form").serialize(),"提交成功",$('#append-submit'),null,"提交结果");
-	}
-
-	function addWorkplan(data){
-		var new_workplan = $("#new-workplan").clone(true);
-		new_workplan.removeAttr("id");
-		new_workplan.addClass("workplan");
-
-		new_workplan.find(".workplan-finish").bootstrapSwitch();
-		new_workplan.find(".workplan-finish").on('switch-change', function (e, data){
-			if(data.value){
-				$(e.target).parents(".workplan").find(".workplan-reason").fadeOut("fast");
-			}
-			else{
-				$(e.target).parents(".workplan").find(".workplan-reason").fadeIn("fast");
-			}		
-		});
-
-		$("#workplan-list").append(new_workplan);
-		new_workplan.fadeIn("fast");
-
-		if(data != null){
-			new_workplan.find(".workplan-detail").val(data.detail);
-			new_workplan.find(".workplan-reason").val(data.reason);
-			new_workplan.find(".workplan-finish").bootstrapSwitch('setState', data.finish);
-		}else{		
-			$.scrollTo(new_workplan.offset().top-60,300);
-		}
-	}
-
-	function deleteWorkPlan(button){
-		var workplan = $(button).parent().parent();
-		workplan.fadeOut("fast",function(){workplan.remove();});
-		
+		append_submit("{:U('Work/editWork')}",$("#append-form"),"提交结果","提交成功");
 	}
 </script>

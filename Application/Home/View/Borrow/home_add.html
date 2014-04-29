@@ -31,38 +31,35 @@
 						<span class="input-group-addon"></span>
 					</div>
 				</div>
-				<div class="col-lg-4 col-sm-6 form-div">
-					<div class="form-label">物品名称</div>
-					<div class="input-group">
-						<input type="input"  class="form-control" id="append-goods-name" name="goods_name">
-						<span class="input-group-addon"></span>
-					</div>
+				<div class="col-sm-12 form-div table-responsive">
+					<table class="table table-condensed table-hover">
+						<thead>
+							<tr>
+								<th></th>
+								<th>编号</th>
+								<th>设备名称</th>
+								<th>设备配件</th>
+							</tr>
+						</thead>
+						<tbody> 
+						<foreach name="goodsList" item="goods">
+							<tr>
+								<td>
+									<input type="radio" name="goods_id" id="append-goods{$goods['goods_id']}" value="{$goods['goods_id']}" checked>
+								</td>
+								<td>{$goods['goods_sn']}</td>
+								<td>{$goods['goods_name']}</td>
+								<td>{$goods['goods_parts']}</td>
+							</tr>
+						</foreach>
+						</tbody>
+					</table>
 				</div>
-				<div class="col-lg-4 col-sm-6 form-div">
-					<div class="form-label">物品配件</div>
-					<div class="input-group">
-						<input type="input"  class="form-control" id="append-goods-parts" name="goods_parts">
-						<span class="input-group-addon"></span>
-					</div>
-				</div>
-				<div class="col-lg-4 col-sm-6 form-div">
-					<div class="form-label">物品数量</div>
-					<div class="input-group">
-						<input type="input"  class="form-control" id="append-goods-number" name="goods_number">
-						<span class="input-group-addon"></span>
-					</div>
-				</div>
+
 				<div class="col-sm-6 form-div">
 					<div class="form-label">借出日期</div>
 					<div class="input-group date form_date"  data-date-format="yyyy-mm-dd">	
 						<input class="form-control" type="text" id="append-start-date" name="start_date" readonly>
-						<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-					</div>
-				</div>
-				<div class="col-sm-6 form-div">
-					<div class="form-label">归还日期</div>
-					<div class="input-group date form_date" data-date-format="yyyy-mm-dd">
-						<input class="form-control" type="text" id="append-end-date" name="end_date" readonly>
 						<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 					</div>
 				</div>
@@ -102,17 +99,15 @@
 	
 	function addBorrow(){	
 		$("#append-submit").unbind();
-		$("#append-submit").click(function(){onAdd_EditSubmit('add');});
+		$("#append-submit").click(function(){onSubmit('add');});
 
 		$("#append-panel .panel-title").text("提交申请");
 		$("#append-borrow-id").val("");
 		$("#append-date").val(new Date().format("yyyy-MM-dd"));
-		$("#append-goods-name").val("");
-		$("#append-goods-parts").val("");
-		$("#append-goods-number").val("");
 		$("#append-start-date").val("");
 		$("#append-end-date").val("");
 		$("#append-reason").val("");
+		$("#append-goods1").click();
 
 		$("#append-panel").show();
 		$.scrollTo($("#append-panel").offset().top-60,300);
@@ -121,18 +116,16 @@
 	//编辑签到申请
 	function editBorrow(data){
 		$("#append-submit").unbind();
-		$("#append-submit").click(function(){onAdd_EditSubmit('edit');});
+		$("#append-submit").click(function(){onSubmit('edit');});
 
 		$("#append-panel .panel-title").text("修改申请");
 		$("#append-borrow-id").val(data.borrow_id);
 		$("#append-date").val(data.date);
-		$("#append-goods-name").val(data.goods_name);
-		$("#append-goods-parts").val(data.goods_parts);
-		$("#append-goods-number").val(data.goods_number);
 		$("#append-start-date").val(data.start_date);
 		$("#append-end-date").val(data.end_date);
 		$("#append-reason").val(data.reason);
 
+		$("#append-goods"+data.goods_id).click();
 		$("#append-panel").show();
 		$.scrollTo($("#append-panel").offset().top-60,300);
 	}
@@ -153,7 +146,8 @@
 		if($("#append-reason").val().length < 3){
 			showModalResult(false,"提示","请请认真填写借用原因",false);
 			return;
-		}	 		
+		}
+
 		append_submit("{:U('Borrow/submitBorrow')}",$("#append-form"),"提交结果","提交成功");
 	}
 </script>

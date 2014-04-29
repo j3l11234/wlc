@@ -82,18 +82,51 @@
     <div style="white-space: nowrap; overflow-x: scroll;">
       <table class="table table-condensed table-hover">
         <thead>
-          <tr>
+          <tr> 
             <th>部门</th>
             <th>姓名</th>
-            <th>申请日期</th>
-            <th>借用时间</th>
-            <th>归还时间</th>
-            <th>物品名称</th>
-            <th>审批状态</th>
-            <th></th>
+            <th>迟到统计</th>
+            <th>加班统计</th>
+            <th>出差统计</th>
+            <th>请假统计</th>
+
           </tr>
         </thead>
-        <tbody>     
+        <tbody>                       
+            <tr>
+              <td>基金工作科</td>
+              <td>黄晨</td>
+              <td>n天n小时n分n秒</td>
+              <td>n天n小时n分n秒</td>
+              <td>n天n小时n分n秒</td>
+              <td>n天n小时n分n秒</td>
+            </tr>
+            <tr>
+              <td>基金工作科</td>
+              <td>武瑞琪</td>
+              <td>n天n小时n分n秒</td>
+              <td>n天n小时n分n秒</td>
+              <td>n天n小时n分n秒</td>
+              <td>n天n小时n分n秒</td>
+            </tr>
+            <tr>
+              <td>基金工作科</td>
+              <td>蒋圣</td>
+              <td>n天n小时n分n秒</td>
+              <td>n天n小时n分n秒</td>
+              <td>n天n小时n分n秒</td>
+              <td>n天n小时n分n秒</td>
+            </tr> 
+            <tr>
+              <td>基金工作科</td>
+              <td>许婧</td>
+              <td>n天n小时n分n秒</td>
+              <td>n天n小时n分n秒</td>
+              <td>n天n小时n分n秒</td>
+              <td>n天n小时n分n秒</td>
+            </tr>       
+          
+
           <foreach name="borrowList" item="record">
             {//判断是否需要立即归还}
           <if condition="($record['check_status'] eq 2) AND ($record['return'] eq 1)">

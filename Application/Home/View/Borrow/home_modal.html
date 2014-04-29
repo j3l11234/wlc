@@ -33,45 +33,31 @@
 								<span class="input-group-addon"></span>
 							</div>
 						</div>
-						<div class="col-sm-6 form-div">
-							<div class="form-label">物品名称</div>
+						<div class="col-sm-12 form-div">
+							<div class="form-label">借用物品</div>
 							<div class="input-group">
-								<input type="input" class="form-control" id="modal-goods-name" name="goods_name" readonly>
-								<span class="input-group-addon"></span>
-							</div>
-						</div>
-						<div class="col-sm-6 form-div">
-							<div class="form-label">物品配件</div>
-							<div class="input-group">
-								<input type="input" class="form-control" id="modal-goods-parts" name="goods_parts" readonly>
-								<span class="input-group-addon"></span>
-							</div>
-						</div>
-						<div class="col-sm-6 form-div">
-							<div class="form-label">物品数量</div>
-							<div class="input-group">
-								<input type="input" class="form-control" id="modal-goods-number" name="goods_number" readonly>
+								<input type="input" class="form-control" id="modal-goods"readonly>
 								<span class="input-group-addon"></span>
 							</div>
 						</div>
 						<div class="col-sm-6 form-div">
 							<div class="form-label">借出日期</div>
 							<div class="input-group date form_date"  data-date-format="yyyy-mm-dd">	
-								<input class="form-control" type="text" id="modal-start-date" name="start_date" readonly>
+								<input class="form-control" type="text" id="modal-start-date" readonly>
 								<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 							</div>
 						</div>
 						<div class="col-sm-6 form-div">
 							<div class="form-label">归还日期</div>
 							<div class="input-group date form_date" data-date-format="yyyy-mm-dd">
-								<input class="form-control" type="text" id="modal-end-date" name="end_date" readonly>
+								<input class="form-control" type="text" id="modal-end-date" readonly>
 								<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 							</div>
 						</div>
 						<div class="col-sm-12 form-div">
 							<div class="form-label">借用原因和具体用途</div>
 							<div class="textarea">
-							<textarea type="" class="form-control" id="modal-reason" name="reason" style="min-height:40px;" readonly> </textarea>
+							<textarea type="" class="form-control" id="modal-reason" style="min-height:40px;" readonly> </textarea>
 							</div>
 						</div>
 						<div class="col-sm-12 form-div">
@@ -129,9 +115,7 @@
 		$("#modal-start-date").val(data.start_date);
 		$("#modal-end-date").val(data.end_date);
 		$("#modal-reason").val(data.reason);
-		$("#modal-goods-name").val(data.goods_name);
-		$("#modal-goods-parts").val(data.goods_parts);
-		$("#modal-goods-number").val(data.goods_number);
+		$("#modal-goods").val(data.goods_sn+" "+data.goods_name+" "+data.goods_parts);
 
 		$("#modal-check-datetime").val(data.check_datetime);
 		$("#modal-check-status"+data.check_status).show();

@@ -18,7 +18,7 @@ class BorrowModel extends Model {
 	 * @param string $reason		借用原因
 	 * @return 修改失败null 否则返回数据条目
 	 */
-	public function submitBorrow($user_id,$borrow_id,$date,$start_date,$end_date,$goods_name,$goods_parts,$goods_number,$reason){
+	public function submitBorrow($user_id,$borrow_id,$date,$start_date,$goods_id,$reason){
 		if(empty($borrow_id)){ //新增记录
 			$data = array(
 				'user_id'		=>	$user_id,
@@ -40,9 +40,7 @@ class BorrowModel extends Model {
 
 		$data['start_date']		=	$start_date;
 		$data['end_date']		=	$end_date;
-		$data['goods_name']		=	$goods_name;
-		$data['goods_parts']	=	$goods_parts;
-		$data['goods_number']	=	$goods_number;
+		$data['goods_id']		=	$goods_id;
 		$data['reason']			=	$reason;
 
 		if(!$this->add($data,array(),true))
@@ -73,7 +71,7 @@ class BorrowModel extends Model {
 		$where = array(
 			'user_id'		=>	$user_id,
 			'start_date'	=>	array('egt',$start_date),
-			'end_date'		=>	array('elt',$end_date),
+			'end_date'		=>	array(array('elt',$end_date),array('exp',' is NULL'),"OR"),
 		);
 		
 		if($check_status >= 1 && $check_status <= 3)
@@ -85,7 +83,9 @@ class BorrowModel extends Model {
 		$count = $this->where($where)->count();
 
 		$this->where($where)->order('date desc')
-		->field('borrow_id,date,start_date,end_date,goods_name,goods_parts,goods_number,reason,check_status,check_datetime,check_comment,return');
+		->join('LEFT JOIN wlc_goods ON wlc_goods.goods_id = wlc_borrow.goods_id')
+		->field('borrow_id,date,start_date,end_date,wlc_borrow.goods_id,goods_sn,goods_name,goods_parts,reason,
+			check_status,check_datetime,check_comment,return');
 
 		if($per_page != 0)
 			$list = $this->page($page.','.$per_page)->select();
@@ -144,7 +144,7 @@ class BorrowModel extends Model {
 	 * @param int $borrow_id	申请条目id
 	 * @return 审批失败null 否则返回数据条目
 	 */
-	public function returnBorrow($user_id,$borrow_id){
+	public function returnBorrow($user_id,$borrow_id,$end_date){
 		//获取记录
 		$data = $this->where(array('borrow_id' => $borrow_id))->select()[0];
 		
@@ -152,6 +152,7 @@ class BorrowModel extends Model {
 			return null;
 
 		$data['return'] = 2;
+		$data['end_date'] = $end_date;
 
 		$this->save($data);
 
@@ -185,7 +186,7 @@ class BorrowModel extends Model {
 
 		$where = array(
 			'start_date'	=>	array('egt',$start_date),
-			'end_date'		=>	array('elt',$end_date),
+			'end_date'		=>	array(array('elt',$end_date),array('exp',' is NULL'),"OR"),
 			);
 
 		if($department_id != 0)
@@ -222,8 +223,10 @@ class BorrowModel extends Model {
 		$count = $this->where($where)->count(); 
 		//var_dump($where);
 		$this->join('RIGHT JOIN wlc_user ON wlc_user.user_id = wlc_borrow.user_id')
-		->join('LEFT JOIN wlc_department ON wlc_department.department_id = wlc_user.department_id');
-		$this->field('borrow_id,date,start_date,end_date,goods_name,goods_parts,goods_number,reason,check_status,check_datetime,check_comment,return,wlc_user.alias,department_name')
+		->join('LEFT JOIN wlc_department ON wlc_department.department_id = wlc_user.department_id')
+		->join('LEFT JOIN wlc_goods ON wlc_goods.goods_id = wlc_borrow.goods_id');
+		$this->field('borrow_id,date,start_date,end_date,wlc_borrow.goods_id,goods_sn,goods_name,goods_parts,reason,
+			check_status,check_datetime,check_comment,return,wlc_user.alias,department_name')
 		->where($where)->order($order);
 		//var_dump($count);
 		if($perPage != 0)
@@ -301,5 +304,11 @@ class BorrowModel extends Model {
 		}
 
 		return $count;
+	}
+
+	public function getGoodsList(){
+		$Goods = M('Goods');
+		$list = $Goods->select();
+		return $list;
 	}
 }
