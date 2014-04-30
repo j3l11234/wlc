@@ -82,7 +82,7 @@ class WorkModel extends Model {
 
 		$this->where($where)->order('date desc')
 		->join('LEFT JOIN wlc_user AS checker ON checker.user_id = wlc_work.checker_id')
-		->field('work_id,date,workplan,summary,status,
+		->field('work_id,date,workplan,summary,comment,status,
 			checker.alias AS checker,check_datetime,check_comment');
 
 		if($per_page != 0)
@@ -112,7 +112,7 @@ class WorkModel extends Model {
 	 * @param string $summary		总结
 	 * @return 修改失败null 否则返回数据条目
 	 */
-	public function editWork($user_id,$work_id,$workplan,$summary){
+	public function editWork($user_id,$work_id,$workplan,$summary,$comment){
 		//获取记录
 		$data = $this->where(array('work_id' => $work_id))->select()[0];
 		
@@ -129,6 +129,7 @@ class WorkModel extends Model {
 
 		$data['workplan']		=	$workplan;
 		$data['summary']		=	$summary;
+		$data['comment']		=	$comment;
 		$data['status']	= 3;
 
 		$this->save($data);
@@ -248,7 +249,7 @@ class WorkModel extends Model {
 		->join('LEFT JOIN wlc_department ON wlc_department.department_id = wlc_user.department_id')
 		->join('LEFT JOIN wlc_user AS checker ON checker.user_id = wlc_work.checker_id');
 		$this->field('department_name,wlc_user.alias,
-			work_id,wlc_work.user_id,date,workplan,summary,
+			work_id,wlc_work.user_id,date,workplan,summary,comment,
 			status,checker.alias AS checker,check_datetime,check_comment')
 		->where($where)->order($order);
 

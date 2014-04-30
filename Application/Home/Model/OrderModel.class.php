@@ -21,7 +21,7 @@ class OrderModel extends Model {
 			$data = array(
 				'user_id'		=>	$user_id,
 				'date'			=>	$date,
-				'check_status'	=>	1,
+				'check_status'	=>	2, //默认全部通过
 				'checker_id'	=>	D('User')->getChecker($user_id),
 			);
 		}else{//编辑记录
@@ -33,8 +33,8 @@ class OrderModel extends Model {
 			if($data['user_id'] != $user_id)
 				return null;
 			//只能编辑未审批的记录
-			if($data['check_status'] > 1)
-				return null;
+			//if($data['check_status'] > 1)
+			//	return null;
 		}	
 
 		$data['place']		=	$place;
@@ -115,8 +115,8 @@ class OrderModel extends Model {
 				return null;
 
 			//只能编删除未审批的记录
-			if($data['check_status'] != 1)
-				return null;
+			//if($data['check_status'] != 1)
+			//	return null;
 		}		
 
 		$this->where(array('order_id' => $order_id))->delete();

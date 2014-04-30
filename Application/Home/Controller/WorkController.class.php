@@ -86,7 +86,8 @@ class WorkController extends Controller {
 			$_SESSION['user']['user_id'],
 			$_REQUEST['work_id'],
 			$_REQUEST['workplan'],
-			$_REQUEST['summary']);
+			$_REQUEST['summary'],
+			$_REQUEST['comment']);
 
 
 		if(!$result)
