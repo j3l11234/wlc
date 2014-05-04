@@ -10,21 +10,21 @@
 			<input type="hidden" id="append-extra-id" name="extra_id">
 			<div class="row">
 				<div class="col-lg-4 col-sm-6 form-div">
-					<div class="form-label">人员姓名</div>
+					<div class="control-label">人员姓名</div>
 					<div class="input-group">
 						<input type="input"  class="form-control" readonly="" value="{:get_username()}">
 						<span class="input-group-addon"></span>
 					</div>
 				</div>
 				<div class="col-lg-4 col-sm-6 form-div">
-					<div class="form-label">所属部门</div>
+					<div class="control-label">所属部门</div>
 					<div class="input-group">
 						<input type="input"  class="form-control" readonly="" value="{:get_department_name()}">
 						<span class="input-group-addon"></span>
 					</div>
 				</div>
 				<div class="col-lg-4 col-sm-6 form-div">
-					<div class="form-label">申请日期</div>
+					<div class="control-label">申请日期</div>
 					<div class="input-group">
 						<input type="input"  class="form-control" id="append-date" readonly="">
 						<span class="input-group-addon"></span>
@@ -32,21 +32,21 @@
 				</div>
 				<div class="clearfix visible-lg visible-md visible-sm"></div>
 				<div class="col-sm-6 form-div">
-					<div class="form-label">开始时间</div>
+					<div class="control-label">开始时间</div>
 					<div class="input-group date form_date"  data-date-format="yyyy-mm-dd hh">	
 						<input class="form-control" type="text" id="append-start-date" name="start_date" readonly>
 						<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 					</div>
 				</div>
 				<div class="col-sm-6 form-div">
-					<div class="form-label">结束时间</div>
+					<div class="control-label">结束时间</div>
 					<div class="input-group date form_date" data-date-format="yyyy-mm-dd hh">
 						<input class="form-control" type="text" id="append-end-date" name="end_date" readonly>
 						<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 					</div>
 				</div>
 				<div class="col-sm-12 form-div">
-					<div class="form-label">加班原因</div>
+					<div class="control-label">加班原因</div>
 					<div class="textarea">
 					<textarea type="" class="form-control" id="append-reason" name="reason" style="min-height:100px;"> </textarea>
 					</div>
@@ -90,7 +90,8 @@
 		$("#append-reason").val("");
 
 		$("#append-panel").show();
-		$.scrollTo($("#append-panel").offset().top-60,300);
+		$(document.body).animate({scrollTop:$("#append-panel").offset().top-60}, 300);
+		$(document.documentElement).animate({scrollTop:$("#append-panel").offset().top-60}, 300);
 	}
 
 	//编辑签到申请
@@ -103,7 +104,8 @@
 		$("#append-reason").val(data.reason);
 
 		$("#append-panel").show();
-		$.scrollTo($("#append-panel").offset().top-60,300);
+		$(document.body).animate({scrollTop:$("#append-panel").offset().top-60}, 300);
+		$(document.documentElement).animate({scrollTop:$("#append-panel").offset().top-60}, 300);
 	}
 
 	function onSubmit(){

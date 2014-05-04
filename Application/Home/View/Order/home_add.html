@@ -10,49 +10,49 @@
 			<input type="hidden" id="append-order-id" name="order_id">
 			<div class="row">	
 				<div class="col-lg-4 col-sm-6 form-div">
-					<div class="form-label">人员姓名</div>
+					<div class="control-label">人员姓名</div>
 					<div class="input-group">
 						<input type="input"  class="form-control" readonly="" value="{:get_username()}">
 						<span class="input-group-addon"></span>
 					</div>
 				</div>
 				<div class="col-lg-4 col-sm-6 form-div">
-					<div class="form-label">所属部门</div>
+					<div class="control-label">所属部门</div>
 					<div class="input-group">
 						<input type="input"  class="form-control" readonly="" value="{:get_department_name()}">
 						<span class="input-group-addon"></span>
 					</div>
 				</div>
 				<div class="col-lg-4 col-sm-6 form-div">
-					<div class="form-label">申请日期</div>
+					<div class="control-label">申请日期</div>
 					<div class="input-group">
 						<input type="input"  class="form-control" id="append-datetime" readonly="">
 						<span class="input-group-addon"></span>
 					</div>
 				</div>
 				<div class="col-sm-12 form-div">
-					<div class="form-label">订餐地点</div>
+					<div class="control-label">订餐地点</div>
 					<div class="input-group">
 						<input class="form-control" id="append-place" name="place">
 						<span class="input-group-addon"></span>
 					</div>
 				</div>
 				<div class="col-sm-12 form-div">
-					<div class="form-label">订餐原因</div>
+					<div class="control-label">订餐原因</div>
 					<div class="input-group">
 						<input class="form-control" id="append-reason" name="reason">
 						<span class="input-group-addon"></span>
 					</div>
 				</div>
 				<div class="col-sm-6 form-div">
-					<div class="form-label">订餐人数</div>
+					<div class="control-label">订餐人数</div>
 					<div class="input-group">
 						<input class="form-control" id="append-number" name="number">
 						<span class="input-group-addon"></span>
 					</div>
 				</div>
 				<div class="col-sm-6 form-div">
-					<div class="form-label">每人餐标</div>
+					<div class="control-label">每人餐标</div>
 					<div class="input-group">
 						<input class="form-control" id="append-standard" name="standard">
 						<span class="input-group-addon"></span>
@@ -82,7 +82,8 @@
 		$("#append-standard").val("");
 
 		$("#append-panel").show();
-		$.scrollTo($("#append-panel").offset().top-60,300);
+		$(document.body).animate({scrollTop:$("#append-panel").offset().top-60}, 300);
+		$(document.documentElement).animate({scrollTop:$("#append-panel").offset().top-60}, 300);
 	}
 
 	function editOrder(data){
@@ -95,7 +96,8 @@
 		$("#append-standard").val(data.standard);
 
 		$("#append-panel").show();
-		$.scrollTo($("#append-panel").offset().top-60,300);
+		$(document.body).animate({scrollTop:$("#append-panel").offset().top-60}, 300);
+		$(document.documentElement).animate({scrollTop:$("#append-panel").offset().top-60}, 300);
 	}
 
 	function onSubmit(){

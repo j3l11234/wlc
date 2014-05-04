@@ -214,6 +214,44 @@ class LeaveModel extends Model {
 	}
 
 	/**
+	 * 统计个人累计请假时间
+	 *
+	 * @param 
+	 *
+	 */
+	public function stat($user_id,$start_date, $end_date){
+		$where = array(
+			'user_id'	=>	$user_id,
+			'date'		=>	array('between',array($start_date,$end_date)),
+			'check_status' => 2,
+		);
+		$list = $this->field('start_date,end_date,start_time,end_time')->where($where)->select();
+		//$date = "1970-01-01 "
+		//var_dump(strtotime('1970-01-01 08:00:00'));
+	
+		$timeSum = 0;
+		foreach ($list as $record) {
+			if($record['start_date'] != null || $record['start_time'] != null ||
+				$record['end_date'] != null || $record['end_time'] != null){
+					$starttime = strtotime($record['start_date'].' '.$record['start_time']);
+					$endtime = strtotime($record['end_date'].' '.$record['end_time']);
+					$time = $endtime-$starttime;
+					if($time > 0)
+						$timeSum += $time; 
+			}
+		}
+		$sum = array(
+			'day'		=>	floor($timeSum/86400),
+			'hour'		=>	floor(($timeSum % 86400)/3600),
+			'minute'	=>	floor(($timeSum % 3600)/60),
+			'second'	=>	$timeSum % 60,
+		);
+
+		return $sum;
+	}
+
+
+	/**
 	 * 审批请假申请
 	 * 
 	 * @param int $checker_id			审批者id

@@ -37,7 +37,7 @@ class ErrandModel extends Model {
 
 		$this->where($where)->order('date desc')
 		->join('LEFT JOIN wlc_user AS checker ON checker.user_id = wlc_errand.checker_id')
-		->field('errand_id,date,start_date,end_date,place,reason,cost,attachment_name,attachment_path,
+		->field('errand_id,date,start_date,start_time,end_date,end_time,place,reason,cost,attachment_name,attachment_path,
 			check_status,checker.alias AS checker,check_datetime,check_comment');
 
 		if($per_page != 0)
@@ -67,7 +67,7 @@ class ErrandModel extends Model {
 	 * @return 修改失败null 否则返回数据条目
 	 */
 	public function submitErrand(
-		$user_id,$errand_id,$date,$start_date,$end_date,$place,$reason,
+		$user_id,$errand_id,$date,$start_date,$start_time,$end_date,$end_time,$place,$reason,
 		$is_summary,$cost="",$attachment_name="",$attachment_path=""){
 		if(empty($errand_id)){ //新增记录
 			$data = array(
@@ -90,7 +90,9 @@ class ErrandModel extends Model {
 		}	
 
 		$data['start_date']	=	$start_date;
+		$data['start_time']	=	$start_time;
 		$data['end_date']	=	$end_date;
+		$data['end_time']	=	$end_time;
 		$data['place']		=	$place;
 		$data['reason']		=	$reason;
 		if($is_summary){
@@ -216,7 +218,7 @@ class ErrandModel extends Model {
 		->join('LEFT JOIN wlc_department ON wlc_department.department_id = wlc_user.department_id')
 		->join('LEFT JOIN wlc_user AS checker ON checker.user_id = wlc_errand.checker_id');
 		$this->field('errand_id,department_name,wlc_user.alias,
-			date,start_date,end_date,place,reason,cost,attachment_name,attachment_path,
+			date,start_date,start_time,end_date,end_time,place,reason,cost,attachment_name,attachment_path,
 			check_status,checker.alias AS checker,check_datetime,check_comment')
 		->where($where)->order($order);
 
@@ -231,6 +233,40 @@ class ErrandModel extends Model {
 			return $return;
 	}
 
+	/**
+	 * 统计个人累计加班时间
+	 *
+	 * @param 
+	 *
+	 */
+	public function stat($user_id,$start_date, $end_date){
+		$where = array(
+			'user_id'	=>	$user_id,
+			'date'		=>	array('between',array($start_date,$end_date)),
+			'check_status' => 3,
+		);
+		$list = $this->field('start_date,end_date,start_time,end_time')->where($where)->select();
+		
+		$timeSum = 0;
+		foreach ($list as $record) {
+			if($record['start_date'] != null || $record['start_time'] != null ||
+				$record['end_date'] != null || $record['end_time'] != null){
+					$starttime = strtotime($record['start_date'].' '.$record['start_time']);
+					$endtime = strtotime($record['end_date'].' '.$record['end_time']);
+					$time = $endtime-$starttime;
+					if($time > 0)
+						$timeSum += $time; 
+			}
+		}
+		$sum = array(
+			'day'		=>	floor($timeSum/86400),
+			'hour'		=>	floor(($timeSum % 86400)/3600),
+			'minute'	=>	floor(($timeSum % 3600)/60),
+			'second'	=>	$timeSum % 60,
+		);
+
+		return $sum;
+	}
 
 	/**
 	 * 审批请假申请

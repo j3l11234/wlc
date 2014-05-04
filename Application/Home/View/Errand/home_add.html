@@ -11,21 +11,21 @@
 			<input type="hidden" id="append-is-summary" name="is_summary">
 			<div class="row">	
 				<div class="col-lg-4 col-sm-6 form-div">
-					<div class="form-label">人员姓名</div>
+					<div class="control-label">人员姓名</div>
 					<div class="input-group">
 						<input type="input"  class="form-control" readonly="" value="{:get_username()}">
 						<span class="input-group-addon"></span>
 					</div>
 				</div>
 				<div class="col-lg-4 col-sm-6 form-div">
-					<div class="form-label">所属部门</div>
+					<div class="control-label">所属部门</div>
 					<div class="input-group">
 						<input type="input"  class="form-control" readonly="" value="{:get_department_name()}">
 						<span class="input-group-addon"></span>
 					</div>
 				</div>
 				<div class="col-lg-4 col-sm-6 form-div">
-					<div class="form-label">申请日期</div>
+					<div class="control-label">申请日期</div>
 					<div class="input-group">
 						<input type="input"  class="form-control" id="append-date" readonly="">
 						<span class="input-group-addon"></span>
@@ -33,28 +33,28 @@
 				</div>
 				<div class="clearfix visible-md visible-sm"></div>
 				<div class="col-sm-6 form-div">
-					<div class="form-label">出发日期</div>
-					<div class="input-group date form_date"  data-date-format="yyyy-mm-dd">	
+					<div class="control-label">出发日期</div>
+					<div class="input-group date form_date"  data-date-format="yyyy-mm-dd hh">	
 						<input class="form-control" type="text" id="append-start-date" name="start_date" readonly>
 						<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 					</div>
 				</div>
 				<div class="col-sm-6 form-div">
-					<div class="form-label">返回日期</div>
-					<div class="input-group date form_date" data-date-format="yyyy-mm-dd">
+					<div class="control-label">返回日期</div>
+					<div class="input-group date form_date" data-date-format="yyyy-mm-dd hh">
 						<input class="form-control" type="text" id="append-end-date" name="end_date" readonly>
 						<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 					</div>
 				</div>
 				<div class="col-sm-6 form-div">
-					<div class="form-label">出差地点</div>
+					<div class="control-label">出差地点</div>
 					<div class="input-group">
 						<input type="input"  class="form-control" id="append-place" name="place">
 						<span class="input-group-addon"></span>
 					</div>
 				</div>
 				<div class="col-sm-6 form-div">
-					<div class="form-label">出差事由</div>
+					<div class="control-label">出差事由</div>
 					<div class="input-group">
 						<input type="input"  class="form-control" id="append-reason" name="reason">
 						<span class="input-group-addon"></span>
@@ -69,7 +69,7 @@
 						<div style="text-align: center;">总结</div>
 					</div>
 					<div class="col-sm-6 form-div">
-						<div class="form-label">文件上传</div>
+						<div class="control-label">文件上传</div>
 						<input type="file" class="btn-success" id="append-attachment-new" name="attachment_new" />
 						<br>
 						<a href="__ROOT__/外联处出差-走访-外出办公总结表.doc">模版下载</a>	
@@ -95,8 +95,8 @@
 								<tbody>
 									<tr id="cost-input">
 										<td width="33%">
-											<div class="input-group">
-												<select id="cost-type-select" class="selectpicker">
+											<div class="control-content">
+												<select id="cost-type-select" class="form-control">
 													<option value="市外差旅费">市外差旅费</option>
 													<option value="市内交通费">市内交通费</option>
 													<option value="餐费">餐费</option>
@@ -151,7 +151,7 @@
 			autoclose: 1,
 			todayHighlight: 1,
 			startView: 2,
-			minView:2,
+			minView:1,
 			forceParse: 0
     	});
 
@@ -188,7 +188,8 @@
 		$("#append-cost-sum").val(0);
 
 		$("#append-panel").show();
-		$.scrollTo($("#append-panel").offset().top-60,300);
+		$(document.body).animate({scrollTop:$("#append-panel").offset().top-60}, 300);
+		$(document.documentElement).animate({scrollTop:$("#append-panel").offset().top-60}, 300);
 	}
 
 	//编辑申请
@@ -196,8 +197,8 @@
 		$("#append-panel .panel-title").text("修改出差记录");
 		$("#append-errand-id").val(data.errand_id);
 		$("#append-date").val(data.date);
-		$("#append-start-date").val(data.start_date);
-		$("#append-end-date").val(data.end_date);
+		$("#append-start-date").val(data.start_date+" "+data.start_time.substr(0,2));
+		$("#append-end-date").val(data.end_date+" "+data.end_time.substr(0,2));
 		$("#append-place").val(data.place);
 		$("#append-reason").val(data.reason);
 		if(data.check_status == 1){
@@ -242,7 +243,8 @@
 		}
 
 		$("#append-panel").show();
-		$.scrollTo($("#append-panel").offset().top-60,300);
+		$(document.body).animate({scrollTop:$("#append-panel").offset().top-60}, 300);
+		$(document.documentElement).animate({scrollTop:$("#append-panel").offset().top-60}, 300);
 	}
 
 	function onSubmit(){

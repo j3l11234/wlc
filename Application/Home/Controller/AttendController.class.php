@@ -13,8 +13,8 @@ class AttendController extends Controller {
 	 * 个人中心——个人中心主页挂件
 	 * @param unknown_type $call
 	 */
-	public function homeWidget($call = null){
-		check_invoke($call);
+	public function homeWidget(){
+		check_login();
 		
 		$record = D('Attend')->isAttended($_SESSION['user']['user_id']);
 		$record['clockin_status'] = D('Attend')->isValid($record['clockin'],0) == 0;
@@ -157,8 +157,8 @@ class AttendController extends Controller {
 	 * 审批管理——签到管理主页面
 	 * @param unknown_type $call
 	 */
-	public function manage($call = null){
-		check_invoke($call);
+	public function manage(){
+		check_login();
 		
 		$privilege = get_privilege();
 

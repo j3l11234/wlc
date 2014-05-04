@@ -186,7 +186,6 @@ class ExtraController extends Controller {
 			$_REQUEST['per_page'] = 8;
 
 		$this->assign('condition',$_REQUEST);
-
 		$Extra = D('Extra');
 		$result = $Extra->adminQuery(
 			$_REQUEST['department'],

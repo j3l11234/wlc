@@ -224,6 +224,40 @@ class AttendModel extends Model {
 
 
 	/**
+	 * 统计个人累计迟到时间
+	 *
+	 * @param 
+	 *
+	 */
+	public function stat($user_id,$start_date, $end_date){
+		$where = array(
+			'user_id'	=>	$user_id,
+			'date'		=>	array('between',array($start_date,$end_date)),
+		);
+		$list = $this->field('clockin,clockout')->where($where)->select();
+		$timeBaseline = strtotime('1970-01-01 00:08:10');
+		$timeSum = 0;
+		foreach ($list as $record) {
+			if($record['clockin'] != null){
+				$time = strtotime("1970-01-01 ".$record['clockin']) - $timeBaseline;
+				if($time > 0)
+					$timeSum += min($time,28800); 
+			}else{
+				$timeSum += 28800;
+			}
+		}
+
+		$sum = array(
+			'day'		=>	floor($timeSum/86400),
+			'hour'		=>	floor(($timeSum % 86400)/3600),
+			'minute'	=>	floor(($timeSum % 3600)/60),
+			'second'	=>	$timeSum % 60,
+		);
+
+		return $sum;
+	}
+
+	/**
 	 * 更改签到信息
 	 *
 	 * @param $attendId		签到记录ID
