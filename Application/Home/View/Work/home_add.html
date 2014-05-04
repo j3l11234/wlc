@@ -11,21 +11,21 @@
 			<input type="hidden" id="append-work-id" name="work_id">
 			<div class="row">	
 				<div class="col-lg-4 col-sm-6 form-div">
-					<div class="form-label">人员姓名</div>
+					<div class="control-label">人员姓名</div>
 					<div class="input-group">
 						<input type="input"  class="form-control" readonly="" value="{:get_username()}">
 						<span class="input-group-addon"></span>
 					</div>
 				</div>
 				<div class="col-lg-4 col-sm-6 form-div">
-					<div class="form-label">所属部门</div>
+					<div class="control-label">所属部门</div>
 					<div class="input-group">
 						<input type="input"  class="form-control" readonly="" value="{:get_department_name()}">
 						<span class="input-group-addon"></span>
 					</div>
 				</div>
 				<div class="col-lg-4 col-sm-6 form-div">
-					<div class="form-label">日期</div>
+					<div class="control-label">日期</div>
 					<div class="input-group">
 						<input type="input"  class="form-control" id="append-date" readonly="">
 						<span class="input-group-addon"></span>
@@ -35,19 +35,19 @@
 					<hr style="margin: 5px auto;">
 				</div>
 				<div class="col-sm-12 form-div">
-					<div class="form-label">计划</div>
+					<div class="control-label">计划</div>
 					<div class="textarea">
 					<textarea type="" class="form-control" id="append-workplan" name="workplan" style="min-height:100px;"> </textarea>
 					</div>
 				</div>	
 				<div class="col-sm-12 form-div">
-					<div class="form-label">总结</div>
+					<div class="control-label">总结</div>
 					<div class="textarea">
 					<textarea type="" class="form-control" id="append-summary" name="summary" style="min-height:100px;"> </textarea>
 					</div>
 				</div>
 				<div class="col-sm-12 form-div">
-					<div class="form-label">备注</div>
+					<div class="control-label">备注</div>
 					<div class="textarea">
 					<textarea type="" class="form-control" id="append-comment" name="comment" style="min-height:100px;"> </textarea>
 					</div>
@@ -86,7 +86,8 @@
 		$("#append-comment").val(data.comment);	
 
 		$("#append-panel").show();
-		$.scrollTo($("#append-panel").offset().top-60,300);
+		$(document.body).animate({scrollTop:$("#append-panel").offset().top-60}, 300);
+		$(document.documentElement).animate({scrollTop:$("#append-panel").offset().top-60}, 300);
 	}
 
 

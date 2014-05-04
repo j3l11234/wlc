@@ -207,6 +207,24 @@ class OrderModel extends Model {
 
 
 	/**
+	 * 统计个人累计加班时间
+	 *
+	 * @param 
+	 *
+	 */
+	public function stat($user_id,$start_date, $end_date){
+		$where = array(
+			'user_id'	=>	$user_id,
+			'date'		=>	array('between',array($start_date,$end_date)),
+			'check_status' => 2,
+		);
+		$count = $this->field('start_date,end_date,start_time,end_time')->where($where)->count();
+
+		return $count;
+	}
+
+
+	/**
 	 * 审批请假申请
 	 * 
 	 * @param int $order_id				请假申请条目id

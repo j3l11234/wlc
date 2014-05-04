@@ -440,10 +440,12 @@
 				offset = this.element.offset();
 				left = offset.left;
 			}
-			//自动识别宽度
+
+			//识别超出屏幕的情况
 			if(left+220 > document.body.clientWidth){
-              	left = document.body.clientWidth-220;
-            }
+				//alert();
+            	left = document.body.clientWidth-220;
+          	}
 
 			if (this.pickerPosition == 'top-left' || this.pickerPosition == 'top-right') {
 				top = offset.top - this.picker.outerHeight();
@@ -1232,8 +1234,7 @@
 	$.fn.datetimepicker = function (option) {
 		var args = Array.apply(null, arguments);
 		args.shift();
-		var internal_return;
-		this.each(function () {
+		return this.each(function () {
 			var $this = $(this),
 				data = $this.data('datetimepicker'),
 				options = typeof option == 'object' && option;
@@ -1241,16 +1242,9 @@
 				$this.data('datetimepicker', (data = new Datetimepicker(this, $.extend({}, $.fn.datetimepicker.defaults, options))));
 			}
 			if (typeof option == 'string' && typeof data[option] == 'function') {
-				internal_return = data[option].apply(data, args);
-				if (internal_return !== undefined) {
-					return false;
-				}
+				data[option].apply(data, args);
 			}
 		});
-		if (internal_return !== undefined)
-			return internal_return;
-		else
-			return this;
 	};
 
 	$.fn.datetimepicker.defaults = {

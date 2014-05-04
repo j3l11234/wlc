@@ -13,7 +13,7 @@
 			<form id="query-form">
 				<div class="row">	
 					<div class="col-lg-4 col-sm-6 form-div">
-						<div class="form-label">开始日期</div>
+						<div class="control-label">开始日期</div>
 						<div class="input-group date form_date" data-date-format="yyyy-mm-dd">	
 							<input class="form-control" size="16" type="text" value="{$condition['start_date']}" name="start_date" readonly>
 							<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
@@ -21,7 +21,7 @@
 						</div>
 					</div>
 					<div class="col-lg-4 col-sm-6 form-div">
-						<div class="form-label">结束日期</div>
+						<div class="control-label">结束日期</div>
 						<div class="input-group date form_date" data-date-format="yyyy-mm-dd">
 							<input class="form-control" size="16" type="text" value="{$condition['end_date']}" name="end_date" readonly>
 							<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
@@ -29,7 +29,7 @@
 						</div>	
 					</div>
 					<div class="col-lg-4 col-sm-6 form-div">
-						<div class="form-label">审批情况</div>
+						<div class="control-label">审批情况</div>
 						<div class="input-group">
 							<select name="status" class="selectpicker">
 								<option value="0">全部</option>
@@ -40,22 +40,23 @@
 							</select>
 						</div>
 					</div>
+					<div class="clearfix visible-lg"></div>
 					<div class="col-lg-4 col-sm-6 form-div">
-						<div class="form-label">编辑模式</div>
+						<div class="control-label">编辑模式</div>
 						<div class="input-group">									
-							<input id="switch-edit" type="checkbox">
+							<input id="switch-edit" type="checkbox" style="display:none;">
 						</div>
 					</div>
 					<div class="clearfix visible-md visible-sm"></div>
 					<div class="col-lg-4 col-sm-6 form-div">
-						<div class="form-label">每页显示</div>
+						<div class="control-label">每页显示</div>
 						<div class="input-group">
 							<input type="input" name="per_page" value="{$condition['per_page']}" class="form-control">
 							<span class="input-group-addon"></span>
 						</div>
 					</div>
 					<div class="col-lg-4 col-sm-6 form-div">
-						<div class="form-label" style="visibility:hidden;">确认按钮</div>
+						<div class="control-label" style="visibility:hidden;">确认按钮</div>
 						<div style="input-group; text-align: center;">
 							<button style="width:70%" type="button" id="search-btn" onclick="onSearch()" data-loading-text="查找中。。。" class="btn btn-primary">查找</button>
 						</div>

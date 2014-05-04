@@ -34,7 +34,7 @@ class ManageController extends Controller {
 		check_privilege();
 		
 		$Attend = new AttendController();
-		$htmlContent = $Attend->manage(C('AUTH_PARA'));
+		$htmlContent = $Attend->manage();
 		$this->assign('htmlContent',$htmlContent);
 		
 		$this->assign('navbar_item','navbar-manage');
@@ -50,7 +50,7 @@ class ManageController extends Controller {
 		check_privilege();
 		
 		$Work = new WorkController();
-		$htmlContent = $Work->manage(C('AUTH_PARA'));
+		$htmlContent = $Work->manage();
 		$this->assign('htmlContent',$htmlContent);
 		
 		$this->assign('navbar_item','navbar-manage');
@@ -66,7 +66,7 @@ class ManageController extends Controller {
 		check_privilege();
 		
 		$Errand = new ErrandController();
-		$htmlContent = $Errand->manage(C('AUTH_PARA'));
+		$htmlContent = $Errand->manage();
 		$this->assign('htmlContent',$htmlContent);
 		
 		$this->assign('navbar_item','navbar-manage');
@@ -82,7 +82,7 @@ class ManageController extends Controller {
 		check_privilege();
 		
 		$Leave = new LeaveController();
-		$htmlContent = $Leave->manage(C('AUTH_PARA'));
+		$htmlContent = $Leave->manage();
 		$this->assign('htmlContent',$htmlContent);
 		
 		$this->assign('navbar_item','navbar-manage');
@@ -98,7 +98,7 @@ class ManageController extends Controller {
 		check_privilege();
 		
 		$Overtime = new OrderController();
-		$htmlContent = $Overtime->manage(C('AUTH_PARA'));
+		$htmlContent = $Overtime->manage();
 		$this->assign('htmlContent',$htmlContent);
 		
 		$this->assign('navbar_item','navbar-manage');
@@ -114,7 +114,7 @@ class ManageController extends Controller {
 		check_privilege();
 		
 		$Extra = new ExtraController();
-		$htmlContent = $Extra->manage(C('AUTH_PARA'));
+		$htmlContent = $Extra->manage();
 		$this->assign('htmlContent',$htmlContent);
 		
 		$this->assign('navbar_item','navbar-manage');
@@ -130,7 +130,7 @@ class ManageController extends Controller {
 		check_privilege();
 		
 		$Borrow = new BorrowController();
-		$htmlContent = $Borrow->manage(C('AUTH_PARA'));
+		$htmlContent = $Borrow->manage();
 		$this->assign('htmlContent',$htmlContent);
 		
 		$this->assign('navbar_item','navbar-manage');
@@ -138,4 +138,19 @@ class ManageController extends Controller {
 		$this->display('template');
 	}
 	
+
+	/**
+	 * 审批管理——综合统计
+	 */
+	public function stat(){
+		check_privilege();
+		
+		$Stat = new StatController();
+		$htmlContent = $Stat->manage();
+		$this->assign('htmlContent',$htmlContent);
+		
+		$this->assign('navbar_item','navbar-manage');
+		$this->assign('sidebar_item','sidebar-stat');
+		$this->display('template');
+	}
 }

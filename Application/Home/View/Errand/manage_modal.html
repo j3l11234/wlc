@@ -13,21 +13,21 @@
 					<input type="hidden" id="modal-is-agree" name="is_agree">
 					<div class="row">	
 						<div class="col-sm-6 form-div">
-							<div class="form-label">人员姓名</div>
+							<div class="control-label">人员姓名</div>
 							<div class="input-group">
 								<input type="input"  id="modal-user" class="form-control" readonly="">
 								<span class="input-group-addon"></span>
 							</div>
 						</div>
 						<div class="col-sm-6 form-div">
-							<div class="form-label">所属部门</div>
+							<div class="control-label">所属部门</div>
 							<div class="input-group">
 								<input type="input"  id='modal-department' class="form-control" readonly="">
 								<span class="input-group-addon"></span>
 							</div>
 						</div>
 						<div class="col-sm-6 form-div">
-							<div class="form-label">申请日期</div>
+							<div class="control-label">申请日期</div>
 							<div class="input-group">
 								<input type="input"  id="modal-date" class="form-control" readonly="">
 								<span class="input-group-addon"></span>
@@ -35,28 +35,28 @@
 						</div>
 						<div class="clearfix visible-lg visible-md visible-sm"></div>
 						<div class="col-sm-6 form-div">
-							<div class="form-label">出发日期</div>
+							<div class="control-label">出发日期</div>
 							<div class="input-group date form_date"  data-date-format="yyyy-mm-dd">	
 								<input class="form-control" type="text" id="modal-start-date" name="start_date" readonly>
 								<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 							</div>
 						</div>
 						<div class="col-sm-6 form-div">
-							<div class="form-label">返回日期</div>
+							<div class="control-label">返回日期</div>
 							<div class="input-group date form_date" data-date-format="yyyy-mm-dd">
 								<input class="form-control" type="text" id="modal-end-date" name="end_date" readonly>
 								<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 							</div>
 						</div>
 						<div class="col-sm-12 form-div">
-							<div class="form-label">出差地点</div>
+							<div class="control-label">出差地点</div>
 							<div class="input-group">
 								<input type="input"  class="form-control" id="modal-place" name="place" readonly="">
 								<span class="input-group-addon"></span>
 							</div>
 						</div>
 						<div class="col-sm-12 form-div">
-							<div class="form-label">出差事由</div>
+							<div class="control-label">出差事由</div>
 							<div class="input-group">
 								<input type="input"  class="form-control" id="modal-reason" name="reason" readonly="">
 								<span class="input-group-addon"></span>
@@ -101,14 +101,14 @@
 							</div>
 							<div class="col-sm-12" style="text-align: center;">审批情况</div>
 							<div class="col-sm-6 form-div">
-								<div class="form-label">审批时间</div>
+								<div class="control-label">审批时间</div>
 								<div class="input-group">
 									<input type="input"  id='modal-check-datetime' class="form-control" readonly="">
 									<span class="input-group-addon"></span>
 								</div>
 							</div>
 							<div class="col-sm-6 form-div">
-								<div class="form-label">审批状态</div>
+								<div class="control-label">审批状态</div>
 								<div class="div-check-status">
 									<button type="button" class="btn btn-sm btn-info btn-check-status2">等待审批</button>
 									<button type="button" class="btn btn-sm btn-success btn-check-status3">申请通过</button>
@@ -117,7 +117,7 @@
 								</div>
 							</div>
 							<div class="col-sm-12 form-div">
-								<div class="form-label">审批批注</div>	
+								<div class="control-label">审批批注</div>	
 								<div class="input-group">
 									<input type="input" id="modal-check-comment" name="check_comment" class="form-control" readonly="">
 									<span class="input-group-addon"></span>
@@ -150,8 +150,8 @@
 		$("#modal-department").val(data.department_name);
 		$("#modal-user").val(data.alias);
 		$("#modal-date").val(data.date);
-		$("#modal-start-date").val(data.start_date);
-		$("#modal-end-date").val(data.end_date);
+		$("#modal-start-date").val(data.start_date+" "+data.start_time.substr(0,2));
+		$("#modal-end-date").val(data.end_date+" "+data.end_time.substr(0,2));
 		$("#modal-place").val(data.place);
 		$("#modal-reason").val(data.reason);
 

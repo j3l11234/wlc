@@ -108,4 +108,31 @@ class UserModel extends Model {
 			return $user['superior'];
 				
 	}
+
+
+	/**
+	 * 查询用户
+	 * 
+	 * @param string $departmentId 部门id
+	 */
+	public function adminQuery($department_id = 0, $user_id = 0, $page = 1, $per_page = 0){
+		$where = array('privilege' => array('neq',0));
+		if($department_id != 0)
+			$where['wlc_user.department_id'] = $department_id;
+		
+		if($user_id != 0)
+			$where['user_id'] = $user_id;
+
+		$count = $this->where($where)->count(); 
+		$this->join('LEFT JOIN wlc_department ON wlc_department.department_id = wlc_user.department_id')
+		->field('alias,user_id,wlc_user.department_id,department_name')->where($where);
+		if($per_page != 0)
+			$list = $this->page($page.','.$per_page)->select();
+		else
+			$list = $this->select();
+		
+		$return = array('count' => $count, 'list' => $list);
+		return $return;		
+	}
+	
 }

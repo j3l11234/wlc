@@ -12,7 +12,7 @@
 			<form id="query-form">
 				<div class="row">	
 					<div class="col-lg-4 col-sm-6 form-div">
-						<div class="form-label">开始日期</div>
+						<div class="control-label">开始日期</div>
 						<div class="input-group date form_date" data-date-format="yyyy-mm-dd" >	
 							<input class="form-control" size="16" type="text" value="{$condition['start_date']}" name="start_date" readonly>
 							<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
@@ -20,7 +20,7 @@
 						</div>
 					</div>
 					<div class="col-lg-4 col-sm-6 form-div">
-						<div class="form-label">结束日期</div>
+						<div class="control-label">结束日期</div>
 						<div class="input-group date form_date" data-date-format="yyyy-mm-dd">
 							<input class="form-control" size="16" type="text" value="{$condition['end_date']}" name="end_date" readonly>
 							<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
@@ -28,9 +28,9 @@
 						</div>
 					</div>
 					<div class="col-lg-4 col-sm-6 form-div">
-						<div class="form-label">签到类型</div>
-						<div class="input-group">
-							<select name="status" class="selectpicker">
+						<div class="control-label">签到类型</div>
+						<div class="control-content">
+							<select name="status" class="form-control">
 								<option value="0">全部</option>
 								<option value="1">迟到(未签到)</option>
 								<option value="2">早退(未签退)</option>
@@ -38,9 +38,9 @@
 						</div>
 					</div>
 					<div class="col-lg-4 col-sm-6 form-div">
-						<div class="form-label">部门选择</div>
-						<div class="input-group">
-							<select name="department" onchange="get_department_user()" class="selectpicker">
+						<div class="control-label">部门选择</div>
+						<div class="control-content">
+							<select name="department" onchange="get_department_user()" class="form-control">
 								<foreach name="departmentList" item="department">
 									<option value="{$department['department_id']}">{$department['department_name']}</option>
 								</foreach>
@@ -48,26 +48,26 @@
 						</div>
 					</div>
 					<div class="col-lg-4 col-sm-6 form-div">
-						<div class="form-label">人员选择</div>
-						<div class="input-group">
-							<select name="user" class="selectpicker">
+						<div class="control-label">人员选择</div>
+						<div class="control-content">
+							<select name="user" class="form-control">
 							</select>
 						</div>
 					</div>
 					<if condition="$privilege eq PRIRILEGE_ADMIN">
 						<div class="col-lg-4 col-sm-6 form-div">
-							<div class="form-label">开启改签</div>
+							<div class="control-label">开启改签</div>
 							<div class="input-group">									
-								<input id="switch-edit" type="checkbox">
+								<input id="switch-edit" type="checkbox" style="display:none;">
 							</div>
 						</div>
 						<div class="clearfix visible-lg visible-md visible-sm"></div>
 					</if>
 					<div class="clearfix visible-lg visible-md visible-sm"></div>
 					<div class="col-lg-4 col-sm-6 form-div">
-						<div class="form-label">排序方式</div>
-						<div class="input-group">
-							<select name="order" class="selectpicker">
+						<div class="control-label">排序方式</div>
+						<div class="control-content">
+							<select name="order" class="form-control">
 								<option value="0">日期倒序</option>
 								<option value="1">日期顺序</option>
 								<option value="2">部门排序</option>
@@ -76,14 +76,14 @@
 						</div>
 					</div>
 					<div class="col-lg-4 col-sm-6 form-div">
-						<div class="form-label">每页显示</div>
+						<div class="control-label">每页显示</div>
 						<div class="input-group">
 							<input type="input" name="per_page" value="{$condition['per_page']}" class="form-control">
 							<span class="input-group-addon"></span>
 						</div>
 					</div>	
 					<div class="col-lg-4 col-sm-6 form-div">
-						<div class="form-label" style="visibility:hidden;">确认按钮</div>
+						<div class="control-label" style="visibility:hidden;">确认按钮</div>
 						<div style="text-align: center;">
 							<button style="width:70%" type="button" id="search-btn" onclick="onSearch()" data-loading-text="查找中。。。" class="btn btn-primary">
 								查找
@@ -182,7 +182,6 @@
 		//获取人员信息
 		get_department_user();
 		$("select[name='user'] option[value='{$condition['user']}']").attr("selected", "selected");		
-		$('.selectpicker').selectpicker('refresh');
 		
 		//搜索条件折叠
 		if(getCookie('collapse') == 1){
@@ -253,7 +252,6 @@
 			if(userList[i].department_id == departmentId || departmentId == 0)
 				userSelct.append('<option value="'+userList[i].user_id+'">'+userList[i].alias+'</option>');
 		}
-		userSelct.selectpicker('refresh');
 	}
 
 	function onSearch(){

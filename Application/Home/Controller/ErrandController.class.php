@@ -98,20 +98,24 @@ class ErrandController extends Controller {
 		}		
 
 		//检查时间格式
-		if(date('Y-m-d',strtotime($_REQUEST['start_date']. ' 00:00:00')) != $_REQUEST['start_date'])
-			die("出发时间不正确");
-		if(date('Y-m-d',strtotime($_REQUEST['end_date']. ' 00:00:00')) != $_REQUEST['end_date'])
-			die("返回时间不正确");
-		if(strtotime($_REQUEST['start_date']. ' 00:00:00') > strtotime($_REQUEST['end_date']. ' 00:00:00'))
-			die("出发时间不能晚于返回时间");
+			$start = strtotime($_REQUEST['start_date']. ':00:00');
+		$end = strtotime($_REQUEST['end_date']. ':00:00');
+		if(date('Y-m-d H',$start) != $_REQUEST['start_date'])
+			die("开始时间不正确");
+		if(date('Y-m-d H',$end) != $_REQUEST['end_date'])
+			die("结束时间不正确");
+		if($start > $end)
+			die("开始时间不能晚于结束时间");
 
 		if($_REQUEST['is_summary'] == 0){
 			$result = D('Errand')->submitErrand(
 				$_SESSION['user']['user_id'],
 				$_REQUEST['errand_id'],
 				$date,
-				$_REQUEST['start_date'],
-				$_REQUEST['end_date'],
+				date('Y-m-d',$start),
+				date('H:i:s',$start),
+				date('Y-m-d',$end),
+				date('H:i:s',$end),
 				$_REQUEST['place'],
 				$_REQUEST['reason'],
 				false);
@@ -121,8 +125,10 @@ class ErrandController extends Controller {
 				$_SESSION['user']['user_id'],
 				$_REQUEST['errand_id'],
 				$date,
-				$_REQUEST['start_date'],
-				$_REQUEST['end_date'],
+				date('Y-m-d',$start),
+				date('H:i:s',$start),
+				date('Y-m-d',$end),
+				date('H:i:s',$end),
 				$_REQUEST['place'],
 				$_REQUEST['reason'],
 				true,

@@ -14,7 +14,7 @@
 			<form id="query-form">
 				<div class="row">	
 					<div class="col-lg-4 col-sm-6 form-div">
-						<div class="form-label">开始日期</div>
+						<div class="control-label">开始日期</div>
 						<div class="input-group date form_date" data-date-format="yyyy-mm-dd">	
 							<input class="form-control"type="text" value="{$condition['start_date']}" name="start_date" readonly>
 							<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
@@ -22,7 +22,7 @@
 						</div>
 					</div>
 					<div class="col-lg-4 col-sm-6 form-div">
-						<div class="form-label">结束日期</div>
+						<div class="control-label">结束日期</div>
 						<div class="input-group date form_date" data-date-format="yyyy-mm-dd">
 							<input class="form-control" type="text" value="{$condition['end_date']}" name="end_date" readonly>
 							<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
@@ -30,9 +30,9 @@
 						</div>
 					</div>
 					<div class="col-lg-4 col-sm-6 form-div">
-						<div class="form-label">签到类型</div>
-						<div class="input-group">
-							<select name="status" class="selectpicker">
+						<div class="control-label">签到类型</div>
+						<div class="control-content">
+							<select name="status" class="form-control">
 								<option value="0">全部</option>
 								<option value="1">迟到(未签到)</option>
 								<option value="2">早退(未签退)</option>
@@ -40,23 +40,22 @@
 						</div>
 					</div>
 					<div class="col-lg-4 col-sm-6 form-div">
-						<div class="form-label">排序方式</div>
-						<div class="input-group">
-							<select name="order" class="selectpicker">
+						<div class="control-label">排序方式</div>
+						<div class="control-content">
+							<select name="order" class="form-control">
 								<option value="0">日期倒序</option>
 								<option value="1">日期顺序</option>
 							</select>
 						</div>
 					</div>
 					<div class="col-lg-4 col-sm-6 form-div">
-						<div class="form-label">每页显示</div>
-						<div class="input-group">
+						<div class="control-label">每页显示</div>
+						<div class="control-content">
 							<input type="input" name="per_page" value="{$condition['per_page']}" class="form-control">
-							<span class="input-group-addon"></span>
 						</div>
 					</div>			
 					<div class="col-lg-4 col-sm-6 form-div">
-						<div class="form-label" style="visibility:hidden;">确认按钮</div>
+						<div class="control-label" style="visibility:hidden;">确认按钮</div>
 						<div style="input-group; text-align: center;">
 							<button style="width:70%" type="button" id="search-btn" onclick="onSearch()" data-loading-text="查找中。。。" class="btn btn-primary">查找</button>
 						</div>
@@ -137,7 +136,6 @@
 
 		$("[name='status'] option[value='{$condition['status']}']").attr("selected", "selected");
 		$("[name='order'] option[value='{$condition['order']}']").attr("selected", "selected");
-		$('.selectpicker').selectpicker();
 
 		//搜索条件折叠
 		if(getCookie('collapse') == 1){
