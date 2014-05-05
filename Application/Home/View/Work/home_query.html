@@ -30,8 +30,8 @@
 					</div>
 					<div class="col-lg-4 col-sm-6 form-div">
 						<div class="control-label">审批情况</div>
-						<div class="input-group">
-							<select name="status" class="selectpicker">
+						<div class="control-content">
+							<select name="status" class="form-control">
 								<option value="0">全部</option>
 								<option value="1">不能填写</option>
 								<option value="2">允许填写</option>
@@ -135,7 +135,6 @@
 		//===控件初始化===
 		//状态筛选
 		$("select[name='status'] option[value='{$condition['status']}']").attr("selected", "selected");
-		$('.selectpicker').selectpicker('refresh');
 		//编辑开关
 		if(getCookie('switch-edit') == 1){
 			$("#query-form #switch-edit").bootstrapSwitch('setState', true);

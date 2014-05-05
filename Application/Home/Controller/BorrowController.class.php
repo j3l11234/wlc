@@ -93,10 +93,7 @@ class BorrowController extends Controller {
 		
 		if(date('Y-m-d',strtotime($_REQUEST['start_date']. ' 00:00:00')) != $_REQUEST['start_date'])
 			die("借出时间不正确");
-		if(date('Y-m-d',strtotime($_REQUEST['end_date']. ' 00:00:00')) != $_REQUEST['end_date'])
-			die("归还时间不正确");
-		if(strtotime($_REQUEST['start_date']. ' 00:00:00') > strtotime($_REQUEST['end_date']. ' 00:00:00'))
-			die("借出时间不能晚于归还时间");
+		
 		
 		$result = D('Borrow')->submitBorrow(
 			$_SESSION['user']['user_id'],

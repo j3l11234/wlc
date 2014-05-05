@@ -98,8 +98,6 @@
 	});
 	
 	function addBorrow(){	
-		$("#append-submit").unbind();
-		$("#append-submit").click(function(){onSubmit('add');});
 
 		$("#append-panel .panel-title").text("提交申请");
 		$("#append-borrow-id").val("");
@@ -116,8 +114,6 @@
 
 	//编辑签到申请
 	function editBorrow(data){
-		$("#append-submit").unbind();
-		$("#append-submit").click(function(){onSubmit('edit');});
 
 		$("#append-panel .panel-title").text("修改申请");
 		$("#append-borrow-id").val(data.borrow_id);
