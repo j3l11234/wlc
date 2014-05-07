@@ -81,21 +81,25 @@
 						<td>{$record['date']}</td>
 						<td>{$record['week']}</td>
 						<td>
-							<switch name="record['status']">
-								<case value="1">
-									<button type="button" class="btn btn-xs btn-danger">不可填写</button>
-								</case>
-								<case value="2">
-									<button type="button" class="btn btn-xs btn-danger">等待填写</button>
-								</case>
-								<case value="3">
-									<button type="button" class="btn btn-xs btn-info">已经填写</button>
-								</case>
-								<case value="4">
-									<button type="button" class="btn btn-xs btn-success">已经审阅</button>
-								</case>
-							</switch>
-						</td>
+							<if condition="($privilege eq PRIRILEGE_WORKER) OR ($privilege eq PRIRILEGE_BOSS)">
+								<button type="button" class="btn btn-xs btn-success">无需填写</button>
+							<else />
+								<switch name="record['status']">
+									<case value="1">
+										<button type="button" class="btn btn-xs btn-danger">不可填写</button>
+									</case>
+									<case value="2">
+										<button type="button" class="btn btn-xs btn-danger">等待填写</button>
+									</case>
+									<case value="3">
+										<button type="button" class="btn btn-xs btn-info">已经填写</button>
+									</case>
+									<case value="4">
+										<button type="button" class="btn btn-xs btn-success">已经审阅</button>
+									</case>
+								</switch>
+							</if>						
+						</td>	
 						<td style="text-align: right;">
 							<button type="button" class="btn btn-xs btn-primary" onclick="onViewClick(this)">查看</button>
 							<if condition="$record['status'] eq 1"> {//不可填写}

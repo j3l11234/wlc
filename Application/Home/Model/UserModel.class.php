@@ -10,7 +10,7 @@ class UserModel extends Model {
 	 * @param string $password 密码
 	 */
 	public function authorize($username, $password){
-		$users = M('User')->where(array('username'=>$username))->select();
+		$users = $this->where(array('username'=>$username))->select();
 		if(!$users)
 			return  '没有这个用户';
 			
@@ -23,6 +23,22 @@ class UserModel extends Model {
 		return $user;
 	}
 	
+	public function changePassword($user_id, $old_password,$new_password){
+		$user = $this->where(array('user_id'=>$user_id))->select()[0];
+		if(!$user)
+			return '没有这个用户';
+		if($user['password'] != md5($old_password))
+			return '密码验证错误';
+
+		$user['password'] = md5($new_password);
+
+		if(!$this->save($user))
+			return '错误';
+		else
+			return $user;
+	}
+
+
 	/**
 	 * 得到未签到的用户以及时间
 	 * 

@@ -49,7 +49,8 @@ class WorkController extends Controller {
 			$_REQUEST['per_page'] = 8;
 		
 		$this->assign('condition',$_REQUEST);
-
+		$this->assign('privilege',get_privilege());
+		
 		$result = D('Work')->userQuery(
 			$_SESSION['user']['user_id'], 
 			$_REQUEST['start_date'], 

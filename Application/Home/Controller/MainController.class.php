@@ -140,6 +140,18 @@ class MainController extends Controller {
 		$this->display('template');
 	}
 	
-	
+	/**
+	 * 个人中心——个人资料
+	 */
+	public function user(){
+		check_login();
+		$User = new UserController();
+		$htmlContent = $User->home();
+		$this->assign('htmlContent',$htmlContent);
+		
+		$this->assign('navbar_item','navbar-main');
+		$this->assign('sidebar_item','sidebar-user');
+		$this->display('template');
+	}
 	
 }

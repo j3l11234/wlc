@@ -37,13 +37,13 @@
 							<hr style="margin: 5px auto;">
 						</div>
 						<div class="col-sm-12 form-div">
-							<div class="control-label">计划</div>
+							<div class="control-label">周计划</div>
 							<div class="textarea">
 							<textarea type="" class="form-control" id="modal-workplan"  style="min-height:80px;" readonly=""> </textarea>
 							</div>
 						</div>
 						<div class="col-sm-12 form-div">
-							<div class="control-label">总结</div>
+							<div class="control-label">完成情况</div>
 							<div class="textarea">
 							<textarea type="" class="form-control" id="modal-summary"  style="min-height:80px;" readonly=""> </textarea>
 							</div>
@@ -52,13 +52,6 @@
 							<div class="control-label">备注</div>
 							<div class="textarea">
 							<textarea type="" class="form-control" id="modal-comment"  style="min-height:80px;" readonly=""> </textarea>
-							</div>
-						</div>
-						<div class="col-sm-6 form-div">
-							<div class="control-label">审批时间</div>
-							<div class="input-group">
-								<input type="input"  id='modal-check-datetime' class="form-control" readonly="">
-								<span class="input-group-addon"></span>
 							</div>
 						</div>
 						<div class="col-sm-6 form-div">
@@ -82,7 +75,7 @@
 						<div class="col-sm-12 form-div">
 							<div class="control-label">审批批注</div>	
 							<div class="input-group">
-								<input type="input" id="modal-check-comment" class="form-control" readonly="">
+								<input type="input" id="modal-check-comment" name="check_comment" class="form-control">
 								<span class="input-group-addon"></span>
 							</div>			
 						</div>
@@ -127,7 +120,7 @@
 	function viewWork(data){
 		reset(data);
 		$("#work-modal .modal-title").text("查看申请");
-		$("#modal-check-comment").attr("readonly","");
+		//$("#modal-check-comment").attr("readonly","");
 		$(".btn-modal-view").show();
 
 		$('#work-modal').modal({backdrop:"static"});

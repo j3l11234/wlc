@@ -93,14 +93,14 @@
           <ul class="nav navbar-nav">
             <li class="{:getIsActive('navbar-main',$navbar_item)}"><a href="{:U('Main/index')}">个人中心</a></li>
             <li class="{:getIsActive('navbar-manage',$navbar_item)}"><a href="{:U('Manage/index')}">审批管理</a></li>
+            <li class=""><a href="#">共享平台</a></li>
+            <li class=""><a href="#">个人网盘</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
           <li class="dropdown">
 	          <a href="#" class="dropdown-toggle" data-toggle="dropdown">{:get_username()} <b class="caret"></b></a>
 	          <ul class="dropdown-menu">
-	            <li><a href="#">编辑个人资料</a></li>
-	            <li><a href="#">修改密码</a></li>
-	            <li><a href="#">[预留]</a></li>
+	            <li><a href="{:U('Main/user')}">修改密码</a></li>
 	            <li class="divider"></li>
 	            <li><a href="{:U('User/logout')}">注销</a></li>
 	          </ul>

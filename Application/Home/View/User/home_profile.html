@@ -1,0 +1,67 @@
+{//个人中心-个人资料} 
+
+<div class="panel panel-info">
+	<div class="panel-heading">
+		<h3 class="panel-title">修改密码
+		</h3>
+	</div>
+	<div class="panel-body">
+		<form class="form-horizontal" role="form" id="password-form">
+			<div class="form-group">
+				<label for="old-password-input" class="col-sm-2 control-label">旧密码</label>
+				<div class="col-sm-10">
+				<input type="password" name="old-password" class="form-control" id="old-password-input" placeholder="旧密码">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="new-password-input" class="col-sm-2 control-label">新密码</label>
+				<div class="col-sm-10">
+					<input type="password" name="new-password" class="form-control" id="new-password-input" placeholder="新密码">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="repeat-password-input" class="col-sm-2 control-label">密码确认</label>
+				<div class="col-sm-10">
+					<input type="password" class="form-control" id="repeat-password-input" placeholder="密码确认">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="button" class="btn btn-primary" data-loading-text="提交中。。。" onclick="onChangeSubmit(this)" style="min-width:70%;">确认修改</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+	function onChangeSubmit(button){
+		var oldPassword = $("#old-password-input").val();	
+		var newPassword = $("#new-password-input").val();
+		var repeatPassword = $("#repeat-password-input").val();
+
+		if(oldPassword == "" || newPassword == "" || repeatPassword == ""){
+			showModalResult(false,"提示","请完整输入",false);
+			return;
+		}
+
+		if($("#new-password-input").val() != $("#repeat-password-input").val()){
+			showModalResult(false,"提示","两次密码不一致",false);
+			return;
+		}
+
+		$(button).button('loading');
+		$.post('{:U('User/changePassword')}', $("#password-form").serialize(), function(result) {
+			if(result == 'ok')
+				showModalResult(true,"提交结果","修改成功",false);
+			else {
+				showModalResult(false,"提交结果",result,false);
+			}
+			$(button).button('reset');
+		}).error(function() {
+			showModalResult(false,"提交结果","错误",false);
+			$(button).button('reset');
+		});
+		}
+</script>
