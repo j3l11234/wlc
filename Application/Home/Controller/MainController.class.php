@@ -7,6 +7,8 @@ class MainController extends Controller {
 	
 	public function index(){
 		check_login();
+
+		//var_dump($_SERVER);
 		//var_dump($_REQUEST);
 		/*
 		//检查是否签到
@@ -153,5 +155,20 @@ class MainController extends Controller {
 		$this->assign('sidebar_item','sidebar-user');
 		$this->display('template');
 	}
-	
+
+
+	function getFtpEntry(){
+		check_login();
+
+		$vbs = 'set ws=createobject("wscript.shell")
+ws.run "%SystemRoot%\explorer.exe ftp://'.$_SESSION['user']['username'].'_:'.substr(md5($_SESSION['user']['password']),0,16).'@'.$_SERVER['SERVER_NAME'].'"';
+
+		header("Content-type:application/octet-stream");
+		header("Content-Disposition: attachment; filename=外联处网盘入口.vbs;");
+
+		echo $vbs;
+		die();
+	}
 }
+
+

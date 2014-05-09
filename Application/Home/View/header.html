@@ -66,6 +66,21 @@
     <script src="__PUBLIC__/js/jquery.min.js"></script>
     <script src="__PUBLIC__/js/jquery.backstretch.min.js"></script>
     
+    <script type="text/javascript">
+      function getFtpEntry(){
+        var ua = navigator.userAgent.toLowerCase();
+        isWindows = (ua.indexOf("windows") != -1 || ua.indexOf("win32") != -1);
+        if(isWindows){
+          window.location.href = "{:U('Main/getFtpEntry')}";
+        }else{
+            showModalResult(false,"提示","您的系统并非windows，请直接访问<a target=\"_blank\" href=\"ftp://{$_SERVER['SERVER_NAME']}\">ftp://{$_SERVER['SERVER_NAME']}</a><br>账号密码于本系统一致",false);
+        }
+      }
+
+      
+    </script>
+
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -93,8 +108,7 @@
           <ul class="nav navbar-nav">
             <li class="{:getIsActive('navbar-main',$navbar_item)}"><a href="{:U('Main/index')}">个人中心</a></li>
             <li class="{:getIsActive('navbar-manage',$navbar_item)}"><a href="{:U('Manage/index')}">审批管理</a></li>
-            <li class=""><a href="#">共享平台</a></li>
-            <li class=""><a href="#">个人网盘</a></li>
+            <li class=""><a href="#" onclick="getFtpEntry()">存储网盘</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
           <li class="dropdown">

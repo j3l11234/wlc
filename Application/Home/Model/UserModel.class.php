@@ -131,7 +131,7 @@ class UserModel extends Model {
 	 * 
 	 * @param string $departmentId 部门id
 	 */
-	public function adminQuery($department_id = 0, $user_id = 0, $page = 1, $per_page = 0){
+	public function adminQuery($department_id = 0, $user_id = 0, $page = 1, $per_page = 0,$detail = false){
 		$where = array('privilege' => array('neq',0));
 		if($department_id != 0)
 			$where['wlc_user.department_id'] = $department_id;
@@ -140,8 +140,14 @@ class UserModel extends Model {
 			$where['user_id'] = $user_id;
 
 		$count = $this->where($where)->count(); 
+
+		if($detail)
+			$detailField=",username,password";
+		else
+			$detailField="";
+
 		$this->join('LEFT JOIN wlc_department ON wlc_department.department_id = wlc_user.department_id')
-		->field('alias,user_id,wlc_user.department_id,department_name')->where($where);
+		->field('alias,user_id,wlc_user.department_id,department_name'.$detailField)->where($where);
 		if($per_page != 0)
 			$list = $this->page($page.','.$per_page)->select();
 		else

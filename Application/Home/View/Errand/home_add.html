@@ -46,18 +46,17 @@
 						<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 					</div>
 				</div>
-				<div class="col-sm-6 form-div">
-					<div class="control-label">出差地点</div>
+				<div class="col-sm-12 form-div">
+					<div class="control-label">外出地点</div>
 					<div class="input-group">
 						<input type="input"  class="form-control" id="append-place" name="place">
 						<span class="input-group-addon"></span>
 					</div>
 				</div>
-				<div class="col-sm-6 form-div">
-					<div class="control-label">出差事由</div>
-					<div class="input-group">
-						<input type="input"  class="form-control" id="append-reason" name="reason">
-						<span class="input-group-addon"></span>
+				<div class="col-sm-12 form-div">
+					<div class="control-label">外出事由</div>
+					<div class="textarea">
+						<textarea type="" class="form-control" id="append-reason" name="reason" style="min-height:50px;"> </textarea>
 					</div>
 				</div>
 				<div class="col-sm-12 form-div" style="text-align: right;">
@@ -173,7 +172,7 @@
 	
 	//添加申请
 	function addErrand(){
-		$("#append-panel .panel-title").text("提交出差记录");
+		$("#append-panel .panel-title").text("提交 异地出差/走访/外出办公 记录");
 		$("#append-errand-id").val("");
 		$("#append-date").val(new Date().format("yyyy-MM-dd"));
 		$("#append-start-date").val("");
@@ -194,7 +193,7 @@
 
 	//编辑申请
 	function editErrand(data){
-		$("#append-panel .panel-title").text("修改出差记录");
+		$("#append-panel .panel-title").text("提交 异地出差/走访/外出办公 记录");
 		$("#append-errand-id").val(data.errand_id);
 		$("#append-date").val(data.date);
 		$("#append-start-date").val(data.start_date+" "+data.start_time.substr(0,2));
