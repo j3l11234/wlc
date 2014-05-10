@@ -33,12 +33,26 @@
 								<span class="input-group-addon"></span>
 							</div>
 						</div>
-						<div class="col-sm-12 form-div">
-							<div class="control-label">借用物品</div>
-							<div class="input-group">
-								<input type="input" class="form-control" id="modal-goods"readonly>
-								<span class="input-group-addon"></span>
-							</div>
+						<div class="col-sm-12">
+							<div style="text-align: center;">借用物品</div>
+						</div>
+						<div class="col-sm-12 form-div table-responsive">
+							<table class="table table-condensed table-hover">
+								<thead>
+									<tr>
+										<th>编号</th>
+										<th>设备名称</th>
+									</tr>
+								</thead>
+								<tbody> 
+								<foreach name="goodsList" item="goods">
+									<tr class="checkbox-modal-goods" id="modal-goods{$goods['goods_id']}">
+										<td>{$goods['goods_sn']}</td>
+										<td>{$goods['goods_name']}</td>
+									</tr>
+								</foreach>
+								</tbody>
+							</table>
 						</div>
 						<div class="col-sm-6 form-div">
 							<div class="control-label">借出日期</div>
@@ -118,7 +132,10 @@
 		$("#modal-start-date").val(data.start_date);
 		$("#modal-end-date").val(data.end_date);
 		$("#modal-reason").val(data.reason);
-		$("#modal-goods").val(data.goods_sn+" "+data.goods_name+" "+data.goods_parts);
+		$(".checkbox-modal-goods").hide();
+		for (var i = 0; i < data.goods_id.length; i++){
+			$("#modal-goods"+data.goods_id[i]).show();
+		};
 
 		$("#modal-check-datetime").val(data.check_datetime);
 		$("#modal-check-status"+data.check_status).show();

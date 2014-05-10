@@ -103,13 +103,23 @@
 						</td>
 						<td style="text-align: right;">
 							<button type="button" class="btn btn-xs btn-primary" onclick="onViewClick(this)">查看</button>
-							<if condition="($record['check_status'] eq 1) OR ($record['check_status'] eq 2)">
-								<button type="button" class="btn btn-xs btn-warning btn-edit" onclick="onEditClick(this)" disabled="disabled">修改</button>
-								<button type="button" class="btn btn-xs btn-danger btn-delete" onclick="onDeleteClick(this)" disabled="disabled">删除</button>
-							<else />
-								<button type="button" class="btn btn-xs" style="visibility:hidden;">修改</button>
-								<button type="button" class="btn btn-xs" style="visibility:hidden;">删除</button>
-							</if>
+							<switch name="record['check_status']">
+								<case value="1">
+									<button type="button" class="btn btn-xs btn-info" onclick="onEditClick(this)">总结</button>
+									<button type="button" class="btn btn-xs btn-danger btn-delete " onclick="onDeleteClick(this)" disabled="disabled">删除</button>
+								</case>	
+								<case value="2">
+									<button type="button" class="btn btn-xs btn-warning btn-edit" onclick="onEditClick(this)" onclick="onEditClick(this)"disabled="disabled">修改</button>
+									<button type="button" class="btn btn-xs btn-danger btn-delete" onclick="onDeleteClick(this)" disabled="disabled">删除</button>
+								</case>
+								<case value="4">
+									<button type="button" class="btn btn-xs btn-warning btn-edit" onclick="onEditClick(this)" disabled="disabled">修改</button>
+									<button type="button" class="btn btn-xs btn-danger btn-delete" onclick="onDeleteClick(this)" disabled="disabled">删除</button>
+								</case>	
+								<default />
+									<button type="button" class="btn btn-xs" style="visibility:hidden;">修改</button>
+									<button type="button" class="btn btn-xs" style="visibility:hidden;">删除</button>
+							</switch>
 						</td>	
 					</tr>
 				</foreach>

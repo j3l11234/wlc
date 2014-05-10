@@ -39,17 +39,41 @@
 								<th>编号</th>
 								<th>设备名称</th>
 								<th>设备配件</th>
+								<th>状态</th>
 							</tr>
 						</thead>
 						<tbody> 
 						<foreach name="goodsList" item="goods">
-							<tr>
+						<switch name="goods['status']">
+							<case value="0">
+								<tr>
+							</case>
+							<case value="1">
+								<tr class="warning">
+							</case>
+							<case value="2">
+								<tr class="danger">
+							</case>
+						</switch>
 								<td>
-									<input type="radio" name="goods_id" id="append-goods{$goods['goods_id']}" value="{$goods['goods_id']}" checked>
+								<input type="checkbox" name="goods_id[]" class="checkbox-append-goods" id="append-goods{$goods['goods_id']}" value="{$goods['goods_id']}">
 								</td>
 								<td>{$goods['goods_sn']}</td>
 								<td>{$goods['goods_name']}</td>
 								<td>{$goods['goods_parts']}</td>
+								<td>
+									<switch name="goods['status']">
+										<case value="0">
+											<button type="button" class="btn btn-xs btn-success">可借出</button>	
+										</case>
+										<case value="1">
+											<button type="button" class="btn btn-xs btn-warning">申请中</button>
+										</case>
+										<case value="2">
+											<button type="button" class="btn btn-xs btn-danger">已借出</button>
+										</case>
+									</switch>
+								</td>
 							</tr>
 						</foreach>
 						</tbody>
@@ -105,8 +129,7 @@
 		$("#append-start-date").val("");
 		$("#append-end-date").val("");
 		$("#append-reason").val("");
-		$("#append-goods1").click();
-
+		$(".checkbox-append-goods").attr("checked",false);
 		$("#append-panel").show();
 		$(document.body).animate({scrollTop:$("#append-panel").offset().top-60}, 300);
 		$(document.documentElement).animate({scrollTop:$("#append-panel").offset().top-60}, 300);
@@ -122,7 +145,11 @@
 		$("#append-end-date").val(data.end_date);
 		$("#append-reason").val(data.reason);
 
-		$("#append-goods"+data.goods_id).click();
+		$(".checkbox-append-goods").attr("checked",false);
+		for (var i = 0; i < data.goods_id.length; i++){
+			$("#append-goods"+data.goods_id[i]).click();
+		};
+		
 		$("#append-panel").show();
 		$(document.body).animate({scrollTop:$("#append-panel").offset().top-60}, 300);
 		$(document.documentElement).animate({scrollTop:$("#append-panel").offset().top-60}, 300);

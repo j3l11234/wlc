@@ -87,7 +87,12 @@
 					<else /> 
 						<tr>
 					</if>
-						<td>{$record['goods_name']}</td>
+						<td>
+							<foreach name="record['goods_id']" item="goods">
+								{$goodsList_[$goods]['goods_name']}
+								<br>
+							</foreach>
+						</td>
 						<td>{$record['date']}</td>
 						<td>{$record['start_date']} {:substr($record['start_time'],0,2)}</td>
 						<td>{$record['end_date']} {:substr($record['end_time'],0,2)}</td>
@@ -123,7 +128,11 @@
 								<case value="1">
 									<button type="button" class="btn btn-xs btn-warning btn-edit" disabled="disabled">修改</button>
 									<button type="button" class="btn btn-xs btn-danger btn-delete" disabled="disabled">删除</button>
-								</case>		
+								</case>	
+								<case value="3">
+									<button type="button" class="btn btn-xs btn-warning btn-edit" disabled="disabled">修改</button>
+									<button type="button" class="btn btn-xs btn-danger btn-delete" disabled="disabled">删除</button>
+								</case>	
 								<default />
 									<button type="button" class="btn btn-xs" style="visibility:hidden;">修改</button>
 									<button type="button" class="btn btn-xs" style="visibility:hidden;">删除</button>
@@ -150,6 +159,8 @@
 <script type="text/javascript">
 
 	var borrowList = {:json_encode($borrowList)};
+	var goodsList = {:json_encode($goodsList)};
+
 	$(function(){
 		if(getCookie('page') != "home-borrow"){
 			setCookie('switch-edit',0);

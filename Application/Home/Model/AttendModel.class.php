@@ -234,17 +234,20 @@ class AttendModel extends Model {
 			'user_id'	=>	$user_id,
 			'date'		=>	array('between',array($start_date,$end_date)),
 		);
-		$list = $this->field('clockin,clockout')->where($where)->select();
+		$list = $this->field('clockin,clockout,date')->where($where)->select();
 		$timeBaseline = strtotime('1970-01-01 00:08:10');
 		$timeSum = 0;
 		foreach ($list as $record) {
-			if($record['clockin'] != null){
-				$time = strtotime("1970-01-01 ".$record['clockin']) - $timeBaseline;
-				if($time > 0)
-					$timeSum += min($time,28800); 
-			}else{
-				$timeSum += 28800;
-			}
+			$wady = getdate(strtotime($record['date'].' '.$record['clockin']))['wday'];
+			if($wady >= 1 && $wady <= 5){
+				if($record['clockin'] != null){
+					$time = strtotime("1970-01-01 ".$record['clockin']) - $timeBaseline;
+					if($time > 0)
+						$timeSum += min($time,28800); 
+				}else{
+					$timeSum += 28800;
+				}
+			}	
 		}
 
 		$sum = array(

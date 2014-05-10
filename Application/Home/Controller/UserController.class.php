@@ -167,10 +167,10 @@ class UserController extends Controller {
 	    				}
 
 	    				$Permission_node = $Permissions_node->addChild('Permission');
-	    				$Permission_node->addAttribute('Dir', C('FTP_DIR').'/public');
+	    				$Permission_node->addAttribute('Dir', C('FTP_DIR').'/公共目录');
 	    				{
 	    					$Aliases_node = $Permission_node->addChild('Aliases');
-	    					$Aliases_node->addChild('Alias',C('FTP_DIR').'/'.$user['username'].'/public');
+	    					$Aliases_node->addChild('Alias',C('FTP_DIR').'/'.$user['username'].'/公共目录');
 
 	    					$Option_node = $Permission_node->addChild('Option','1');
 	    					$Option_node->addAttribute('Name', 'FileRead');
@@ -259,22 +259,22 @@ class UserController extends Controller {
 	    				}
 
 	    				$Permission_node = $Permissions_node->addChild('Permission');
-	    				$Permission_node->addAttribute('Dir', C('FTP_DIR').'/public');
+	    				$Permission_node->addAttribute('Dir', C('FTP_DIR').'/公共目录');
 	    				{
 	    					$Aliases_node = $Permission_node->addChild('Aliases');
-	    					$Aliases_node->addChild('Alias',C('FTP_DIR').'/'.$user['username'].'/public');
+	    					$Aliases_node->addChild('Alias',C('FTP_DIR').'/'.$user['username'].'/公共目录');
 
 	    					$Option_node = $Permission_node->addChild('Option','1');
 	    					$Option_node->addAttribute('Name', 'FileRead');
 	    					$Option_node = $Permission_node->addChild('Option','1');
 	    					$Option_node->addAttribute('Name', 'FileWrite');
-	    					$Option_node = $Permission_node->addChild('Option','1');
+	    					$Option_node = $Permission_node->addChild('Option','0');
 	    					$Option_node->addAttribute('Name', 'FileDelete');
 	    					$Option_node = $Permission_node->addChild('Option','1');
 	    					$Option_node->addAttribute('Name', 'FileAppend');
 	    					$Option_node = $Permission_node->addChild('Option','1');
 	    					$Option_node->addAttribute('Name', 'DirCreate');
-	    					$Option_node = $Permission_node->addChild('Option','1');
+	    					$Option_node = $Permission_node->addChild('Option','0');
 	    					$Option_node->addAttribute('Name', 'DirDelete');
 	    					$Option_node = $Permission_node->addChild('Option','1');
 	    					$Option_node->addAttribute('Name', 'DirList');
@@ -305,8 +305,6 @@ class UserController extends Controller {
 		fwrite($file,$xmlContent);
 		fclose($file);
 
-		exec('"'.C('FileZillaFTP_DIR').'/FileZilla server.exe" /stop');
-		exec('ping 127.0.0.1 -n 2');
-		exec('"'.C('FileZillaFTP_DIR').'/FileZilla server.exe" /start');
+		exec('"'.C('FileZillaFTP_DIR').'/FileZilla server.exe" /reload-config');
     }
 }

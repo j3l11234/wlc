@@ -34,13 +34,14 @@ class BorrowModel extends Model {
 			if($data['user_id'] != $user_id)
 				return null;
 			//只能编辑未审批的记录
-			if($data['check_status'] > 1)
+			if($data['check_status'] != 1 && $data['check_status'] != 3)
 				return null;
+			$data['check_status'] = 1;
 		}	
 
 		$data['start_date']		=	$start_date;
 		$data['end_date']		=	$end_date;
-		$data['goods_id']		=	$goods_id;
+		$data['goods_id']		=	json_encode($goods_id);
 		$data['reason']			=	$reason;
 
 		if(!$this->add($data,array(),true))
@@ -83,8 +84,7 @@ class BorrowModel extends Model {
 		$count = $this->where($where)->count();
 
 		$this->where($where)->order('date desc')
-		->join('LEFT JOIN wlc_goods ON wlc_goods.goods_id = wlc_borrow.goods_id')
-		->field('borrow_id,date,start_date,end_date,wlc_borrow.goods_id,goods_sn,goods_name,goods_parts,reason,
+		->field('borrow_id,date,start_date,end_date,wlc_borrow.goods_id,reason,
 			check_status,check_datetime,check_comment,return');
 
 		if($per_page != 0)
@@ -92,11 +92,12 @@ class BorrowModel extends Model {
 		else
 			$list = $this->select();
 
-		//判断是否需要归还
+		//判断是否需要归还以及货物名称
 		$now = time();
 		foreach ($list as $key => $record){
 			if($list[$key]['return'] ==1 && $now < strtotime($record['end_date'].' 00:00:00'))
 				$list[$key]['return'] = 0;	
+			$list[$key]['goods_id'] = json_decode($record['goods_id']);
 		}
 
 		$return = array('count' => $count, 'list' => $list);
@@ -123,7 +124,7 @@ class BorrowModel extends Model {
 				return null;
 
 			//只能编删除未审批的记录
-			if($data['check_status'] != 1)
+			if($data['check_status'] != 1 && $data['check_status'] != 3)
 				return null;
 		}		
 
@@ -223,9 +224,8 @@ class BorrowModel extends Model {
 		$count = $this->where($where)->count(); 
 		//var_dump($where);
 		$this->join('RIGHT JOIN wlc_user ON wlc_user.user_id = wlc_borrow.user_id')
-		->join('LEFT JOIN wlc_department ON wlc_department.department_id = wlc_user.department_id')
-		->join('LEFT JOIN wlc_goods ON wlc_goods.goods_id = wlc_borrow.goods_id');
-		$this->field('borrow_id,date,start_date,end_date,wlc_borrow.goods_id,goods_sn,goods_name,goods_parts,reason,
+		->join('LEFT JOIN wlc_department ON wlc_department.department_id = wlc_user.department_id');
+		$this->field('borrow_id,date,start_date,end_date,wlc_borrow.goods_id,reason,
 			check_status,check_datetime,check_comment,return,wlc_user.alias,department_name')
 		->where($where)->order($order);
 		//var_dump($count);
@@ -239,6 +239,7 @@ class BorrowModel extends Model {
 		foreach ($list as $key => $record){
 			if($list[$key]['return'] ==1 && $now < strtotime($record['end_date'].' 00:00:00'))
 				$list[$key]['return'] = 0;	
+			$list[$key]['goods_id'] = json_decode($record['goods_id']);
 		}
 
 		$return = array('count' => $count, 'list' => $list);
@@ -306,9 +307,47 @@ class BorrowModel extends Model {
 		return $count;
 	}
 
-	public function getGoodsList(){
+	/**
+	 * 获取货物列表
+	 * @param $only			不需要获取物品状态，而且以goods_id为下标
+	 * @param $username		是否得到借用人
+	 * @return 待审批数量
+	 */
+	public function getGoodsList($only = false,$username = false){
 		$Goods = M('Goods');
 		$list = $Goods->select();
+		$goodsList = array();
+		foreach ($list as $key => $value) {
+			$value['status'] = 0;
+			$value['username'] = "";
+			$goodsList[$value['goods_id']] = $value;
+		}
+		if($only)
+			return $goodsList;
+
+		//根据借用记录查询物品状态
+		$borrowList = $this->where(array(
+			'check_status' => array('in','1,2'),
+			'return' => 1,
+			))->join('RIGHT JOIN wlc_user ON wlc_user.user_id = wlc_borrow.user_id')
+		->order('date')->select();
+		foreach ($borrowList as $key => $value) {
+			$borrowList[$key]['goods_id'] = json_decode($value['goods_id']);
+			//标记物品状态
+			foreach ($borrowList[$key]['goods_id'] as $key2 => $value2){
+				if($borrowList[$key]['check_status'] >= $goodsList[$value2]['status']){
+					$goodsList[$value2]['status'] = $borrowList[$key]['check_status'];
+					if($username)
+						$goodsList[$value2]['username'] = $borrowList[$key]['alias'];
+				}
+			}
+		}
+
+		$list = array();
+		foreach ($goodsList as $key => $value) {
+			array_push($list,$value);
+		}
 		return $list;
 	}
+
 }

@@ -81,8 +81,9 @@ class LeaveModel extends Model {
 			if($data['user_id'] != $user_id)
 				return null;
 			//只能编辑未审批的记录
-			if($data['check_status'] > 1)
+			if($data['check_status'] != 1 && $data['check_status'] != 3)
 				return null;
+			$data['check_status'] = 1;
 		}
 
 		$data['type']		=	$type;
@@ -119,7 +120,7 @@ class LeaveModel extends Model {
 				return null;
 
 			//只能编删除未审批的记录
-			if($data['check_status'] != 1)
+			if($data['check_status'] != 1 && $data['check_status'] != 3)
 				return null;
 		}
 		

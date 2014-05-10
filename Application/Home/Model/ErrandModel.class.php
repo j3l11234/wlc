@@ -85,8 +85,9 @@ class ErrandModel extends Model {
 			if($data['user_id'] != $user_id)
 				return null;
 			//只能编辑未审批的记录
-			if($data['check_status'] > 2)
+			if($data['check_status'] != 1 && $data['check_status'] != 2 && $data['check_status'] != 4)
 				return null;
+			$data['check_status'] = $is_summary?2:1;
 		}	
 
 		$data['start_date']	=	$start_date;
@@ -143,7 +144,7 @@ class ErrandModel extends Model {
 				return null;
 
 			//只能编删除未审批的记录
-			if($data['check_status'] > 2)
+			if($data['check_status'] != 1 && $data['check_status'] != 2 && $data['check_status'] != 4)
 				return null;
 		}
 

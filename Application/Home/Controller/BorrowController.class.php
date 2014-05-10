@@ -17,6 +17,9 @@ class BorrowController extends Controller {
 	public function home(){
 		check_login();
 		
+		$goodsList = D('Borrow')->getGoodsList(false,false);
+		$this->assign('goodsList' ,$goodsList);
+
 		//装载查询页面
 		$queryHtml = $this->homeQuery();
 		$this->assign('queryHtml' ,$queryHtml);
@@ -26,8 +29,6 @@ class BorrowController extends Controller {
 		$this->assign('modalHtml' ,$modalHtml);
 
 		//装载提交页
-		$goodsList = D('Borrow')->getGoodsList();
-		$this->assign('goodsList' ,$goodsList);
 		$addHtml = $this->fetch('Borrow/home_add');
 		$this->assign('addHtml' ,$addHtml);
 		
@@ -81,6 +82,9 @@ class BorrowController extends Controller {
 		$this->assign('pageHtml',$pageHtml);
 		$this->assign('borrowList',$borrowList);
 			
+		$goodsList = D('Borrow')->getGoodsList(true);
+		$this->assign('goodsList_' ,$goodsList);
+
 		return $this->fetch('Borrow/home_query');
 	}
 	
@@ -91,6 +95,8 @@ class BorrowController extends Controller {
 	public function submitBorrow(){
 		check_login();
 		
+		//var_dump($_REQUEST);
+		//die();
 		if(date('Y-m-d',strtotime($_REQUEST['start_date']. ' 00:00:00')) != $_REQUEST['start_date'])
 			die("借出时间不正确");
 		
@@ -153,6 +159,10 @@ class BorrowController extends Controller {
 		check_login();
 		
 		$privilege = get_privilege();
+
+		$goodsList = D('Borrow')->getGoodsList(false,true);
+		$this->assign('goodsList' ,$goodsList);
+
 		//装载查询页面
 		$queryHtml = $this->manageQuery($privilege);
 		$this->assign('queryHtml' ,$queryHtml);
@@ -240,7 +250,9 @@ class BorrowController extends Controller {
 		
 		$this->assign('pageHtml',$pageHtml);
 		$this->assign('borrowList',$borrowList);
-			
+		$goodsList = D('Borrow')->getGoodsList(true);
+		$this->assign('goodsList_' ,$goodsList);
+
 		return $this->fetch('Borrow/manage_query');
 	}
 
