@@ -115,7 +115,7 @@
 		$("#append-panel .panel-title").text("修改申请");
 		$("#append-leave-id").val(data.leave_id);
 		$("#append-date").val(data.date);
-		$("#append-type option[value='"+data.leave_type+"']").attr("selected", "selected");
+		$("#append-type option[value='"+data.type+"']").attr("selected", "selected");
 		$("#append-form .selectpicker").selectpicker('refresh');	
 		$("#append-start-date").val(data.start_date+" "+data.start_time.substr(0,2));
 		$("#append-end-date").val(data.end_date+" "+data.end_time.substr(0,2));
