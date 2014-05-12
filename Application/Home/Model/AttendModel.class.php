@@ -235,7 +235,7 @@ class AttendModel extends Model {
 			'date'		=>	array('between',array($start_date,$end_date)),
 		);
 		$list = $this->field('clockin,clockout,date')->where($where)->select();
-		$timeBaseline = strtotime('1970-01-01 00:08:10');
+		$timeBaseline = strtotime('1970-01-01 08:10:00');
 		$timeSum = 0;
 		foreach ($list as $record) {
 			$wady = getdate(strtotime($record['date'].' '.$record['clockin']))['wday'];
