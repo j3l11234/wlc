@@ -68,13 +68,7 @@
     
     <script type="text/javascript">
       function getFtpEntry(){
-        var ua = navigator.userAgent.toLowerCase();
-        isWindows = (ua.indexOf("windows") != -1 || ua.indexOf("win32") != -1);
-        if(isWindows){
-          window.location.href = "{:U('Main/getFtpEntry')}";
-        }else{
-            showModalResult(false,"提示","您的系统并非windows，请直接访问<a target=\"_blank\" href=\"ftp://{$_SERVER['SERVER_NAME']}\">ftp://{$_SERVER['SERVER_NAME']}</a><br>账号密码于本系统一致",false);
-        }
+            showModalResult(false,"提示","请使用客户端访问网盘<br>地址为{$_SERVER['SERVER_NAME']}，账号密码于本系统一致<br><a href=\"__ROOT__/8uftp.exe\">FTP客户端下载</a>",false);
       }
 
       
