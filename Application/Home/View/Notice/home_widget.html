@@ -1,0 +1,72 @@
+{//个人中心-主页显示挂件}
+<div class="panel panel-success">
+	<div class="panel-heading">
+		<h4 class="panel-title">
+			公告信息
+		</h4>
+	</div>
+	
+	<div class="panel-body">
+		<h1>{$notice["title"]}</h1>
+		<p><pre>{$notice["content"]}</pre></p>
+		
+		<a data-toggle="collapse" data-toggle="collapse" href="#collapseNotice">
+			更改公告
+		</a>
+		<div id="collapseNotice" class="panel-collapse collapse">
+			<form id="notice-form">
+				<div class="row">
+					<div class="col-sm-12 form-div">
+						<div class="control-label">公告标题</div>
+						<div class="input-group">
+							<input type="input" class="form-control" name="notice_title" value="{$notice["title"]}">
+							<span class="input-group-addon"></span>
+						</div>
+					</div>
+					<div class="col-sm-12 form-div">
+						<div class="control-label">公告内容</div>
+						<div class="textarea">
+						<textarea type="" class="form-control" id="notice-textarea" name="notice_content" style="min-height:80px;">{$notice["content"]}</textarea>
+						</div>
+					</div>
+				</div>
+				<button type="button" class="btn btn-success" onclick="onNoticeSubmit()">提交</button>
+			</form>
+		</div>
+	</div>
+	
+</div>
+
+<script type="text/javascript">
+   
+	function onNoticeSubmit(button){
+		append_submit("{:U('Notice/submitNotice')}",$("#notice-form"),"提交结果","提交成功");
+	}
+
+	function attend(clockType){
+		switch(clockType){
+			case 0:
+				postSubmit("{:U('Attend/attend')}",{clockType:clockType},"签到成功",null,null,"签到结果");
+				break;
+			case 1:
+				postSubmit("{:U('Attend/attend')}",{clockType:clockType},"签退成功",null,null,"签退结果");
+				break;
+		}	
+	}
+	
+	function attended(data,clockType){
+		if(clockType == 0 && data.clockin != null){
+			$("#clockin-status").text("已签到");
+			$("#clockin-button").removeClass("btn-danger")
+			.addClass("btn-success")
+			.attr("disabled","disabled")
+			.text(data.clockin);      
+		}else if(clockType == 1 && data.clockout != null){
+			$("#clockout-status").text("已签退");
+			$("#clockout-button").removeClass("btn-danger")
+			.addClass("btn-success")
+			.attr("disabled","disabled")
+			.text(data.clockout);   
+		}
+	}
+</script>

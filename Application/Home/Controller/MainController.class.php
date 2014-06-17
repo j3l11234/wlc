@@ -25,8 +25,12 @@ class MainController extends Controller {
 		$this->assign('attendanceTplName',$attendanceTplName);
 		 */
 		$Attend = new AttendController();
-		$attendWidget .= $Attend->homeWidget(C('AUTH_PARA'));
+		$attendWidget .= $Attend->homeWidget();
 		$this->assign('attendWidget',$attendWidget);
+
+		$Notice = new NoticeController();
+		$noticeWidget .= $Notice->homeWidget();
+		$this->assign('noticeWidget',$noticeWidget);
 
 		$htmlContent = $this->fetch('Main/index');
 		$this->assign('htmlContent',$htmlContent);

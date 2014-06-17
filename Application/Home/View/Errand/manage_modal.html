@@ -181,7 +181,7 @@
 					cost_tr.append("<td>" + costList[i].type + "</td>");
 					cost_tr.append("<td>" + costList[i].detail + "</td>");
 					cost_tr.append("<td>" + costList[i].cost + "</td>");
-					costSum += parseInt(costList[i].cost);
+					costSum += parseFloat(costList[i].cost);
 					cost_trList.push(cost_tr);
 				}
 				$("#modal-cost-tbody").prepend(cost_trList);

@@ -286,7 +286,7 @@
 			return;
 		}
 		var cost =$("#cost-cost-input").val();
-		if(parseInt(cost) != cost){
+		if(parseFloat(cost) != cost){
 			showModalResult(false,"输入错误","请正确输入金额",false);
 			return;
 		}
@@ -317,7 +317,7 @@
 		var sumCost = 0;
 		for (var i = 0; i < costList_trList.length-1; i++){
 			var cost_tdList = $(costList_trList[i]).children();
-			sumCost+=parseInt($(cost_tdList[2]).text());
+			sumCost+=parseFloat($(cost_tdList[2]).text());
 		}
 		$("#append-cost-sum").val(sumCost);
 	}
