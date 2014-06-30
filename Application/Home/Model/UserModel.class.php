@@ -92,10 +92,8 @@ class UserModel extends Model {
 	 * @param string $departmentId 部门id
 	 */
 	public function getDepartmentUser($departmentId = 0){
-		$where = array('need_clock' => 1);
-		if($departmentId ==0)
-			$where['department_id'] = array('exp','is not NULL');
-		else
+		//$where = array('need_clock' => 1);
+		if($departmentId != 0)
 			$where['department_id'] = $departmentId;
 		
 		return $this->field('alias,user_id,department_id')->where($where)->select();
