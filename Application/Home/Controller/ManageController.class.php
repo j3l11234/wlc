@@ -140,6 +140,22 @@ class ManageController extends Controller {
 	
 
 	/**
+	 * 审批管理——兼职申报
+	 */
+	public function parttime(){
+		check_privilege();
+		
+		$Parttime = new ParttimeController();
+		$htmlContent = $Parttime->manage();
+		$this->assign('htmlContent',$htmlContent);
+		
+		$this->assign('navbar_item','navbar-manage');
+		$this->assign('sidebar_item','sidebar-parttime');
+		$this->display('template');
+	}
+
+
+	/**
 	 * 审批管理——综合统计
 	 */
 	public function stat(){

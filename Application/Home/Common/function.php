@@ -72,6 +72,10 @@ function getPendingNum($item,$home = 0){
 			if (get_privilege() == PRIRILEGE_BOSS) //查询待审批
 				$pendingNum = D('Extra')->getPendingNum($_SESSION['user']['user_id']);
 			break;
+		case 'parttime': 
+			if (get_privilege() == PRIRILEGE_PERSONNEL) //查询待审批
+				$pendingNum = D('Parttime')->getPendingNum();
+			break;
 
 	}
 	if($pendingNum == 0)

@@ -81,6 +81,8 @@ class StatController extends Controller {
 			$statList[$key]['leaveSum'] = $leaveSum['day'].'天'.$leaveSum['hour'].'小时';
 			$orderSum = D('Order')->stat($value['user_id'],$_REQUEST['start_date'],$_REQUEST['end_date']);
 			$statList[$key]['orderSum'] = $orderSum.'次';
+			$parttimeSum = D('Parttime')->stat($value['user_id'],$_REQUEST['start_date'],$_REQUEST['end_date']);
+			$statList[$key]['parttimeSum'] = $parttimeSum.'次';
 		}
 
 		//var_dump($statList);

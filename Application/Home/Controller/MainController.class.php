@@ -147,6 +147,20 @@ class MainController extends Controller {
 	}
 	
 	/**
+	 * 个人中心——兼职申报
+	 */
+	public function parttime(){
+		check_login();
+		$Parttime = new ParttimeController();
+		$htmlContent = $Parttime->home();
+		$this->assign('htmlContent',$htmlContent);
+		
+		$this->assign('navbar_item','navbar-main');
+		$this->assign('sidebar_item','sidebar-parttime');
+		$this->display('template');
+	}
+
+	/**
 	 * 个人中心——个人资料
 	 */
 	public function user(){

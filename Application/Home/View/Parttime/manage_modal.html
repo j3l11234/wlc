@@ -1,6 +1,6 @@
 {//加班订餐管理-模态框}
 
-<div class="modal fade" id="order-modal">
+<div class="modal fade" id="parttime-modal">
 	<div class="modal-dialog" style="margin: 10px auto;">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -9,74 +9,79 @@
 			</div>
 			<div class="modal-body">
 				<form id="modal-form">
-					<input type="hidden" id="modal-order-id" name="order_id">
+					<input type="hidden" id="modal-parttime-id" name="parttime_id">
 					<input type="hidden" id="modal-is-agree" name="is_agree">
 					<div class="row">	
 						<div class="col-sm-6 form-div">
 							<div class="control-label">人员姓名</div>
 							<div class="input-group">
-								<input type="input"  id="modal-user" class="form-control" readonly="" >
+								<input type="input"  class="form-control" id="modal-user" readonly="" >
 								<span class="input-group-addon"></span>
 							</div>
 						</div>
 						<div class="col-sm-6 form-div">
 							<div class="control-label">所属部门</div>
 							<div class="input-group">
-								<input type="input"  id='modal-department' class="form-control" readonly="">
+								<input type="input"  class="form-control" id="modal-department" readonly="">
 								<span class="input-group-addon"></span>
 							</div>
 						</div>
-						<div class="col-sm-12 form-div">
+						<div class="col-sm-6 form-div">
 							<div class="control-label">申请日期</div>
 							<div class="input-group">
-								<input type="input"  id="modal-date" class="form-control" readonly="">
+								<input type="input" class="form-control" id="modal-date" readonly="">
 								<span class="input-group-addon"></span>
 							</div>
 						</div>
-						<div class="col-sm-12 form-div">
-							<div class="control-label">订餐地点</div>
-							<div class="input-group">
-								<input class="form-control" id="modal-place" type="text" name="place" readonly="">
-								<span class="input-group-addon"></span>
+						<div class="clearfix visible-lg visible-md visible-sm"></div>
+						<div class="col-sm-6 form-div">
+						<div class="control-label">助管类型</div>
+							<div class="control-content">
+								<select id="modal-type" class="form-control" disabled="disabled">
+									<option value="1">勤工</option>
+									<option value="2">三助</option>
+								</select>
 							</div>
 						</div>
-						<div class="col-sm-12 form-div">
-							<div class="control-label">订餐原因</div>
+						<div class="col-sm-6 form-div">
+							<div class="control-label">学生学号</div>
 							<div class="input-group">
-								<input class="form-control" id="modal-reason" type="text" name="reason" readonly="">
+								<input type="input"  class="form-control" id="modal-student-id" readonly="">
 								<span class="input-group-addon"></span>
 							</div>
 						</div>
 						<div class="col-sm-6 form-div">
-							<div class="control-label">订餐人数</div>
+							<div class="control-label">学生姓名</div>
 							<div class="input-group">
-								<input class="form-control" id="modal-number" type="text" name="number" readonly="">
+								<input type="input"  class="form-control" id="modal-name" readonly="">
 								<span class="input-group-addon"></span>
 							</div>
 						</div>
 						<div class="col-sm-6 form-div">
-							<div class="control-label">每人餐标</div>
+							<div class="control-label">工作性质</div>
 							<div class="input-group">
-								<input class="form-control" id="modal-standard" type="text" name="standard" readonly="">
+								<input class="form-control" id="modal-nature" readonly="">
 								<span class="input-group-addon"></span>
+							</div>
+						</div>
+						<div class="col-sm-12 form-div">
+							<div class="control-label">工作内容</div>
+							<div class="textarea">
+								<textarea type="" class="form-control" id="modal-work" name="work" style="min-height:100px;" readonly=""> </textarea>
 							</div>
 						</div>
 						<div class="col-sm-12 form-div">
 							<hr style="margin: auto;">
 						</div>	
 						<div class="col-sm-6 form-div">
-							<div class="control-label">
-							审批时间
-							</div>
+							<div class="control-label">审批时间</div>
 							<div class="input-group">
 								<input type="input"  id='modal-check-datetime' class="form-control" readonly="">
 								<span class="input-group-addon"></span>
 							</div>
 						</div>
 						<div class="col-sm-6 form-div">
-							<div class="control-label">
-							审批状态
-							</div>
+							<div class="control-label">审批状态</div>
 							<div id="modal-check-status">
 								<button type="button" id="modal-check-status1" class="btn btn-sm btn-info">等待审批</button>
 								<button type="button" id="modal-check-status2" class="btn btn-sm btn-success">审批通过</button>
@@ -85,11 +90,9 @@
 							</div>
 						</div>
 						<div class="col-sm-12 form-div">
-							<div class="control-label">
-							审批批注
-							</div>					
+							<div class="control-label">审批批注</div>					
 							<div class="textarea">
-								<textarea type="" id="modal-check-comment" name="check_comment" class="form-control"  style="min-height:20px;"readonly="">
+								<textarea type="" id="modal-check-comment" class="form-control" name="check_comment" style="min-height:20px;"readonly="">
 								</textarea>
 							</div>
 						</div>
@@ -113,59 +116,59 @@
 	function reset(data){
 		$("#modal-check-status").children().hide();
 		$("#modal-check-comment").attr("readonly","");
-		$("#order-modal .modal-footer").children().hide();
-		$("#order-modal .alert").hide();
+		$("#parttime-modal .modal-footer").children().hide();
+		$("#parttime-modal .alert").hide();
 
-		$("#modal-order-id").val(data.order_id);
+		$("#modal-parttime-id").val(data.parttime_id);
 		$("#modal-user").val(data.alias);
 		$("#modal-department").val(data.department_name);
 		$("#modal-date").val(data.date);
-		$("#modal-place").val(data.place);
-		$("#modal-reason").val(data.reason);
-		$("#modal-number").val(data.number);
-		$("#modal-standard").val(data.standard);
+		$("#modal-type").val(data.type);
+		$("#modal-student-id").val(data.student_id);
+		$("#modal-name").val(data.name);
+		$("#modal-nature").val(data.nature);
+		$("#modal-work").val(data.work);
 		$("#modal-check-datetime").val(data.check_datetime);
 		$("#modal-check-status"+data.check_status).show();
 		$("#modal-check-comment").val(data.check_comment);
-		$("#modal-checker").text(data.check_status != 1 && data.checker!=null ?"by "+data.checker:"").show();
 	}
 
-	function viewOrder(data){
+	function viewParttime(data){
 		reset(data);
-		$("#order-modal .modal-title").text("查看订餐申请");
+		$("#parttime-modal .modal-title").text("查看助管申请");
 
 		$(".btn-modal-view").show();	
-		$('#order-modal').modal({backdrop:"static"});
+		$('#parttime-modal').modal({backdrop:"static"});
 	}
 
-	function deleteOrder(data){
+	function deleteParttime(data){
 		reset(data);
 
-		$("#order-modal .modal-title").text("删除申请");
+		$("#parttime-modal .modal-title").text("删除申请");
 		$("#modal-check-comment").attr("readonly","");
 		$(".btn-modal-delete").show();
 
-		$("#order-modal .alert").text("您确定要删除该条记录吗？");
-		$("#order-modal .alert").show();
+		$("#parttime-modal .alert").text("您确定要删除该条记录吗？");
+		$("#parttime-modal .alert").show();
 
-		$('#order-modal').modal({backdrop:"static"});
+		$('#parttime-modal').modal({backdrop:"static"});
 	}
 
 	function onDeleteSubmit(){
-		modal_submit("{:U('Order/deleteOrder')}",$("#modal-form"),"删除成功",$("#modal-alert"));
+		modal_submit("{:U('Parttime/deleteParttime')}",$("#modal-form"),"删除成功",$("#modal-alert"));
 	}
 
-	function approbateOrder(data){
+	function approbateParttime(data){
 		reset(data);
-		$("#order-modal .modal-title").text("审批订餐申请");
+		$("#parttime-modal .modal-title").text("审批助管申请");
 		$("#modal-check-comment").removeAttr("readonly");
 
 		$(".btn-modal-approbate").show();
-		$('#order-modal').modal({backdrop:"static"});
+		$('#parttime-modal').modal({backdrop:"static"});
 	}
 
 	function onApprobateSubmit(isAgree){	
 		$('#modal-is-agree').val(isAgree?"true":"false");
-		postSubmit("{:U('Order/approbateOrder')}",$("#modal-form").serialize(),"审批成功",null,$("#order-modal"),"");
+		postSubmit("{:U('Parttime/approbateParttime')}",$("#modal-form").serialize(),"审批成功",null,$("#parttime-modal"),"");
 	}
 </script>

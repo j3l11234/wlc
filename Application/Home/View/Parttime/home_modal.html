@@ -1,0 +1,157 @@
+{//个人中心-模态框} 
+{//查看申请-编辑申请-删除申请} 
+
+<div class="modal fade" id="parttime-modal">
+	<div class="modal-dialog" style="margin: 10px auto;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title"></h4>
+			</div>
+			<div class="modal-body">
+				<form id="modal-form">
+					<input type="hidden" id="modal-parttime-id" name="parttime_id">
+					<div class="row">	
+						<div class="col-sm-6 form-div">
+							<div class="control-label">人员姓名</div>
+							<div class="input-group">
+								<input type="input"  class="form-control" readonly="" value="{:get_username()}">
+								<span class="input-group-addon"></span>
+							</div>
+						</div>
+						<div class="col-sm-6 form-div">
+							<div class="control-label">所属部门</div>
+							<div class="input-group">
+								<input type="input"  class="form-control" readonly="" value="{:get_department_name()}">
+								<span class="input-group-addon"></span>
+							</div>
+						</div>
+						<div class="col-sm-6 form-div">
+							<div class="control-label">申请日期</div>
+							<div class="input-group">
+								<input type="input" class="form-control" id="modal-date" readonly="">
+								<span class="input-group-addon"></span>
+							</div>
+						</div>
+						<div class="clearfix visible-lg visible-md visible-sm"></div>
+						<div class="col-sm-6 form-div">
+						<div class="control-label">助管类型</div>
+							<div class="control-content">
+								<select id="modal-type" class="form-control" disabled="disabled">
+									<option value="1">勤工</option>
+									<option value="2">三助</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-sm-6 form-div">
+							<div class="control-label">学生学号</div>
+							<div class="input-group">
+								<input type="input"  class="form-control" id="modal-student-id" readonly="">
+								<span class="input-group-addon"></span>
+							</div>
+						</div>
+						<div class="col-sm-6 form-div">
+							<div class="control-label">学生姓名</div>
+							<div class="input-group">
+								<input type="input"  class="form-control" id="modal-name" readonly="">
+								<span class="input-group-addon"></span>
+							</div>
+						</div>
+						<div class="col-sm-6 form-div">
+							<div class="control-label">工作性质</div>
+							<div class="input-group">
+								<input class="form-control" id="modal-nature" readonly="">
+								<span class="input-group-addon"></span>
+							</div>
+						</div>
+						<div class="col-sm-12 form-div">
+							<div class="control-label">工作内容</div>
+							<div class="textarea">
+								<textarea type="" class="form-control" id="modal-work" name="work" style="min-height:100px;" readonly=""> </textarea>
+							</div>
+						</div>
+						<div class="col-sm-12 form-div">
+							<hr style="margin: auto;">
+						</div>	
+						<div class="col-sm-6 form-div">
+							<div class="control-label">审批时间</div>
+							<div class="input-group">
+								<input type="input"  id='modal-check-datetime' class="form-control" readonly="">
+								<span class="input-group-addon"></span>
+							</div>
+						</div>
+						<div class="col-sm-6 form-div">
+							<div class="control-label">审批状态</div>
+							<div id="modal-check-status">
+								<button type="button" id="modal-check-status1" class="btn btn-sm btn-info">等待审批</button>
+								<button type="button" id="modal-check-status2" class="btn btn-sm btn-success">审批通过</button>
+								<button type="button" id="modal-check-status3" class="btn btn-sm btn-danger">审批驳回</button>
+								<span id="modal-checker"></span>
+							</div>
+						</div>
+						<div class="col-sm-12 form-div">
+							<div class="control-label">审批批注</div>					
+							<div class="textarea">
+								<textarea type="" id="modal-check-comment" class="form-control"  style="min-height:20px;"readonly="">
+								</textarea>
+							</div>
+						</div>
+					</div>
+				</form>
+				<div class="alert alert-danger" id="modal-alert" style="margin-bottom: 0px;">
+				</div>
+			</div>
+			<div class="modal-footer" style="margin-top: auto;">
+				<button type="button" class="btn btn-default btn-modal-edit btn-modal-delete" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-primary btn-modal-edit" onclick="onEditSubmit()">确认修改</button>
+				<button type="button" class="btn btn-primary btn-modal-view" data-dismiss="modal">确定</button>
+				<button type="button" class="btn btn-danger btn-modal-delete" onclick="onDeleteSubmit()">确认删除</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<script type="text/javascript">	
+
+	function reset(data){
+		$("#modal-check-status").children().hide();
+		$("#parttime-modal .modal-footer").children().hide();
+		$("#parttime-modal .alert").hide();
+		$("#parttime-modal .alert").removeClass("alert-success").addClass("alert-danger");
+
+		$("#modal-parttime-id").val(data.parttime_id);
+		$("#modal-date").val(data.date);
+		$("#modal-type").val(data.type);
+		$("#modal-student-id").val(data.student_id);
+		$("#modal-name").val(data.name);
+		$("#modal-nature").val(data.nature);
+		$("#modal-work").val(data.work);
+		$("#modal-check-datetime").val(data.check_datetime);
+		$("#modal-check-status"+data.check_status).show();
+		$("#modal-check-comment").val(data.check_comment);
+	}
+
+	//查看订餐申请
+	function viewParttime(data){
+		reset(data);
+
+		$("#parttime-modal .modal-title").text("查看助管申请");
+		$(".btn-modal-view").show();
+		$('#parttime-modal').modal({backdrop:"static"});
+	}
+
+	//删除订餐申请
+	function deleteParttime(data){
+		reset(data);
+
+		$("#parttime-modal .modal-title").text("编辑助管申请");
+		$(".btn-modal-delete").show();
+		$("#parttime-modal .alert").text("您确定要删除该条记录吗？").show();
+		$('#parttime-modal').modal({backdrop:"static"});
+	}
+
+	function onDeleteSubmit(){
+		modal_submit("{:U('Parttime/deleteParttime')}",$("#modal-form"),"删除成功",$("#modal-alert"));
+	}
+</script>

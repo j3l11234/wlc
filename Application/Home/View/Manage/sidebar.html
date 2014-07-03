@@ -23,6 +23,9 @@
       <a href="{:U('Manage/borrow')}" class="list-group-item {:getIsActive('sidebar-borrow',$sidebar_item)}">设备审批
          <span class="badge">{:getPendingNum('borrow')}</span>
       </a>
+      <a href="{:U('Manage/parttime')}" class="list-group-item {:getIsActive('sidebar-parttime',$sidebar_item)}">助管审批
+        <span class="badge">{:getPendingNum('parttime')}</span>
+      </a>
       <a href="{:U('Manage/stat')}" class="list-group-item {:getIsActive('sidebar-stat',$sidebar_item)}">综合统计
       </a>
     </div>         

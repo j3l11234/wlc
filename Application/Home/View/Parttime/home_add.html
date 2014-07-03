@@ -1,0 +1,122 @@
+{//个人中心-加班订餐-提交申请页面} 
+
+{//个人中心-加班订餐-提交表单} 
+<div class="panel panel-success" id="append-panel" style="display:none;">
+	<div class="panel-heading">
+		<h3 class="panel-title"></h3>
+	</div>
+	<div class="panel-body">
+		<form id="append-form">
+			<input type="hidden" id="append-parttime-id" name="parttime_id">
+			<div class="row">	
+				<div class="col-lg-4 col-sm-6 form-div">
+					<div class="control-label">申报人员</div>
+					<div class="input-group">
+						<input type="input"  class="form-control" readonly="" value="{:get_username()}">
+						<span class="input-group-addon"></span>
+					</div>
+				</div>
+				<div class="col-lg-4 col-sm-6 form-div">
+					<div class="control-label">申报日期</div>
+					<div class="input-group">
+						<input type="input"  class="form-control" id="append-datetime" readonly="">
+						<span class="input-group-addon"></span>
+					</div>
+				</div>
+				<div class="col-lg-4 col-sm-6 form-div">
+					<div class="control-label">助管类型</div>
+					<div class="control-content">
+						<select id="append-type" name="type" class="form-control">
+							<option value="1">勤工</option>
+							<option value="2">三助</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-lg-4 col-sm-6 form-div">
+					<div class="control-label">学生学号</div>
+					<div class="input-group">
+						<input type="input"  class="form-control" id="append-student-id"  name="student_id">
+						<span class="input-group-addon"></span>
+					</div>
+				</div>
+				<div class="col-lg-4 col-sm-6 form-div">
+					<div class="control-label">学生姓名</div>
+					<div class="input-group">
+						<input type="input"  class="form-control" id="append-name"  name="name">
+						<span class="input-group-addon"></span>
+					</div>
+				</div>
+				<div class="col-lg-4 col-sm-6 form-div">
+					<div class="control-label">工作性质</div>
+					<div class="input-group">
+						<input class="form-control" id="append-nature" name="nature">
+						<span class="input-group-addon"></span>
+					</div>
+				</div>
+				<div class="col-sm-12 form-div">
+					<div class="control-label">工作内容</div>
+					<div class="textarea">
+						<textarea type="" class="form-control" id="append-work" name="work" style="min-height:100px;"> </textarea>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12 form-div" style="text-align: center;">
+					<br>
+						<button style="min-width:150px;width:30%;" type="button" id="append-submit" data-loading-text="提交中。。" class="btn btn-success" onclick="onSubmit()">
+							提交
+						</button>
+				</div>	
+			</div>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+	function addParttime(){	
+		$("#append-panel .panel-title").text("提交申请");
+		$("#append-parttime-id").val("");
+		$("#append-datetime").val(new Date().format("yyyy-MM-dd"));
+		$("#append-type").val("1");
+		$("#append-student-id").val("");
+		$("#append-name").val("");
+		$("#append-nature").val("");
+		$("#append-work").val("");
+
+		$("#append-panel").show();
+		$(document.body).animate({scrollTop:$("#append-panel").offset().top-60}, 300);
+		$(document.documentElement).animate({scrollTop:$("#append-panel").offset().top-60}, 300);
+	}
+
+	function editParttime(data){
+		$("#append-panel .panel-title").text("修改申请");
+		$("#append-parttime-id").val(data.parttime_id);
+		$("#append-datetime").val(data.date);
+		$("#append-type").val(data.type);
+		$("#append-student-id").val(data.student_id);
+		$("#append-name").val(data.name);
+		$("#append-nature").val(data.nature);
+		$("#append-work").val(data.work);
+
+		$("#append-panel").show();
+		$(document.body).animate({scrollTop:$("#append-panel").offset().top-60}, 300);
+		$(document.documentElement).animate({scrollTop:$("#append-panel").offset().top-60}, 300);
+	}
+
+	function onSubmit(){
+		if($("#append-name").val() == ""){
+			showModalResult(false,"输入错误","请输入学生名称",false);
+			return;
+		}
+		if($("#append-nature").val() == ""){
+			showModalResult(false,"输入错误","请输入工作性质",false);
+			return;
+		}
+		if($("#append-work").val() == ""){
+			showModalResult(false,"输入错误","请输入工作内容",false);
+			return;
+		}
+
+		append_submit("{:U('Parttime/submitParttime')}",$("#append-form"),"提交结果","提交成功");
+	}		
+</script>
